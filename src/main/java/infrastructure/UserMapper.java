@@ -1,7 +1,8 @@
-package DBAccess;
+package infrastructure;
 
-import FunctionLayer.LoginSampleException;
-import FunctionLayer.User;
+import domain.user.LoginSampleException;
+import function.Entities.User;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +18,7 @@ public class UserMapper {
 
     public static void createUser( User user ) throws LoginSampleException {
         try {
-            Connection con = Connector.connection();
+            Connection con = Database.connection();
             String SQL = "INSERT INTO Users (email, password, role) VALUES (?, ?, ?)";
             PreparedStatement ps = con.prepareStatement( SQL, Statement.RETURN_GENERATED_KEYS );
             ps.setString( 1, user.getEmail() );
@@ -35,7 +36,7 @@ public class UserMapper {
 
     public static User login( String email, String password ) throws LoginSampleException {
         try {
-            Connection con = Connector.connection();
+            Connection con = Database.connection();
             String SQL = "SELECT id, role FROM Users "
                     + "WHERE email=? AND password=?";
             PreparedStatement ps = con.prepareStatement( SQL );

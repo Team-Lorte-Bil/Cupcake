@@ -15,7 +15,7 @@
     </head>
     <body>
         <h1>Welcome to Sem 2</h1>
-        
+
         <table>
             <tr><td>Login</td>
                 <td>

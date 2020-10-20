@@ -1,11 +1,12 @@
-package DBAccess;
+package infrastructure;
 
-import FunctionLayer.LoginSampleException;
-import FunctionLayer.User;
+import domain.user.LoginSampleException;
+import function.Entities.User;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -34,7 +35,7 @@ public class UserMapperTest {
 
                 testConnection = DriverManager.getConnection( url, USER, USERPW );
                 // Make mappers use test 
-                Connector.setConnection( testConnection );
+                Database.setConnection( testConnection );
             }
             // reset test database
             try ( Statement stmt = testConnection.createStatement() ) {

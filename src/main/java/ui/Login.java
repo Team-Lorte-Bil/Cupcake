@@ -1,8 +1,10 @@
-package PresentationLayer;
+package ui;
 
-import FunctionLayer.LogicFacade;
-import FunctionLayer.LoginSampleException;
-import FunctionLayer.User;
+import domain.user.LogicFacade;
+import domain.user.LoginSampleException;
+import function.Entities.User;
+import ui.command.Command;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;

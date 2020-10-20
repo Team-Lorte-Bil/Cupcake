@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package PresentationLayer;
+package ui;
 
-import FunctionLayer.LoginSampleException;
+import domain.user.LoginSampleException;
+import ui.Command;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import javax.servlet.ServletException;

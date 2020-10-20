@@ -1,6 +1,7 @@
-package PresentationLayer;
+package ui;
 
-import FunctionLayer.LoginSampleException;
+import domain.user.LoginSampleException;
+
 import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
