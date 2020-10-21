@@ -1,7 +1,6 @@
 package domain.user;
 
 import infrastructure.UserMapper;
-import function.Entities.User;
 
 /**
  * The purpose of LogicFacade is to...
@@ -14,7 +13,7 @@ public class LogicFacade {
     } 
 
     public static User createUser( String email, String password ) throws LoginSampleException {
-        User user = new User(email, password, "customer");
+        User user = new User(0,email,password, User.Role.User);
         UserMapper.createUser( user );
         return user;
     }

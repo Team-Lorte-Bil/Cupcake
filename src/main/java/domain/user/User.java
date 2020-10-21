@@ -5,7 +5,7 @@ package domain.user;
  * @author kasper
  */
 public class User {
-    enum Role {
+    public enum Role {
         User,
         Admin
     }

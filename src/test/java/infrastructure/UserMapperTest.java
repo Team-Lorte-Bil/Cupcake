@@ -1,12 +1,12 @@
 package infrastructure;
 
 import domain.user.LoginSampleException;
-import function.Entities.User;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import domain.user.User;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -80,9 +80,9 @@ public class UserMapperTest {
     public void testCreateUser01() throws LoginSampleException {
         // Can we create a new user - Notice, if login fails, this will fail
         // but so would login01, so this is OK
-        User original = new User( "king@kong.com", "uhahvorhemmeligt", "konge" );
+        User original = new User( 0,"king@kong.com", "uhahvorhemmeligt", User.Role.valueOf("admin") );
         UserMapper.createUser( original );
         User retrieved = UserMapper.login( "king@kong.com", "uhahvorhemmeligt" );
-        assertEquals( "konge", retrieved.getRole() );
+        assertEquals( "admin", retrieved.getRole() );
     }
 }

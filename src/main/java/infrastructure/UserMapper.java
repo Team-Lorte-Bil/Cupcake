@@ -23,12 +23,12 @@ public class UserMapper {
             PreparedStatement ps = con.prepareStatement( SQL, Statement.RETURN_GENERATED_KEYS );
             ps.setString( 1, user.getEmail() );
             ps.setString( 2, user.getPassword() );
-            ps.setString( 3, user.getRole() );
+            ps.setString( 3, user.getRole().toString() );
             ps.executeUpdate();
             ResultSet ids = ps.getGeneratedKeys();
             ids.next();
             int id = ids.getInt( 1 );
-            user.setId( id );
+            
         } catch ( SQLException | ClassNotFoundException ex ) {
             throw new LoginSampleException( ex.getMessage() );
         }
@@ -46,8 +46,7 @@ public class UserMapper {
             if ( rs.next() ) {
                 String role = rs.getString( "role" );
                 int id = rs.getInt( "id" );
-                User user = new User( email, password, role );
-                user.setId( id );
+                User user = new User(id, email, password, User.Role.valueOf(role));
                 return user;
             } else {
                 throw new LoginSampleException( "Could not validate user" );
