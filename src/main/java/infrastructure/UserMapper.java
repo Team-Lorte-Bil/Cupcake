@@ -1,7 +1,7 @@
 package infrastructure;
 
 import domain.user.LoginSampleException;
-import function.Entities.User;
+import domain.user.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

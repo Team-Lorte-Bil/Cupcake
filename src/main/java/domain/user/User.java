@@ -5,48 +5,42 @@ package domain.user;
  * @author kasper
  */
 public class User {
+    enum Role {
+        User,
+        Admin
+    }
     
-    public User( String email, String password, String role ) {
+    private final int id; // just used to demo retrieval of autogen keys in UserMapper
+    private final String email;
+    private final String password; // Should be hashed and secured
+    private Enum<Role> role;
+    
+    
+    
+    public User(int id, String email, String password, Enum<Role> role) {
+        this.id = id;
         this.email = email;
         this.password = password;
-        this.role = role;
-    }
-    
-    private int id; // just used to demo retrieval of autogen keys in UserMapper
-    private String email;
-    private String password; // Should be hashed and secured
-    private String role;
-    
-    public String getEmail() {
-        return email;
-    }
-    
-    public void setEmail( String email ) {
-        this.email = email;
-    }
-    
-    public String getPassword() {
-        return password;
-    }
-    
-    public void setPassword( String password ) {
-        this.password = password;
-    }
-    
-    public String getRole() {
-        return role;
-    }
-    
-    public void setRole( String role ) {
-        this.role = role;
+        this.role = Role.User;
     }
     
     public int getId() {
         return id;
     }
     
-    public void setId( int id ) {
-        this.id = id;
+    public String getEmail() {
+        return email;
     }
     
+    public String getPassword() {
+        return password;
+    }
+    
+    public Enum<Role> getRole() {
+        return role;
+    }
+    
+    public void setRole(Enum<Role> role) {
+        this.role = role;
+    }
 }

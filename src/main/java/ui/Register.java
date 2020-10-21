@@ -2,8 +2,7 @@ package ui;
 
 import domain.user.LogicFacade;
 import domain.user.LoginSampleException;
-import function.Entities.User;
-import ui.command.Command;
+import domain.user.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
