@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="23932340-f245-4b9b-9bfd-68d54d3192f5" name="do" url="http://lortebil.team">
+        <fileTransfer accessType="SFTP" host="104.248.135.65" port="22" sshConfigId="2d9dccf0-2f95-4b0f-a71f-bfc1e9a4647c" sshConfig="emil@104.248.135.65:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
