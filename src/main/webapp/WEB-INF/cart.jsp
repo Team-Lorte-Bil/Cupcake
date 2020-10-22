@@ -1,5 +1,4 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@include file="../includes/header.jsp"%>
 <div class="container text-center">
     <h3>Din kurv</h3>
     <br/> <br/>
@@ -38,8 +37,7 @@
                 <td>${cake.key.topping}</td>
                 <td>${cake.key.price},- kr</td>
                 <td>
-                    <form action="FrontController" method="post">
-                        <input type="hidden" name="target" value="cart">
+                    <form action="Cart" method="post">
                         <input type="hidden" name="type" value="removeitem">
                         <input type="hidden" name="id" value="${cake.key.id}">
                         <input type="submit" class="btn btn-danger" value="Fjern fra kurv"></input>
@@ -57,11 +55,9 @@
     <p><b>Total pris:</b></p>
     <p><b><u>${sessionScope.totalprice},- kr</u></b></p>
 
-    <form action="FrontController" method="post">
-        <input type="hidden" name="target" value="checkout">
+    <form action="CreateOrder" method="post">
         <input type="hidden" name="cakes" value="${cakes}">
+        <input type="hidden" name="totalprice" value="${sessionScope.totalprice}">
         <input type="submit" class="btn btn-primary" value="Afgiv ordre"></input>
     </form>
 </div>
-
-<%@include file="../includes/footer.jsp"%>

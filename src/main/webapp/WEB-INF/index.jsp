@@ -1,7 +1,6 @@
 <%@ page import="domain.items.CakeOption" %>
 <%@ page import="java.util.Map" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@include file="includes/header.jsp"%>
 <% CakeOption cake = new CakeOption(); %>
 
     <div class="container text-center">
@@ -14,8 +13,7 @@
 
     <br/> <br/>
 
-        <form action="FrontController" method="post">
-            <input type="hidden" name="target" value="cart">
+        <form action="Cart" method="post">
 
     <label for="Bunde">Bunde:</label>
 
@@ -64,9 +62,8 @@
 
 
     <br/> <br/>
-    <a class="nav-link" href="basket.html">
+    <a class="nav-link" href="/Cart">
         <input type="submit" value="Gå til betaling"/>
         </form>
     </a>
 </div>
-<%@include file="includes/footer.jsp"%>

@@ -1,48 +1,52 @@
 package infrastructure;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.TimeZone;
 
-/**
- The purpose of Database is to...
-
- @author kasper
- */
 public class Database {
-
-    private static String URL;
-    private static String USERNAME;
-    private static String PASSWORD;
-
-    private static Connection singleton;
-
-    public static void setConnection( Connection con ) {
-        singleton = con;
-    }
-
-    public static Connection connection() throws ClassNotFoundException, SQLException {
-        if ((singleton == null) || singleton.isClosed()) {
-            setDBCredentials();
-            Class.forName( "com.mysql.cj.jdbc.Driver" );
-            singleton = DriverManager.getConnection( URL, USERNAME, PASSWORD );
-        }
-        return singleton;
-    }
-
-    public static void setDBCredentials() {
-        String deployed = System.getenv("DEPLOYED");
-        if (deployed != null){
-            // Prod: hent variabler fra setenv.sh i Tomcats bin folder
-            URL = System.getenv("JDBC_CONNECTION_STRING");
-            USERNAME = System.getenv("JDBC_USER");
-            PASSWORD = System.getenv("JDBC_PASSWORD");
-        } else {
-            // Localhost
-            URL = "jdbc:mysql://localhost:3306/useradmin?serverTimezone=CET&useSSL=false";
-            USERNAME = "root";
-            PASSWORD = "root";
+    // JDBC driver name and database URL
+    static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
+    static final String DB_URL = "jdbc:mysql://localhost/SCHEMA_NAME?serverTimezone=" + TimeZone.getDefault().getID();
+    
+    // Database credentials
+    static final String USER = "none";
+    static final String PASS = "none";
+    
+    // Database version
+    private static final int version = 3;
+    
+    public Database() {
+        if (getCurrentVersion() != getVersion()) {
+            throw new IllegalStateException("Database in wrong state, expected:"
+                    + getVersion() + ", got: " + getCurrentVersion());
         }
     }
-
+    
+    public static int getCurrentVersion() {
+        try (Connection conn = getConnection()) {
+            Statement s = conn.createStatement();
+            ResultSet rs = s.executeQuery("SELECT value FROM properties WHERE name = 'version';");
+            if(rs.next()) {
+                String column = rs.getString("value");
+                return Integer.parseInt(column);
+            } else {
+                System.err.println("No version in properties.");
+                return -1;
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return -1;
+        }
+    }
+    
+    public static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(DB_URL, USER, PASS);
+        
+    }
+    
+    public static int getVersion() {
+        return version;
+    }
+    
+    
 }
