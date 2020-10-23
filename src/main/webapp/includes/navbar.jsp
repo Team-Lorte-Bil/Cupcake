@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
 <div class="container">
     <nav class="navbar navbar-expand-md navbar-light bg-light">
         <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">

@@ -14,10 +14,11 @@
     <br/> <br/>
 
         <form action="Cart" method="post">
+            <input type="hidden" name="action" value="add">
 
-    <label for="Bunde">Bunde:</label>
+    <label for="Bund">Bunde:</label>
 
-    <select name="bunde" id="bunde">
+    <select name="bund" id="bund">
         <%
             for (Map.Entry<String, Integer> entry : cake.getBottoms().entrySet()) {
                 %>

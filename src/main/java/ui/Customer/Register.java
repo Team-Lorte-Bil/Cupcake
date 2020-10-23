@@ -1,4 +1,6 @@
-package ui;
+package ui.Customer;
+
+import ui.BaseServlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

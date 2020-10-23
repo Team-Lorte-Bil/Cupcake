@@ -1,8 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <div class="container text-center">
     <h3>Din kurv</h3>
     <br/> <br/>
 
+    <%
+        if (session.getAttribute("cakes") != null) {
+    %>
     <table class="table table-striped">
         <thead>
         <tr>
@@ -18,7 +22,7 @@
         <c:forEach items="${cakes}" var="cake">
             <tr>
                 <th scope="row">
-                    <select class="custom-select text-center">
+                    <select class="custom-select text-center" disabled>
                         <option selected>${cake.value}</option>
                         <option value="0">0</option>
                         <option value="1">1</option>
@@ -38,7 +42,7 @@
                 <td>${cake.key.price},- kr</td>
                 <td>
                     <form action="Cart" method="post">
-                        <input type="hidden" name="type" value="removeitem">
+                        <input type="hidden" name="action" value="remove">
                         <input type="hidden" name="id" value="${cake.key.id}">
                         <input type="submit" class="btn btn-danger" value="Fjern fra kurv"></input>
                     </form>
@@ -49,15 +53,29 @@
     </table>
 
     </label>
-    <textarea id="subject" name="subject" placeholder="kommentar til bestillingen" style="height:100px" lenght="150px" ></textarea>
+    <div class="form-group">
+        <label for="comment">Kommentar til ordren</label>
+        <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+    </div>
     <br/> <br/>
 
     <p><b>Total pris:</b></p>
     <p><b><u>${sessionScope.totalprice},- kr</u></b></p>
 
     <form action="CreateOrder" method="post">
-        <input type="hidden" name="cakes" value="${cakes}">
+        <input type="hidden" name="cakes" value="${sessionScope.cakes}">
         <input type="hidden" name="totalprice" value="${sessionScope.totalprice}">
         <input type="submit" class="btn btn-primary" value="Afgiv ordre"></input>
     </form>
+
+    <br><br>
+
+    <% } else { %>
+    <h1>Der er ingen lækre kager i kurven!</h1><br>
+
+    <a href="${pageContext.request.contextPath}">
+        <button type="button" class="btn btn-primary">Gå til forsiden</button>
+    </a>
+
+    <% }; %>
 </div>

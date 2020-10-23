@@ -17,7 +17,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary" aria-describedby="emailHelp">Log ind</button>
 
-                <a href="FrontController?target=redirect&destination=resetpassword">
+                <a href="${pageContext.request.contextPath}/Reset">
                     <small id="emailHelp" class="form-text text-muted">Har du glemt dit kodeord? Tryk her</small>
                 </a>
             </form>

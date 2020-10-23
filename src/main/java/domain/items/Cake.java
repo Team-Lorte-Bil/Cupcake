@@ -1,12 +1,14 @@
 package domain.items;
 
+import java.util.Objects;
+
 public class Cake {
     private static int cid = 1;
     private final int id;
     private final String bottom, topping;
-    private final double price;
+    private final int price;
     
-    public Cake(String bottom, String topping, double price) {
+    public Cake(String bottom, String topping, int price) {
         this.id = cid;
         this.bottom = bottom;
         this.topping = topping;
@@ -26,8 +28,24 @@ public class Cake {
         return topping;
     }
     
-    public double getPrice() {
+    public int getPrice() {
         return price;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cake cake = (Cake) o;
+        return id == cake.id &&
+                Double.compare(cake.price, price) == 0 &&
+                Objects.equals(bottom, cake.bottom) &&
+                Objects.equals(topping, cake.topping);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, bottom, topping, price);
     }
     
     @Override

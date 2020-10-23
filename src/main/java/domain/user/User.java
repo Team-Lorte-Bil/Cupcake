@@ -2,17 +2,13 @@ package domain.user;
 
 import java.sql.Timestamp;
 
-/**
- * The purpose of User is to...
- * @author kasper
- */
 public class User {
     private enum Role {
         User,
         Admin
     }
     
-    private final int id; // just used to demo retrieval of autogen keys in UserMapper
+    private final int id;
     private final String email;
     private final String name;
     private final String phoneno;
