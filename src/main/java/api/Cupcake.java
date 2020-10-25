@@ -29,6 +29,11 @@ public class Cupcake {
         this.cakes = cakes;
     }
     
+    /**
+     * Tries to remove the request cake from the list.
+     * @param id Cake object ID
+     * @see Cake
+     */
     public void removeFromCart(int id){
         Cake tmpCake = null;
         for(Cake c: cakes.keySet()){
@@ -42,14 +47,26 @@ public class Cupcake {
         if(cakes.isEmpty()) cakes = null;
     }
     
+    
+    /**
+     * Clears the list.
+     */
     public void clearCart(){
         cakes.clear();
     }
     
+    /**
+     * Calculates the total sum of the current list/basket.
+     * @return Total value of cart as int.
+     */
     public int getCartValue(){
         return calculateTotalPrice(cakes);
     }
     
+    /**
+     * @param cakes Map with cakes and amounts.
+     * @return Value of provided Map
+     */
     private int calculateTotalPrice(Map<Cake,Integer> cakes){
         int totalprice = 0;
         for (Map.Entry<Cake, Integer> entry : cakes.entrySet()) {

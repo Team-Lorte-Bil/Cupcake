@@ -8,6 +8,10 @@ import java.io.IOException;
 
 @WebServlet("/Login")
 public class Login extends BaseServlet {
+    /**
+     * Renders the Login page
+     * @see BaseServlet
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {

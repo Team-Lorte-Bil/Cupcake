@@ -14,6 +14,12 @@ public class BaseServlet extends HttpServlet {
     
     public Cupcake api = new Cupcake();
     
+    /**
+     * @param title Page title tag
+     * @param content Content to be rendered. (Provide JSP path)
+     * @param req Servlet request
+     * @param resp Servlet response
+     */
     protected void render(String title, String content, HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
@@ -22,6 +28,11 @@ public class BaseServlet extends HttpServlet {
         req.getRequestDispatcher("/includes/base.jsp").forward(req, resp);
     }
     
+    /**
+     * Logs desired info
+     * @param req Request servlet to log
+     * @param str Text to log
+     */
     protected void log(HttpServletRequest req, String str){
         System.err.print("(" + LocalDateTime.now() + ")" + this.getClass().getCanonicalName() + " - " + req.getRequestURI() + " - " + str);
     }

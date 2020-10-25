@@ -16,6 +16,10 @@ import java.util.HashMap;
 @WebServlet("/Cart")
 public class Cart extends BaseServlet {
     
+    /**
+     * Renders the cart when POST is sent.
+     * Parameter "action" should be set to "add" or "remove".
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -27,34 +31,46 @@ public class Cart extends BaseServlet {
             case "add":
                 addToCart(req,session);
             case "remove":
-                removeFromCart(req,session);
+                removeFromCart(req,resp,session);
             default:
-                //DO SOMETHING ELSE
                 log(req,"default reached");
+                resp.sendError(400);
         }
         
         render("Cart", "/WEB-INF/cart.jsp", req, resp);
         
     }
     
+    /**
+     * Makes sure the list is created and ready for use.
+     */
     private void setup(HttpSession session){
         if(session.getAttribute("cakes") != null){
             api.setCakes((HashMap<Cake, Integer>) session.getAttribute("cakes"));
         }
     }
     
-    private void removeFromCart(HttpServletRequest req, HttpSession session){
+    /**
+     * Removes the desired cake from the List.
+     * @see api.Cupcake
+     */
+    private void removeFromCart(HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws IOException {
         int id = 0;
         try {
             id = Integer.parseInt(req.getParameter("id"));
         } catch (Exception e){
             log(req, e.getMessage());
+            resp.sendError(400);
         }
         
         api.removeFromCart(id);
         session.setAttribute("cakes",api.getCakes());
     }
     
+    /**
+     * Adds the desired cake to the list
+     * @see api.Cupcake
+     */
     private void addToCart(HttpServletRequest req, HttpSession session){
         CakeOption cakeOption = new CakeOption();
     
@@ -88,6 +104,9 @@ public class Cart extends BaseServlet {
         session.setAttribute("cakes",api.getCakes());
     }
     
+    /**
+     * Renders the cart if no POST is sent.
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {

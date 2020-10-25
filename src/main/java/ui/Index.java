@@ -9,10 +9,14 @@ import java.io.IOException;
 @WebServlet("")
 public class Index extends BaseServlet {
     
+    /**
+     * Renders the index.jsp page
+     * @see BaseServlet
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         
-        render("FourThings+", "/WEB-INF/index.jsp", req, resp);
+        render("Olsker Cupcaks", "/WEB-INF/index.jsp", req, resp);
     }
 }

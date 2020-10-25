@@ -16,6 +16,10 @@ import java.util.Random;
 @WebServlet("/CreateOrder")
 public class Order extends BaseServlet {
     
+    /**
+     * Create the order and redirects to order confirmation page.
+     * @see Order
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -35,12 +39,21 @@ public class Order extends BaseServlet {
         
     }
     
+    /**
+     * Sends the user to a error 400 page.
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         resp.sendError(400,"No order sent");
     }
     
+    /**
+     * Clears the session cart.
+     * @param session Current HttpSession
+     * @param req Current HttpServletRequest
+     * @see api.Cupcake
+     */
     private void clearCart(HttpSession session, HttpServletRequest req){
         api.clearCart();
         session.removeAttribute("cakes");

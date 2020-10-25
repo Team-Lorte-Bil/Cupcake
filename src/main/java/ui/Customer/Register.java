@@ -12,6 +12,10 @@ import java.io.IOException;
 @WebServlet("/Register")
 public class Register extends BaseServlet {
     
+    /**
+     * Renders the Register new account page
+     * @see BaseServlet
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
