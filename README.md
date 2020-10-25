@@ -6,6 +6,9 @@
 >
 > Introduction of JSP usage and web servlets.
 
+### 💾 [Assignment description](https://datsoftlyngby.github.io/dat2sem2020Spring/uge11/cupcake/cupcake.html)
+
+
 ### ✨ [Live Demo](lortebil.team:8080/cupcake)
 
 ## Team
