@@ -21,6 +21,9 @@
     <error-code>500</error-code>
     <location>/WEB-INF/errors/500.jsp</location>
   </error-page>
+  <error-page>
+    <location>/WEB-INF/errors/error.jsp</location>
+  </error-page>
 
 <session-config>
   <session-timeout>

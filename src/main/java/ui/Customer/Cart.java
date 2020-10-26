@@ -30,11 +30,14 @@ public class Cart extends BaseServlet {
         switch (req.getParameter("action")){
             case "add":
                 addToCart(req,session);
+                break;
             case "remove":
                 removeFromCart(req,resp,session);
+                break;
             default:
                 log(req,"default reached");
                 resp.sendError(400);
+                return;
         }
         
         render("Cart", "/WEB-INF/cart.jsp", req, resp);
