@@ -34,7 +34,7 @@
     <!-- header end -->
 
     <main role="main" class="container">
-        <jsp:include page="${requestScope.content}" flush="true"/>
+        <jsp:include page="${requestScope.content}" flush="true" />
     </main>
 
     <!-- Optional JavaScript; choose one of the two! -->

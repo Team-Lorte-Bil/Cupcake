@@ -5,6 +5,13 @@
          version="4.0">
   <display-name>Olsker Cupcakes</display-name>
 
+  <jsp-config>
+    <jsp-property-group>
+      <url-pattern>*.jsp</url-pattern>
+      <page-encoding>UTF-8</page-encoding>
+    </jsp-property-group>
+  </jsp-config>
+
   <error-page>
     <error-code>404</error-code>
     <location>/WEB-INF/errors/404.jsp</location>

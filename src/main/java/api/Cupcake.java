@@ -1,6 +1,8 @@
 package api;
 
 import domain.items.Cake;
+import domain.items.CakeOption;
+import infrastructure.DBCakeOptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,10 +10,19 @@ import java.util.Map;
 public class Cupcake {
     
     private HashMap<Cake, Integer> cakes = new HashMap<>();
+    private CakeOption cakeOptions = new DBCakeOptions().findAllCakeOptions();
     
     
     public Cupcake() {
     
+    }
+    
+    public CakeOption getCakeOptions() {
+        return cakeOptions;
+    }
+    
+    public void setCakeOptions(CakeOption cakeOptions) {
+        this.cakeOptions = cakeOptions;
     }
     
     public HashMap<Cake, Integer> getCakes() {

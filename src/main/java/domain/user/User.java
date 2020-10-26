@@ -36,11 +36,11 @@ public class User {
     private final byte[] salt;
     private final byte[] secret;
     private final Enum<Role> role;
-    private final Timestamp timestamp;
+    private final Timestamp createdAt;
     private double accountBalance;
     
     
-    public User(int id, String email, String name, String phoneno, byte[] salt, byte[] secret, Enum<Role> role, Timestamp timestamp, double accountBalance) {
+    public User(int id, String email, String name, String phoneno, byte[] salt, byte[] secret, Enum<Role> role, Timestamp createdAt, double accountBalance) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -48,7 +48,7 @@ public class User {
         this.salt = salt;
         this.secret = secret;
         this.role = role;
-        this.timestamp = timestamp;
+        this.createdAt = createdAt;
         this.accountBalance = accountBalance;
     }
     
@@ -72,8 +72,8 @@ public class User {
         return role;
     }
     
-    public Timestamp getTimestamp() {
-        return timestamp;
+    public Timestamp getCreatedAt() {
+        return createdAt;
     }
     
     public double getAccountBalance() {
@@ -92,7 +92,7 @@ public class User {
                 ", name='" + name + '\'' +
                 ", phoneno='" + phoneno + '\'' +
                 ", role=" + role +
-                ", timestamp=" + timestamp +
+                ", createdAt=" + createdAt +
                 ", accountBalance=" + accountBalance +
                 '}';
     }

@@ -1,6 +1,5 @@
 package ui.Customer;
 
-import api.Cupcake;
 import domain.items.Cake;
 import domain.items.CakeOption;
 import ui.BaseServlet;
@@ -24,6 +23,7 @@ public class Cart extends BaseServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         HttpSession session = req.getSession();
+        req.setCharacterEncoding("UTF-8");
     
         setup(session);
         
@@ -75,7 +75,7 @@ public class Cart extends BaseServlet {
      * @see api.Cupcake
      */
     private void addToCart(HttpServletRequest req, HttpSession session){
-        CakeOption cakeOption = new CakeOption();
+        CakeOption cakeOption = api.getCakeOptions();
     
         String bottom = req.getParameter("bund");
         String topping = req.getParameter("topping");
@@ -113,6 +113,7 @@ public class Cart extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
         
         HttpSession session = req.getSession();
         setup(session);

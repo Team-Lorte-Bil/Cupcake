@@ -1,7 +1,8 @@
 <%@ page import="domain.items.CakeOption" %>
 <%@ page import="java.util.Map" %>
+<%@ page import="infrastructure.DBCakeOptions" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<% CakeOption cake = new CakeOption(); %>
+<% CakeOption cake = new DBCakeOptions().findAllCakeOptions(); %>
 
     <div class="container text-center">
 

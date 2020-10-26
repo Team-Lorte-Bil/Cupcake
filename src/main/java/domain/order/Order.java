@@ -14,14 +14,16 @@ public class Order {
     private final String comment;
     private final Timestamp timestamp;
     private final boolean paid;
+    private final boolean completed;
     
-    public Order(int orderId, User user, String comment, Timestamp timestamp, boolean paid) {
+    public Order(int orderId, User user, String comment, Timestamp timestamp, boolean paid, boolean completed) {
         this.orderId = orderId;
         this.user = user;
         this.cakes = new HashMap<>();
         this.comment = comment;
         this.timestamp = timestamp;
         this.paid = paid;
+        this.completed = completed;
     }
     
     
