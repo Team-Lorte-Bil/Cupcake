@@ -1,27 +1,30 @@
 package api;
 
 import domain.items.Cake;
-import domain.items.CakeOption;
+import domain.items.CakeOptions;
 import infrastructure.DBCakeOptions;
+import infrastructure.Database;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Cupcake {
     
+    private final Database database = new Database();
+    
     private HashMap<Cake, Integer> cakes = new HashMap<>();
-    private CakeOption cakeOptions = new DBCakeOptions().findAllCakeOptions();
+    private CakeOptions cakeOptions = new DBCakeOptions(database).findAllCakeOptions();
     
     
     public Cupcake() {
     
     }
     
-    public CakeOption getCakeOptions() {
+    public CakeOptions getCakeOptions() {
         return cakeOptions;
     }
     
-    public void setCakeOptions(CakeOption cakeOptions) {
+    public void setCakeOptions(CakeOptions cakeOptions) {
         this.cakeOptions = cakeOptions;
     }
     

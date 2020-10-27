@@ -2,12 +2,12 @@ package domain.items;
 
 import java.util.HashMap;
 
-public class CakeOption {
+public class CakeOptions {
     
     private final HashMap<String,Integer> bottoms;
     private final HashMap<String,Integer> toppings;
     
-    public CakeOption(HashMap<String, Integer> bottoms, HashMap<String, Integer> toppings) {
+    public CakeOptions(HashMap<String, Integer> bottoms, HashMap<String, Integer> toppings) {
         this.bottoms = bottoms;
         this.toppings = toppings;
     }

@@ -1,7 +1,7 @@
 package ui.Customer;
 
 import domain.items.Cake;
-import domain.items.CakeOption;
+import domain.items.CakeOptions;
 import ui.BaseServlet;
 
 import javax.servlet.ServletException;
@@ -75,7 +75,7 @@ public class Cart extends BaseServlet {
      * @see api.Cupcake
      */
     private void addToCart(HttpServletRequest req, HttpSession session){
-        CakeOption cakeOption = api.getCakeOptions();
+        CakeOptions cakeOptions = api.getCakeOptions();
     
         String bottom = req.getParameter("bund");
         String topping = req.getParameter("topping");
@@ -84,12 +84,12 @@ public class Cart extends BaseServlet {
         final int[] bottomPrice = {0};
         final int[] toppingPrice = {0};
     
-        cakeOption.getBottoms().forEach((k, v) -> {
+        cakeOptions.getBottoms().forEach((k, v) -> {
             if(k.equalsIgnoreCase(bottom)){
                 bottomPrice[0] = v;
             }
         });
-        cakeOption.getToppings().forEach((k, v) -> {
+        cakeOptions.getToppings().forEach((k, v) -> {
             if(k.equalsIgnoreCase(topping)){
                 toppingPrice[0] = v;
             }

@@ -1,3 +1,19 @@
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : Localhost
+ Source Server Type    : MySQL
+ Source Server Version : 80019
+ Source Host           : localhost:3306
+ Source Schema         : Cupcake
+
+ Target Server Type    : MySQL
+ Target Server Version : 80019
+ File Encoding         : 65001
+
+ Date: 27/10/2020 10:15:52
+*/
+
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -11,6 +27,17 @@ CREATE TABLE `CakeBottoms` (
   `price` double(10,2) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
+
+-- ----------------------------
+-- Records of CakeBottoms
+-- ----------------------------
+BEGIN;
+INSERT INTO `CakeBottoms` VALUES (1, 'Chokolade', 5.00);
+INSERT INTO `CakeBottoms` VALUES (2, 'Vanilje', 5.00);
+INSERT INTO `CakeBottoms` VALUES (3, 'Nødder', 5.00);
+INSERT INTO `CakeBottoms` VALUES (4, 'Pistacie', 6.00);
+INSERT INTO `CakeBottoms` VALUES (5, 'Mandel', 7.00);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for CakesOnOrder
@@ -32,6 +59,12 @@ CREATE TABLE `CakesOnOrder` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
 
 -- ----------------------------
+-- Records of CakesOnOrder
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for CakeToppings
 -- ----------------------------
 DROP TABLE IF EXISTS `CakeToppings`;
@@ -41,6 +74,21 @@ CREATE TABLE `CakeToppings` (
   `price` double(10,2) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
+
+-- ----------------------------
+-- Records of CakeToppings
+-- ----------------------------
+BEGIN;
+INSERT INTO `CakeToppings` VALUES (1, 'Chokolade', 5.00);
+INSERT INTO `CakeToppings` VALUES (2, 'Blåbær', 5.00);
+INSERT INTO `CakeToppings` VALUES (3, 'Hindbær', 5.00);
+INSERT INTO `CakeToppings` VALUES (4, 'Chrips', 6.00);
+INSERT INTO `CakeToppings` VALUES (5, 'Jordbær', 6.00);
+INSERT INTO `CakeToppings` VALUES (6, 'Rum og rossin', 7.00);
+INSERT INTO `CakeToppings` VALUES (7, 'Appelsin', 8.00);
+INSERT INTO `CakeToppings` VALUES (8, 'Citron', 8.00);
+INSERT INTO `CakeToppings` VALUES (9, 'Blåskimmel', 9.00);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for Orders
@@ -59,6 +107,12 @@ CREATE TABLE `Orders` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
 
 -- ----------------------------
+-- Records of Orders
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for properties
 -- ----------------------------
 DROP TABLE IF EXISTS `properties`;
@@ -66,6 +120,13 @@ CREATE TABLE `properties` (
   `name` varchar(255) COLLATE utf8_danish_ci DEFAULT NULL,
   `value` varchar(255) COLLATE utf8_danish_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
+
+-- ----------------------------
+-- Records of properties
+-- ----------------------------
+BEGIN;
+INSERT INTO `properties` VALUES ('version', '1');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for Users
@@ -83,5 +144,11 @@ CREATE TABLE `Users` (
   `accountBalance` double(255,0) NOT NULL,
   PRIMARY KEY (`id`,`email`,`phoneno`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
+
+-- ----------------------------
+-- Records of Users
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -1,8 +1,11 @@
-<%@ page import="domain.items.CakeOption" %>
+<%@ page import="domain.items.CakeOptions" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="infrastructure.DBCakeOptions" %>
+<%@ page import="api.Cupcake" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<% CakeOption cake = new DBCakeOptions().findAllCakeOptions(); %>
+<%
+    Cupcake api = new Cupcake();
+%>
 
     <div class="container text-center">
 
@@ -21,7 +24,7 @@
 
     <select name="bund" id="bund">
         <%
-            for (Map.Entry<String, Integer> entry : cake.getBottoms().entrySet()) {
+            for (Map.Entry<String, Integer> entry : api.getCakeOptions().getBottoms().entrySet()) {
                 %>
         <option value="<%=entry.getKey()%>"><%=entry.getKey()%> - <%=entry.getValue()%>kr</option>
         <%}%>
@@ -32,7 +35,7 @@
 
     <select name="topping" id="topping">
         <%
-            for (Map.Entry<String, Integer> entry : cake.getToppings().entrySet()) {
+            for (Map.Entry<String, Integer> entry : api.getCakeOptions().getToppings().entrySet()) {
         %>
         <option value="<%=entry.getKey()%>"><%=entry.getKey()%> - <%=entry.getValue()%>kr</option>
         <%}%>
