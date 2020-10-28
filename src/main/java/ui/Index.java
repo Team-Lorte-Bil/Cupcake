@@ -17,6 +17,9 @@ public class Index extends BaseServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         
+        req.setAttribute("toppings", api.getCakeOptions().getToppings());
+        req.setAttribute("bottoms", api.getCakeOptions().getBottoms());
+        
         render("Olsker Cupcaks", "/WEB-INF/index.jsp", req, resp);
     }
 }

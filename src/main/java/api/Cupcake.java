@@ -9,16 +9,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Cupcake {
+    private static final String VERSION = "0.1";
+    private final Database database;
+    private HashMap<Cake, Integer> cakes;
+    private CakeOptions cakeOptions;
     
-    private final Database database = new Database();
     
-    private HashMap<Cake, Integer> cakes = new HashMap<>();
-    private CakeOptions cakeOptions = new DBCakeOptions(database).findAllCakeOptions();
-    
-    
-    public Cupcake() {
-    
+    public Cupcake(Database db) {
+        this.database = db;
+        cakes = new HashMap<>();
+        cakeOptions = new DBCakeOptions(database).findAllCakeOptions();
     }
+    
+    public String getVersion() {
+        return VERSION;
+    }
+    
     
     public CakeOptions getCakeOptions() {
         return cakeOptions;
@@ -89,5 +95,9 @@ public class Cupcake {
             totalprice += k.getPrice() * v;
         }
         return totalprice;
+    }
+    
+    public Database getDatabase() {
+        return database;
     }
 }

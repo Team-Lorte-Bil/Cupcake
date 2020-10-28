@@ -1,6 +1,7 @@
 package ui;
 
 import api.Cupcake;
+import infrastructure.Database;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -11,8 +12,16 @@ import java.time.LocalDateTime;
 
 
 public class BaseServlet extends HttpServlet {
+    protected static final Cupcake api;
     
-    public Cupcake api = new Cupcake();
+    static {
+        api = createApplication();
+    }
+    
+    private static Cupcake createApplication() {
+        Database db = new Database();
+        return new Cupcake(db);
+    }
     
     /**
      * @param title Page title tag

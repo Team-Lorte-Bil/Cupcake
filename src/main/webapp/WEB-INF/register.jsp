@@ -6,26 +6,28 @@
         <div class="col-sm">
         </div>
         <div class="col-sm">
-            <form>
+            <form action="Register" method="POST">
                 <div class="form-group">
-                    <label for="exampleInputName">Indtast dit navn</label>
-                    <input type="name" class="form-control" id="exampleInputName" placeholder="Indtast din e-mail...">
-
+                    <label for="inputName">Indtast dit navn</label>
+                    <input type="name" class="form-control" id="inputName" name="inputName" placeholder="Indtast dit navn...">
+                </div>
 
                     <div class="form-group">
+                        <label for="inputEmail">Indtast din e-mail addresse</label>
+                        <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="Indtast din e-mail...">
+                    </div>
 
-                    </div> <label for="exampleInputEmail1">Indtast din e-mail addresse</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Indtast din e-mail...">
-
-                </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword1">Lav et kodeord</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Indtast dit kodeord...">
+                    <label for="inputPhone">Indtast telefon nummer</label>
+                    <input type="tel" class="form-control" id="inputPhone" name="inputPhone" placeholder="Indtast dit telefon nummer...">
                 </div>
-                <a class="nav-link" href="login.html.html">
-                    <button type="submit" class="btn btn-primary" aria-describedby="usercreated">Opret bruger</button>
-                </a>
 
+                <div class="form-group">
+                    <label for="inputPsw">Indtast kodeord</label>
+                    <input type="password" class="form-control" id="inputPsw" name="inputPsw" placeholder="Indtast dit kodeord...">
+                </div>
+
+                <input type="submit" value="Opret bruger" class="btn btn-primary" />
 
             </form>
         </div>

@@ -1,36 +1,100 @@
 package infrastructure;
 
-import domain.items.CakeOptions;
 import domain.items.Option;
+import domain.user.User;
+import domain.user.UserExists;
 
 import java.sql.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 
-public class DBCakeOptions {
+public class DBUser {
     
     private final Database db;
     
-    public DBCakeOptions(Database db) {
+    public DBUser(Database db) {
         this.db = db;
     }
     
-    private HashMap<String, Integer> getAllCakeBottoms(){
+    public ArrayList<User> getAllUsers(){
         try (Connection conn = db.getConnection()) {
-            PreparedStatement s = conn.prepareStatement("SELECT * FROM CakeBottoms;");
+            PreparedStatement s = conn.prepareStatement("SELECT * FROM Users;");
             ResultSet rs = s.executeQuery();
-            HashMap<String, Integer> tmpList = new HashMap<>();
-        
+            ArrayList<User> tmpList = new ArrayList<>();
+            
             while(rs.next()) {
-                String name = rs.getString("name");
-                int price = (int) rs.getDouble("price");
+                int id = rs.getInt(1);
+                String email = rs.getString(2);
+                String name = rs.getString(3);
+                int phoneno = rs.getInt(4);
+                byte[] salt = rs.getBytes(5);
+                byte[] secret = rs.getBytes(6);
+                Enum<User.Role> role = User.Role.valueOf(rs.getString(7));
+                Timestamp createdAt = rs.getTimestamp(8);
+                double accountBalance = rs.getDouble(9);
                 
-                tmpList.put(name,price);
+                User tmpUser = new User(id,email,name,phoneno,salt,secret,role,createdAt,accountBalance);
+                
+                tmpList.add(tmpUser);
             }
             return tmpList;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+    
+    public User createUser(String name, String password, String email, int phoneno, double accountBalance){
+        int id;
+        byte[] userSalt = User.generateSalt();
+        byte[] userSecret = User.calculateSecret(userSalt, password);
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         
+        User tmpUser;
+    
+        try (Connection conn = db.getConnection()) {
+        
+            
+                PreparedStatement ps =
+                        conn.prepareStatement(
+                                "INSERT INTO Users (email, name, phoneno, salt, secret, role, accountBalance, createdAt) " +
+                                        "VALUE (?,?,?,?,?,?,?,?);",
+                                Statement.RETURN_GENERATED_KEYS);
+        
+            ps.setString(1,email);
+            ps.setString(2,name);
+            ps.setInt(3,phoneno);
+            ps.setBytes(4,userSalt);
+            ps.setBytes(5,userSecret);
+            ps.setString(6, String.valueOf(User.Role.User));
+            ps.setDouble(7,accountBalance);
+            ps.setTimestamp(8,timestamp);
+        
+            try {
+                ps.executeUpdate();
+            } catch (SQLIntegrityConstraintViolationException e) {
+                System.out.println(e);
+            }
+        
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                id = rs.getInt(1);
+                System.out.println(timestamp);
+                tmpUser = new User(id, email,name,  phoneno,
+                        userSalt, userSecret, User.Role.User,
+                        timestamp,
+                        accountBalance);
+            } else {
+                tmpUser = null;
+                throw new UserExists(name);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        
+        return tmpUser;
     }
     
     private HashMap<String, Integer> getAllCakeToppings(){
@@ -52,11 +116,7 @@ public class DBCakeOptions {
         
     }
     
-    public CakeOptions findAllCakeOptions() {
-        return new CakeOptions(getAllCakeBottoms(), getAllCakeToppings());
-    }
     
-
     public Option createCakeOption(Option option) {
         int id;
         PreparedStatement ps;
@@ -85,7 +145,7 @@ public class DBCakeOptions {
             } catch (SQLIntegrityConstraintViolationException e) {
                 System.out.println(e);
             }
-
+            
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
                 id = rs.getInt(1);
@@ -130,8 +190,8 @@ public class DBCakeOptions {
     }
     
     
-
-
     
-
+    
+    
+    
 }

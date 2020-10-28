@@ -11,7 +11,7 @@
  Target Server Version : 80019
  File Encoding         : 65001
 
- Date: 27/10/2020 10:15:52
+ Date: 28/10/2020 14:34:11
 */
 
 SET NAMES utf8mb4;
@@ -140,7 +140,7 @@ CREATE TABLE `Users` (
   `salt` blob NOT NULL,
   `secret` blob NOT NULL,
   `role` enum('User','Admin') COLLATE utf8_danish_ci NOT NULL,
-  `createdAt` timestamp NOT NULL,
+  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `accountBalance` double(255,0) NOT NULL,
   PRIMARY KEY (`id`,`email`,`phoneno`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;

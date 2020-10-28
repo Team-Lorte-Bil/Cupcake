@@ -24,7 +24,7 @@ public class User {
         PASSWORD_FACTORY = factory;
     }
 
-    private enum Role {
+    public enum Role {
         User,
         Admin
     }
@@ -32,7 +32,7 @@ public class User {
     private final int id;
     private final String email;
     private final String name;
-    private final String phoneno;
+    private final int phoneno;
     private final byte[] salt;
     private final byte[] secret;
     private final Enum<Role> role;
@@ -40,7 +40,7 @@ public class User {
     private double accountBalance;
     
     
-    public User(int id, String email, String name, String phoneno, byte[] salt, byte[] secret, Enum<Role> role, Timestamp createdAt, double accountBalance) {
+    public User(int id, String email, String name, int phoneno, byte[] salt, byte[] secret, Enum<Role> role, Timestamp createdAt, double accountBalance) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -64,7 +64,7 @@ public class User {
         return name;
     }
     
-    public String getPhoneno() {
+    public int getPhoneno() {
         return phoneno;
     }
     
@@ -82,6 +82,10 @@ public class User {
     
     public void setAccountBalance(double accountBalance) {
         this.accountBalance = accountBalance;
+    }
+    
+    public boolean isAdmin(){
+        return this.role.equals(Role.Admin);
     }
     
     @Override

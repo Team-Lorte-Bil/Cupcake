@@ -1,11 +1,5 @@
-<%@ page import="domain.items.CakeOptions" %>
-<%@ page import="java.util.Map" %>
-<%@ page import="infrastructure.DBCakeOptions" %>
-<%@ page import="api.Cupcake" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%
-    Cupcake api = new Cupcake();
-%>
 
     <div class="container text-center">
 
@@ -22,23 +16,20 @@
 
     <label for="Bund">Bunde:</label>
 
+
     <select name="bund" id="bund">
-        <%
-            for (Map.Entry<String, Integer> entry : api.getCakeOptions().getBottoms().entrySet()) {
-                %>
-        <option value="<%=entry.getKey()%>"><%=entry.getKey()%> - <%=entry.getValue()%>kr</option>
-        <%}%>
+        <c:forEach items="${requestScope.bottoms.entrySet()}" var="bottom">
+        <option value="${bottom.key}">${bottom.key} - ${bottom.value}kr</option>
+        </c:forEach>
     </select>
 
     <br/> <br/>
     <label for="Topping">Topping:</label>
 
     <select name="topping" id="topping">
-        <%
-            for (Map.Entry<String, Integer> entry : api.getCakeOptions().getToppings().entrySet()) {
-        %>
-        <option value="<%=entry.getKey()%>"><%=entry.getKey()%> - <%=entry.getValue()%>kr</option>
-        <%}%>
+        <c:forEach items="${requestScope.toppings.entrySet()}" var="topping">
+            <option value="${topping.key}">${topping.key} - ${topping.value}kr</option>
+        </c:forEach>
     </select>
 
     <br/> <br/>
@@ -62,13 +53,13 @@
 
     <br/> <br/>
 
-    <input type="submit" value="Tilføj til kurv"/>
+    <input type="submit" value="Tilføj til kurv" class="btn btn-primary" />
     </form>
 
 
     <br/> <br/>
     <a class="nav-link" href="/Cart">
-        <input type="submit" value="Gå til betaling"/>
-        </form>
+        <input type="submit" value="Gå til betaling" class="btn btn-success" />
+
     </a>
 </div>
