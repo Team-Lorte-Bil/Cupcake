@@ -30,7 +30,12 @@
         </div>
     </div>
     <!-- nav bar -->
-    <%@include file="../includes/navbar.jsp"%>
+    <c:if test="${sessionScope.currentUser.admin}">
+    <%@include file="../includes/admin-navbar.jsp"%>
+    </c:if>
+    <c:if test="${!sessionScope.currentUser.admin}">
+        <%@include file="../includes/navbar.jsp"%>
+    </c:if>
     <!-- navbar end -->
     <!-- header end -->
 
