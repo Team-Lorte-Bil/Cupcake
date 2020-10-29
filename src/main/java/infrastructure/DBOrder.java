@@ -46,7 +46,7 @@ public class DBOrder {
         HashMap<Cake, Integer> cakeList = new HashMap<Cake, Integer>();
         
         try(Connection conn = db.getConnection()){
-            String sqlQuery = "SELECT CakesOnOrder.orderId, CakesOnOrder.quantity, \n" +
+            String sqlQuery = "SELECT CakesOnOrder.orderId, Cupcake.CakesOnOrder.quantity, \n" +
                     "CakeBottoms.`name` as \"bottomName\", CakeBottoms.price as \"bottomPrice\",\n" +
                     "CakeToppings.`name` as \"toppingName\", CakeToppings.price as \"toppingPrice\"\n" +
                     "FROM CakesOnOrder\n" +
@@ -83,7 +83,7 @@ public class DBOrder {
     public Order createOrder(User user, HashMap<Cake, Integer> cakes, String comment){
         Order tmpOrder = null;
         
-        int orderId;
+        int orderId = 0;
         User tmpUser = user;
         String orderComment = comment;
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -100,6 +100,7 @@ public class DBOrder {
                                 Statement.RETURN_GENERATED_KEYS);
         
             ps.setInt(1,tmpUser.getId());
+            System.out.println(tmpUser);
             ps.setString(2,orderComment);
             ps.setTimestamp(3,timestamp);
             ps.setBoolean(4,paid);
@@ -114,40 +115,57 @@ public class DBOrder {
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
                 orderId = rs.getInt(1);
-                createCakesOnOrder(orderId, cakes);
-                
-                tmpOrder = new Order(orderId, tmpUser, comment, timestamp, paid, completed);
-                return tmpOrder;
             }
+            
+            System.out.println("Creating cakes on order: " + orderId);
+    
+            tmpOrder = new Order(orderId, tmpUser, comment, timestamp, paid, completed);
+            
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        
+    
+        createCakesOnOrder(orderId, cakes);
         return tmpOrder;
     }
     
     public HashMap<Cake, Integer> createCakesOnOrder(int orderId, HashMap<Cake, Integer> cakes){
+        int cakeno = cakes.size();
+        System.out.println("Antal kager som skal indsættes: " + cakeno);
             for(Map.Entry<Cake, Integer> c: cakes.entrySet()){
+                System.out.println("cakeno: " + cakeno);
                 try (Connection conn = db.getConnection()) {
+                    
+                    String sql = "INSERT INTO CakesOnOrder (orderId, bottomId, toppingId, quantity) VALUE (?,?,?,?);";
         
                     PreparedStatement ps =
                             conn.prepareStatement(
-                                    "INSERT INTO CakesOnOrder (orderId, bottomId, toppingId, quantity) " +
-                                            "VALUE (?,?,?,?);",
+                                    sql,
                                     Statement.RETURN_GENERATED_KEYS);
                     
                     int cakeToppingId = new DBCakeOptions(db).getToppingIdFromName(c.getKey().getTopping());
-                    int cakeBottomId = new DBCakeOptions(db).getToppingIdFromName(c.getKey().getTopping());
+                    int cakeBottomId = new DBCakeOptions(db).getBottomIdFromName(c.getKey().getBottom());
+    
+                    System.out.println("Trying to insert cake...");
+                    System.out.println("orderID: " + orderId);
+                    System.out.println("bottomId: " + cakeBottomId);
+                    System.out.println("toppingId: " + cakeToppingId);
+                    System.out.println("quantity: " + c.getValue());
         
                     ps.setInt(1, orderId);
                     ps.setInt(2, cakeToppingId);
                     ps.setInt(3, cakeBottomId);
                     ps.setInt(4, c.getValue());
-                    
-                    return cakes;
+    
+                    try {
+                        ps.executeUpdate();
+                    } catch (SQLIntegrityConstraintViolationException e) {
+                        System.out.println(e);
+                    }
                 } catch (SQLException e){
                     throw new RuntimeException(e);
                 }
+                cakeno--;
             }
         return cakes;
     }

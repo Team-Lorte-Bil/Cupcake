@@ -11,9 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.Random;
 
 @WebServlet("/CreateOrder")
 public class Order extends BaseServlet {
@@ -41,11 +39,17 @@ public class Order extends BaseServlet {
     }
     
     private domain.order.Order createNewOrder(HttpServletRequest req){
-        User curUser = (User) req.getAttribute("currentUser");
-        HashMap<Cake, Integer> cakesFromPost = (HashMap<Cake, Integer>) req.getAttribute("cakes");
+        User curUser = (User) req.getSession().getAttribute("currentUser");
+        System.out.println("User: " + curUser);
+        HashMap<Cake, Integer> cakesFromSession = (HashMap<Cake, Integer>) req.getSession().getAttribute("cakes");
+        System.out.println("Cakes from sess: " + cakesFromSession);
         String comment = (String) req.getAttribute("comment");
+        System.out.println("Comment: " + comment);
+        if(comment == null){
+            comment = "";
+        }
     
-        return new DBOrder(api.getDatabase()).createOrder(curUser, cakesFromPost, comment);
+        return new DBOrder(api.getDatabase()).createOrder(curUser, cakesFromSession, comment);
     }
     
     /**

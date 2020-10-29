@@ -4,6 +4,7 @@
     <h3>Din kurv</h3>
     <br/> <br/>
 
+
     <%
         if (session.getAttribute("cakes") != null) {
     %>
@@ -53,6 +54,7 @@
     </table>
 
     </label>
+    <form action="CreateOrder" method="post">
     <div class="form-group">
         <label for="comment">Kommentar til ordren</label>
         <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
@@ -62,7 +64,7 @@
     <p><b>Total pris:</b></p>
     <p><b><u>${sessionScope.totalprice},- kr</u></b></p>
 
-    <form action="CreateOrder" method="post">
+
         <input type="hidden" name="cakes" value="${sessionScope.cakes}">
         <input type="hidden" name="totalprice" value="${sessionScope.totalprice}">
         <input type="submit" class="btn btn-primary" value="Afgiv ordre"></input>

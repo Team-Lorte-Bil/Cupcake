@@ -149,12 +149,12 @@ public class DBCakeOptions {
         return 0;
     }
     
-    public int getBottomIdFromName(String topping) {
+    public int getBottomIdFromName(String bottom) {
         try(Connection conn = db.getConnection()){
             String sqlQuery = "SELECT id FROM CakeBottoms WHERE name=?";
             
             PreparedStatement s = conn.prepareStatement(sqlQuery);
-            s.setString(1,topping);
+            s.setString(1,bottom);
             ResultSet rs = s.executeQuery();
             
             while(rs.next()){
