@@ -19,6 +19,14 @@ CREATE TABLE `CakeBottoms` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
 
+BEGIN;
+INSERT INTO `CakeBottoms` VALUES (1, 'Chokolade', 5.00);
+INSERT INTO `CakeBottoms` VALUES (2, 'Vanilje', 5.00);
+INSERT INTO `CakeBottoms` VALUES (3, 'Nødder', 5.00);
+INSERT INTO `CakeBottoms` VALUES (4, 'Pistacie', 6.00);
+INSERT INTO `CakeBottoms` VALUES (5, 'Mandel', 7.00);
+COMMIT;
+
 -- ----------------------------
 -- Table structure for CakesOnOrder
 -- ----------------------------
@@ -48,6 +56,18 @@ CREATE TABLE `CakeToppings` (
   `price` double(10,2) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
+
+BEGIN;
+INSERT INTO `CakeToppings` VALUES (1, 'Chokolade', 5.00);
+INSERT INTO `CakeToppings` VALUES (2, 'Blåbær', 5.00);
+INSERT INTO `CakeToppings` VALUES (3, 'Hindbær', 5.00);
+INSERT INTO `CakeToppings` VALUES (4, 'Chrips', 6.00);
+INSERT INTO `CakeToppings` VALUES (5, 'Jordbær', 6.00);
+INSERT INTO `CakeToppings` VALUES (6, 'Rum og rossin', 7.00);
+INSERT INTO `CakeToppings` VALUES (7, 'Appelsin', 8.00);
+INSERT INTO `CakeToppings` VALUES (8, 'Citron', 8.00);
+INSERT INTO `CakeToppings` VALUES (9, 'Blåskimmel', 9.00);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for Orders
