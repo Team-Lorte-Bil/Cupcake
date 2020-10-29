@@ -1,15 +1,11 @@
-package ui.Customer;
+package web.pages.Customer;
 
-import domain.items.Cake;
-import domain.items.CakeOptions;
 import domain.user.User;
-import domain.user.UserExists;
 import infrastructure.DBUser;
-import ui.BaseServlet;
+import web.pages.BaseServlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;

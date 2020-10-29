@@ -12,20 +12,26 @@
 
         <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    ${sessionScope.currentUser.email}
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/Register">Opret konto</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/Login">Log ind</a>
-                </li>
-                <li class="nav-item">
+                <c:forEach var="i" items="${requestScope.navbar.items}">
+                    <c:choose>
+                        <c:when test="${i.url == 'nolink'}">
+                            <span class="navbar-text">
+                                    ${sessionScope.currentUser.email} (Saldo: ${sessionScope.currentUser.accountBalance} kr) |
+                            </span>
+                        </c:when>
+                        <c:otherwise>
+                            <li class="nav-item <c:if test="${i.active}">active</c:if>">
+                                <a class="nav-link" href="<c:url value="${i.url}"/>">${i.name} <c:if test="${i.active}"><span
+                                        class="sr-only">(current)</span></c:if></a>
+                            </li>
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
 
                 <li class="nav-item">
                     <a class="nav-link" href="${pageContext.request.contextPath}/Cart"><i class="fa fa-shopping-cart"></i></a>
                 </li>
+
             </ul>
         </div>
     </nav>

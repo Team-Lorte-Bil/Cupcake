@@ -1,9 +1,9 @@
-package ui.Customer;
+package web.pages.Customer;
 
 import domain.user.InvalidPassword;
 import domain.user.User;
 import infrastructure.DBUser;
-import ui.BaseServlet;
+import web.pages.BaseServlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

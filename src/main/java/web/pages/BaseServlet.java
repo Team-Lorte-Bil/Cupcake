@@ -1,7 +1,8 @@
-package ui;
+package web.pages;
 
 import api.Cupcake;
 import infrastructure.Database;
+import web.widgets.Navbar;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -33,6 +34,7 @@ public class BaseServlet extends HttpServlet {
             throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
+        req.setAttribute("navbar", new Navbar(req));
         req.setAttribute("title", title);
         req.setAttribute("content", content);
         req.getRequestDispatcher("/includes/base.jsp").forward(req, resp);
