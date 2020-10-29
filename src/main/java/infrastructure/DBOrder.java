@@ -100,7 +100,6 @@ public class DBOrder {
                                 Statement.RETURN_GENERATED_KEYS);
         
             ps.setInt(1,tmpUser.getId());
-            System.out.println(tmpUser);
             ps.setString(2,orderComment);
             ps.setTimestamp(3,timestamp);
             ps.setBoolean(4,paid);

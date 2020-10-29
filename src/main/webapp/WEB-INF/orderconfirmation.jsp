@@ -16,7 +16,7 @@
         </thead>
         <tbody>
         <!-- print all cupcakes in session cart -->
-        <c:forEach items="${requestScope.order.cakes}" var="cake">
+        <c:forEach items="${requestScope.cakes}" var="cake">
             <tr>
                 <td>${cake.value}</td>
                 <td>${cake.key.bottom}</td>
@@ -24,7 +24,7 @@
                 <td>${cake.key.price * cake.value},- kr</td>
             </tr>
         </c:forEach>
-        <tr>
+        <tr> <!-- empty row for spacing -->
             <td></td>
             <td></td>
             <td></td>

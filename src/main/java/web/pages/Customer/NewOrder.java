@@ -1,6 +1,7 @@
 package web.pages.Customer;
 
 import domain.items.Cake;
+import domain.order.Order;
 import domain.user.User;
 import infrastructure.DBOrder;
 import web.pages.BaseServlet;
@@ -16,6 +17,8 @@ import java.util.HashMap;
 @WebServlet("/CreateOrder")
 public class NewOrder extends BaseServlet {
     
+    private HashMap<Cake, Integer> cakes = new HashMap<>();
+    
     /**
      * Create the order and redirects to order confirmation page.
      * @see NewOrder
@@ -25,10 +28,13 @@ public class NewOrder extends BaseServlet {
             throws ServletException, IOException {
         HttpSession session = req.getSession();
         
+        cakes = (HashMap<Cake, Integer>) session.getAttribute("cakes");
         
-        domain.order.Order tmpOrder = createNewOrder(req);
+        
+        Order tmpOrder = createNewOrder(req);
         
         req.setAttribute("order",tmpOrder);
+        req.setAttribute("cakes", cakes);
         
         log(req,"Got: " + tmpOrder);
         
@@ -38,18 +44,14 @@ public class NewOrder extends BaseServlet {
         
     }
     
-    private domain.order.Order createNewOrder(HttpServletRequest req){
+    private Order createNewOrder(HttpServletRequest req){
         User curUser = (User) req.getSession().getAttribute("currentUser");
-        System.out.println("User: " + curUser);
-        HashMap<Cake, Integer> cakesFromSession = (HashMap<Cake, Integer>) req.getSession().getAttribute("cakes");
-        System.out.println("Cakes from sess: " + cakesFromSession);
         String comment = (String) req.getAttribute("comment");
-        System.out.println("Comment: " + comment);
         if(comment == null){
             comment = "";
         }
     
-        return new DBOrder(api.getDatabase()).createOrder(curUser, cakesFromSession, comment);
+        return new DBOrder(api.getDatabase()).createOrder(curUser, cakes, comment);
     }
     
     /**
@@ -70,9 +72,9 @@ public class NewOrder extends BaseServlet {
     private void clearCart(HttpSession session, HttpServletRequest req){
         api.clearCart();
         session.removeAttribute("cakes");
+        req.removeAttribute("cakes");
+        cakes.clear();
         session.removeAttribute("totalprice");
         session.removeAttribute("lastcake");
-        session.invalidate();
-        req.getSession().invalidate();
     }
 }
