@@ -24,9 +24,9 @@
 
                 <input type="submit" value="Log ind" class="btn btn-primary" />
 
-                <a href="${pageContext.request.contextPath}/Reset">
-                    <small id="emailHelp" class="form-text text-muted">Har du glemt dit kodeord? Tryk her</small>
-                </a>
+<%--                <a href="${pageContext.request.contextPath}/Reset">--%>
+<%--                    <small id="emailHelp" class="form-text text-muted">Har du glemt dit kodeord? Tryk her</small>--%>
+<%--                </a>--%>
             </form>
         </div>
         <div class="col-sm">

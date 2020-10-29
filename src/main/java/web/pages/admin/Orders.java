@@ -20,13 +20,24 @@ public class Orders extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        
-        ArrayList<Order> orders = api.getOrders();
     
-        System.out.println(orders);
-        
-        req.setAttribute("orders", orders);
-        
-        render("Administrator - Vis ordre", "/WEB-INF/admin/orders.jsp", req, resp);
+        try {
+            if (! api.checkAdminRights(req)) {
+                resp.sendError(401);
+            }
+    
+            if (! req.getSession().getAttribute("isAdmin").equals(true) || req.getSession().getAttribute("isAdmin") == null)
+                resp.sendError(401);
+    
+            ArrayList<Order> orders = api.getOrders();
+    
+            System.out.println(orders);
+    
+            req.setAttribute("orders", orders);
+    
+            render("Administrator - Vis ordre", "/WEB-INF/admin/orders.jsp", req, resp);
+        } catch (Exception e){
+            log(e.getMessage());
+        }
     }
 }

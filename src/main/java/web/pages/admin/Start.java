@@ -1,8 +1,5 @@
 package web.pages.admin;
 
-import domain.items.CakeOptions;
-import domain.items.Option;
-import domain.order.Order;
 import domain.user.User;
 import web.pages.BaseServlet;
 
@@ -12,10 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
-@WebServlet("/AdminItems")
-public class Items extends BaseServlet {
+@WebServlet("/AdminStart")
+public class Start extends BaseServlet {
     
     /**
      * Renders the index.jsp page
@@ -24,22 +20,12 @@ public class Items extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-    
+        
         try {
             if (! api.checkAdminRights(req)) {
                 resp.sendError(401);
             }
-    
-            ArrayList<Option> items = api.getAllCakeOptions();
-    
-            for (Option o : items) {
-                System.out.println(o);
-            }
-    
-            req.setAttribute("items", items);
-    
-            render("Administrator - Vis produkter", "/WEB-INF/admin/items.jsp", req, resp);
-    
+            render("Administrator - Start", "/WEB-INF/admin/start.jsp", req, resp);
         } catch (Exception e){
             log(e.getMessage());
         }

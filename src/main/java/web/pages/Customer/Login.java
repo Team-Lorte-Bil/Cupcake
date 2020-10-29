@@ -31,8 +31,10 @@ public class Login extends BaseServlet {
             login(req, req.getSession());
             if(req.getSession().getAttribute("cakes") != null){
                 resp.sendRedirect(req.getContextPath() + "/Cart");
+            } else if (req.getSession().getAttribute("isAdmin").equals(true)) {
+                    resp.sendRedirect(req.getContextPath() + "/AdminStart");
             } else {
-                resp.sendRedirect(req.getContextPath() + "/");
+                    resp.sendRedirect(req.getContextPath() + "/");
             }
         } catch (InvalidPassword e){
             req.setAttribute("errorMsg", e.getMessage());

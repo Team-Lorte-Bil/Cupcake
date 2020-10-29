@@ -35,6 +35,7 @@
             <div class="container">
                 <h1 class="display-4">Der skete 401 fejl</h1>
                 <p class="lead">Og ud af de 401 fejl, fandt vi ud af at du ikke har adgang hertil 🔒👮‍</p>
+                <p><a href="${pageContext.request.contextPath}/">Gå til startsiden</a></p>
             </div>
         </div>
     </div>

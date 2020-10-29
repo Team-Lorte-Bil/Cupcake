@@ -4,7 +4,9 @@
     <nav class="navbar navbar-expand-md navbar-light bg-light">
         <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/AdminStart">Start</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="${pageContext.request.contextPath}/AdminOrders">Ordre</a>
                 </li>
@@ -20,6 +22,9 @@
 
         <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
             <ul class="navbar-nav ml-auto">
+                <span class="navbar-text">
+                    ${sessionScope.currentUser.email} (Saldo: ${sessionScope.currentUser.accountBalance} kr) |
+                </span>
                 <li class="nav-item">
                     <a class="nav-link" href="${pageContext.request.contextPath}/Logout">Log ud</a>
                 </li>

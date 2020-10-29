@@ -21,13 +21,24 @@ public class Customers extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        
-        ArrayList<User> customers = api.getCustomers();
     
-        System.out.println(customers);
-        
-        req.setAttribute("customers", customers);
-        
-        render("Administrator - Vis kunder", "/WEB-INF/admin/customers.jsp", req, resp);
+        try {
+            if (! api.checkAdminRights(req)) {
+                resp.sendError(401);
+            }
+    
+            if (! req.getSession().getAttribute("isAdmin").equals(true) || req.getSession().getAttribute("isAdmin") == null)
+                resp.sendError(401);
+    
+            ArrayList<User> customers = api.getCustomers();
+    
+            System.out.println(customers);
+    
+            req.setAttribute("customers", customers);
+    
+            render("Administrator - Vis kunder", "/WEB-INF/admin/customers.jsp", req, resp);
+        } catch (Exception e){
+            log(e.getMessage());
+        }
     }
 }
