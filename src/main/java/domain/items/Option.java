@@ -46,4 +46,14 @@ public class Option {
     public int hashCode() {
         return Objects.hash(id, name, type, price);
     }
+    
+    @Override
+    public String toString() {
+        return "Option{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", price=" + price +
+                '}';
+    }
 }

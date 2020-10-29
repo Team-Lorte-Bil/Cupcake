@@ -4,6 +4,7 @@ import domain.items.CakeOptions;
 import domain.items.Option;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DBCakeOptions {
@@ -164,5 +165,45 @@ public class DBCakeOptions {
             throw new RuntimeException(e);
         }
         return 0;
+    }
+    
+    public ArrayList<Option> getAllCakeOptions() {
+        ArrayList<Option> cakeOptions = new ArrayList<>();
+        try(Connection conn = db.getConnection()){
+            String toppingQuery = "SELECT * FROM CakeToppings;";
+            String bottomQuery = "SELECT * FROM CakeBottoms;";
+        
+            PreparedStatement s = conn.prepareStatement(toppingQuery);
+            ResultSet toppingRs = s.executeQuery();
+        
+            while(toppingRs.next()){
+                int id = toppingRs.getInt(1);
+                String name = toppingRs.getString(2);
+                int price = (int) toppingRs.getDouble(3);
+                String type = "topping";
+                
+                Option option = new Option(id, name, type, price);
+                cakeOptions.add(option);
+            }
+    
+            s = conn.prepareStatement(bottomQuery);
+            ResultSet bottomRs = s.executeQuery();
+    
+            while(bottomRs.next()){
+                int id = bottomRs.getInt(1);
+                String name = bottomRs.getString(2);
+                int price = (int) bottomRs.getDouble(3);
+                String type = "bottom";
+        
+                Option option = new Option(id, name, type, price);
+                cakeOptions.add(option);
+            }
+            
+            return cakeOptions;
+        
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+        
     }
 }

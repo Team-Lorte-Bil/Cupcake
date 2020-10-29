@@ -13,16 +13,14 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${requestScope.adminmenu}" var="adminmenu" varStatus="vs">
+        <c:forEach items="${requestScope.items}" var="item" varStatus="vs">
             <tr>
                 <td>
-                    <a href="#" data-toggle="modal" data-target="#modal${vs.index}">${order.orderId}</a>
+                    <a href="#" data-toggle="modal" data-target="#modal${vs.index}">${item.name}</a>
 
                 </td>
-                <td>${adminmenu.name()}</td>
-                <td>${adminmenu.bottom()}</td>
-                <td>${adminmenu.topping}</td>
-                <td>${adminmenu.price}</td>
+                <td>${item.type}</td>
+                <td>${item.price} kr</td>
 
                 <td>
                     <form action="AdminOrders" method="post">
@@ -40,16 +38,15 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Ordre nr. ${order.orderId}</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">${item.name}</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
                             <div id="custinfo">
-                                <p>Kundenavn: ${order.user.name}</p>
-                                <p>Kundemail: ${order.user.email}</p>
-                                <p>Kundetelefon: ${order.user.phoneno}</p>
+                                <p>Type: ${item.type}</p>
+                                <p>Pris: ${item.price}</p>
                             </div>
                             <div id="custitems">
 

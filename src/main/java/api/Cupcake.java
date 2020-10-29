@@ -2,13 +2,13 @@ package api;
 
 import domain.items.Cake;
 import domain.items.CakeOptions;
+import domain.items.Option;
 import domain.order.Order;
 import domain.user.User;
 import infrastructure.DBCakeOptions;
 import infrastructure.DBOrder;
 import infrastructure.DBUser;
 import infrastructure.Database;
-import web.pages.admin.AdminMenu;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -113,10 +113,16 @@ public class Cupcake {
         return new DBOrder(database).getAllOrders();
     }
     
-    public ArrayList<User> getCustomers() { return new DBUser(database).getAllUsers(); }
+    public ArrayList<User> getCustomers() {
+        return new DBUser(database).getAllUsers();
+    }
+    
+    public ArrayList<Option> getAllCakeOptions() {
+        return new DBCakeOptions(database).getAllCakeOptions();
+    }
 
-    public boolean createCakeOption (String name, double price, String type) {
-        return new DBCakeOptions(database).createCakeOption(name, price, type);
+    public Option createCakeOption (String name, double price, String type) {
+        return new DBCakeOptions(database).createCakeOption(new Option(0, name, type, (int) price));
 
     }
 
