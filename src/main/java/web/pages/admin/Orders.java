@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @WebServlet("/AdminOrders")
 public class Orders extends BaseServlet {
@@ -30,8 +31,7 @@ public class Orders extends BaseServlet {
                 resp.sendError(401);
     
             ArrayList<Order> orders = api.getOrders();
-    
-            System.out.println(orders);
+            HashMap<Order, Double> ordersNew = api.getAllOrders();
     
             req.setAttribute("orders", orders);
     

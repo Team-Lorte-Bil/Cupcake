@@ -251,4 +251,29 @@ public class DBOrder {
             throw new RuntimeException(e);
         }
     }
+    
+    public HashMap<Order, Double> getAllOrdersMap() {
+        HashMap<Order, Double> tmpMap = new HashMap<>();
+            try (Connection conn = db.getConnection()) {
+                PreparedStatement s = conn.prepareStatement("SELECT * FROM Orders;");
+                ResultSet rs = s.executeQuery();
+            
+                while(rs.next()) {
+                    int id = rs.getInt(1);
+                    int userId = rs.getInt(2);
+                    String comment = rs.getString(3);
+                    Timestamp timestamp = rs.getTimestamp(4);
+                    boolean paid = rs.getBoolean(5);
+                    boolean completed = rs.getBoolean(6);
+                
+                    User tmpUsr = new DBUser(db).getUserFromId(userId);
+                    Order tmpOrder = new Order(id,tmpUsr,comment,timestamp,paid,completed);
+                    tmpOrder.addCakes(getCakesOnOrder(id));
+                
+                }
+                return tmpMap;
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+    }
 }

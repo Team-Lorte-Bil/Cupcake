@@ -125,6 +125,10 @@ public class Cupcake {
         return new DBOrder(database).getAllOrders();
     }
     
+    public HashMap<Order, Double> getAllOrders(){
+        return new DBOrder(database).getAllOrdersMap();
+    }
+    
     public ArrayList<User> getCustomers() {
         return new DBUser(database).getAllUsers();
     }
