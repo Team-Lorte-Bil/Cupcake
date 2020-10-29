@@ -34,8 +34,8 @@ DROP TABLE IF EXISTS `CakesOnOrder`;
 CREATE TABLE `CakesOnOrder` (
   `id` int NOT NULL AUTO_INCREMENT,
   `orderId` int DEFAULT NULL,
-  `bottomId` int DEFAULT NULL,
-  `toppingId` int DEFAULT NULL,
+  `bottomId` int NOT NULL,
+  `toppingId` int NOT NULL,
   `quantity` int NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `CakeIdOnOrderId` (`orderId`),

@@ -109,7 +109,7 @@ public class DBOrder {
             try {
                 ps.executeUpdate();
             } catch (SQLIntegrityConstraintViolationException e) {
-                System.out.println(e);
+                throw new RuntimeException(e);
             }
         
             ResultSet rs = ps.getGeneratedKeys();
@@ -153,14 +153,14 @@ public class DBOrder {
                     System.out.println("quantity: " + c.getValue());
         
                     ps.setInt(1, orderId);
-                    ps.setInt(2, cakeToppingId);
-                    ps.setInt(3, cakeBottomId);
+                    ps.setInt(2, cakeBottomId);
+                    ps.setInt(3, cakeToppingId);
                     ps.setInt(4, c.getValue());
     
                     try {
                         ps.executeUpdate();
                     } catch (SQLIntegrityConstraintViolationException e) {
-                        System.out.println(e);
+                        throw new RuntimeException(e);
                     }
                 } catch (SQLException e){
                     throw new RuntimeException(e);
