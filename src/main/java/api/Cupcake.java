@@ -110,7 +110,5 @@ public class Cupcake {
         return new DBOrder(database).getAllOrders();
     }
     
-    public ArrayList<User> getCustomers() {
-        return new DBUser(database).getAllUsers();
-    }
+    public ArrayList<User> getCustomers() { return new DBUser(database).getAllUsers(); }
 }
