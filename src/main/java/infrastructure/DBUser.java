@@ -92,7 +92,7 @@ public class DBUser {
         }
     }
     
-    public User createUser(String name, String password, String email, int phoneno, double accountBalance){
+    public User createUser(String name, String password, String email, int phoneno, double accountBalance, String role){
         int id;
         byte[] userSalt = User.generateSalt();
         byte[] userSecret = User.calculateSecret(userSalt, password);
@@ -114,7 +114,7 @@ public class DBUser {
             ps.setInt(3,phoneno);
             ps.setBytes(4,userSalt);
             ps.setBytes(5,userSecret);
-            ps.setString(6, String.valueOf(User.Role.User));
+            ps.setString(6, User.Role.valueOf(role).name());
             ps.setDouble(7,accountBalance);
             ps.setTimestamp(8,timestamp);
         
@@ -129,7 +129,7 @@ public class DBUser {
                 id = rs.getInt(1);
                 System.out.println(timestamp);
                 tmpUser = new User(id, email,name,  phoneno,
-                        userSalt, userSecret, User.Role.User,
+                        userSalt, userSecret, User.Role.valueOf(role),
                         timestamp,
                         accountBalance);
             } else {
@@ -256,6 +256,26 @@ public class DBUser {
             }
             return null;
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    public void changeBalance(int userId, double newBalance) {
+        try (Connection conn = db.getConnection()) {
+        
+            PreparedStatement ps = conn.prepareStatement(
+                    "UPDATE Users SET Cupcake.Users.accountBalance=? WHERE id=?");
+        
+        
+            ps.setDouble(1, newBalance);
+            ps.setInt(2, userId);
+        
+            try {
+                ps.executeUpdate();
+            } catch (SQLIntegrityConstraintViolationException e) {
+                System.out.println(e);
+            }
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

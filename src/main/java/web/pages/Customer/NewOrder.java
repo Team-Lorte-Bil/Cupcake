@@ -46,7 +46,7 @@ public class NewOrder extends BaseServlet {
     
     private Order createNewOrder(HttpServletRequest req){
         User curUser = (User) req.getSession().getAttribute("currentUser");
-        String comment = (String) req.getAttribute("comment");
+        String comment = req.getParameter("comment");
         if(comment == null){
             comment = "";
         }
