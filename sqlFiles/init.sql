@@ -1,3 +1,10 @@
+CREATE DATABASE `Cupcake` CHARACTER SET utf8 COLLATE utf8_danish_ci;
+CREATE USER 'cupcake'@'localhost' IDENTIFIED BY 'lortebil';
+GRANT ALL ON Cupcake.* TO 'cupcake'@'localhost';
+FLUSH PRIVILEGES;
+
+USE Cupcake;
+
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 

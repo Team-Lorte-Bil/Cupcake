@@ -245,12 +245,9 @@ public class DBOrder {
             } catch (SQLIntegrityConstraintViolationException e) {
                 System.out.println(e);
             }
+    
+            return ps.getUpdateCount() == 1;
             
-            if (ps.getUpdateCount() == 1) {
-                return true;
-            } else {
-                return false;
-            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
