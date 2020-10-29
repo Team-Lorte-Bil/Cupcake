@@ -22,6 +22,8 @@ public class Orders extends BaseServlet {
             throws ServletException, IOException {
         
         ArrayList<Order> orders = api.getOrders();
+    
+        System.out.println(orders);
         
         req.setAttribute("orders", orders);
         
