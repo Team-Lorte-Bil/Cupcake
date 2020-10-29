@@ -142,34 +142,33 @@ public class DBUser {
         
         return tmpUser;
     }
-    
     private HashMap<String, Integer> getAllCakeToppings(){
         try (Connection conn = db.getConnection()) {
             PreparedStatement s = conn.prepareStatement("SELECT * FROM CakeToppings;");
             ResultSet rs = s.executeQuery();
             HashMap<String, Integer> tmpList = new HashMap<>();
-            
+
             while(rs.next()) {
                 String name = rs.getString("name");
                 int price = (int) rs.getDouble("price");
-                
+
                 tmpList.put(name,price);
             }
             return tmpList;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        
+
     }
-    
-    
+
+
     public Option createCakeOption(Option option) {
         int id;
         PreparedStatement ps;
-        
+
         try (Connection conn = db.getConnection()) {
-            
-            if(option.getType().equalsIgnoreCase("bottom")){
+
+            if (option.getType().equalsIgnoreCase("bottom")) {
                 ps =
                         conn.prepareStatement(
                                 "INSERT INTO CakeBottoms (name, price) " +
@@ -182,16 +181,16 @@ public class DBUser {
                                         "VALUE (?,?);",
                                 Statement.RETURN_GENERATED_KEYS);
             }
-            
-            ps.setString(1,option.getName());
+
+            ps.setString(1, option.getName());
             ps.setDouble(2, option.getPrice());
-            
+
             try {
                 ps.executeUpdate();
             } catch (SQLIntegrityConstraintViolationException e) {
                 System.out.println(e);
             }
-            
+
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
                 id = rs.getInt(1);
@@ -201,8 +200,10 @@ public class DBUser {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return new Option(id,option.getName(),option.getType(),option.getPrice());
+        return new Option(id, option.getName(), option.getType(), option.getPrice());
     }
+    
+
     
     public boolean deleteUser(int userId) {
         try (Connection conn = db.getConnection()) {

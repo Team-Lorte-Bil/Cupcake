@@ -8,6 +8,7 @@ import infrastructure.DBCakeOptions;
 import infrastructure.DBOrder;
 import infrastructure.DBUser;
 import infrastructure.Database;
+import web.pages.admin.AdminMenu;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -101,6 +102,8 @@ public class Cupcake {
         }
         return totalprice;
     }
+
+
     
     public Database getDatabase() {
         return database;
@@ -111,4 +114,12 @@ public class Cupcake {
     }
     
     public ArrayList<User> getCustomers() { return new DBUser(database).getAllUsers(); }
+
+    public boolean createCakeOption (String name, double price, String type) {
+        return new DBCakeOptions(database).createCakeOption(name, price, type);
+
+    }
+
+
+
 }

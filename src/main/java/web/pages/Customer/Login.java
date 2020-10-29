@@ -14,7 +14,6 @@ import java.io.IOException;
 
 @WebServlet("/Login")
 public class Login extends BaseServlet {
-    
     /**
      * Renders the Register new account page
      * @see BaseServlet
@@ -55,6 +54,5 @@ public class Login extends BaseServlet {
             session.setAttribute("currentUser", curUsr);
             session.setAttribute("isAdmin", curUsr.isAdmin());
     }
-    
-    
+
 }
