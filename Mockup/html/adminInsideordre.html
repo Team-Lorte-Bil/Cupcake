@@ -14,6 +14,7 @@
     <style>
         html body {
             background-color: #f8f9fa!important;
+
         }
     </style>
 
@@ -48,15 +49,10 @@
             <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="newuser.html">Opret konto</a>
+                        <a class="nav-link" href="newuser.html">Admin@gmail.com</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="login.html">Log ind</a>
-                    </li>
                     <li class="nav-item">
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="basket.html"><i class="fa fa-shopping-cart"></i></a>
                     </li>
                 </ul>
             </div>
@@ -64,84 +60,67 @@
     </div>
 
     <div class="container text-center">
-        <h3>Rediger Menukort</h3>
-        <br/> <br/>
-        <div class="col-4">
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                Opret ny
-            </button>
-        </div>
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">Navn nr</th>
-                <th scope="col">Type</th>
-                <th scope="col">Pris</th>
-                <th scope="col"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>Mandel</td>
-                <td>Bund</td>
-                <td>7kr</td>
-                <td><button type="button" class="close" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button></td>
-            </tr>
-            <tr>
-                <td>Blåbær</td>
-                <td>Fyld</td>
-                <td>5kr</td>
-                <td><button type="button" class="close" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button></td>
-            </tr>
-            <tr>
-                <td>Vanilje</td>
-                <td>Bund</td>
-                <td>5kr</td>
-                <td><button type="button" class="close" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    </div>
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"><b>Opret nyt produkt</b></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <span style="float:left;"><label for="navn">Navn</label></span>
-                    <input type="number" class="form-control" id="navn" placeholder="Indtast navn på produkt">
+        <h3>Aktive ordre</h3>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            Test ordre
+        </button>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"><b>Ordre 202001</b></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <br> <span style="float:left;"><b>Kundemail:</b> john@smith.com</span>
+                        <br> <span style="float:left;"><b>Telefon:</b> 54402030</span>
+                        <br> <span style="float:left;"><b>Tidligere ordre fra kunde:</b> 16</span>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Antal</th>
+                            <th scope="col">Bund</th>
+                            <th scope="col">Fyld</th>
+                            <th scope="col">Pris</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td>Mandel</td>
+                            <td>Blåbær</td>
+                            <td>36 kr</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>Chokolade</td>
+                            <td>Appelsin</td>
+                            <td>26 kr</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">5</th>
+                            <td>Vanilje</td>
+                            <td>Hindbær</td>
+                            <td>50 kr</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="modal-body">
+                        <br> <span style="float:left;"><b>Odre kommentar:</b></span>
+                        <br> <span style="float:left;">Det skal være uden dysenteri</span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Luk</button>
+                    </div>
                 </div>
             </div>
-            <div class="modal-body">
-                    <span style="float:left;"><label for="type">Type</label></span>
-                    <input type="text" class="form-control" id="type" placeholder="Bund">
-            </div>
-            <div class="modal-body">
-                <span style="float:left;"><label for="pris">Pris</label></span>
-                <input type="number" class="form-control" id="pris" placeholder="Kr   Indtast pris">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Opret</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Luk</button>
-            </div>
         </div>
     </div>
-</div>
-
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
