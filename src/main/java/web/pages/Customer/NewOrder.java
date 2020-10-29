@@ -14,11 +14,11 @@ import java.io.IOException;
 import java.util.HashMap;
 
 @WebServlet("/CreateOrder")
-public class Order extends BaseServlet {
+public class NewOrder extends BaseServlet {
     
     /**
      * Create the order and redirects to order confirmation page.
-     * @see Order
+     * @see NewOrder
      */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -32,7 +32,7 @@ public class Order extends BaseServlet {
         
         log(req,"Got: " + tmpOrder);
         
-        render("Order confirmation", "/WEB-INF/orderconfirmation.jsp", req, resp);
+        render("NewOrder confirmation", "/WEB-INF/orderconfirmation.jsp", req, resp);
         
         clearCart(session,req); //TODO: Fix bugs
         

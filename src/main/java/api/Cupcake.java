@@ -2,9 +2,12 @@ package api;
 
 import domain.items.Cake;
 import domain.items.CakeOptions;
+import domain.order.Order;
 import infrastructure.DBCakeOptions;
+import infrastructure.DBOrder;
 import infrastructure.Database;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -99,5 +102,9 @@ public class Cupcake {
     
     public Database getDatabase() {
         return database;
+    }
+    
+    public ArrayList<Order> getOrders() {
+        return new DBOrder(database).getAllOrders();
     }
 }
