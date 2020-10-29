@@ -55,6 +55,10 @@ public class Order {
         return paid;
     }
     
+    public void addCakes(HashMap<Cake, Integer> cakes){
+        cakes.putAll(cakes);
+    }
+    
     public void addCake(Cake cake, int amount){
         cakes.put(cake,amount);
     }

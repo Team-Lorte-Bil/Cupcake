@@ -228,4 +228,34 @@ public class DBUser {
             throw new RuntimeException(e);
         }
     }
+    
+    public User getUserFromId(int userId) {
+        User tmpUser = null;
+    
+        try (Connection conn = db.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Users WHERE id=?;");
+            ps.setInt(1,userId);
+        
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                int id = rs.getInt(1);
+                String email = rs.getString(2);
+                String name = rs.getString(3);
+                int phoneno = rs.getInt(4);
+                byte[] salt = rs.getBytes(5);
+                byte[] secret = rs.getBytes(6);
+                Enum<User.Role> role = User.Role.valueOf(rs.getString(7));
+                Timestamp createdAt = rs.getTimestamp(8);
+                double accountBalance = rs.getDouble(9);
+            
+                tmpUser = new User(id,email,name,phoneno,salt,secret,role,createdAt,accountBalance);
+            
+                return tmpUser;
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -1,6 +1,8 @@
 package web.pages.Customer;
 
 import domain.items.Cake;
+import domain.user.User;
+import infrastructure.DBOrder;
 import web.pages.BaseServlet;
 
 import javax.servlet.ServletException;
@@ -25,18 +27,25 @@ public class Order extends BaseServlet {
             throws ServletException, IOException {
         HttpSession session = req.getSession();
         
-        String orderId = String.format("%d%d",LocalDateTime.now().getYear(), new Random().nextInt(99));
         
-        req.setAttribute("orderId",orderId);
+        domain.order.Order tmpOrder = createNewOrder(req);
         
-        HashMap<Cake, Integer> cakesFromPost = (HashMap<Cake, Integer>) req.getAttribute("cakes");
+        req.setAttribute("order",tmpOrder);
         
-        log(req,"Got: " + cakesFromPost);
+        log(req,"Got: " + tmpOrder);
         
-        render("CreateOrder", "/WEB-INF/orderconfirmation.jsp", req, resp);
+        render("Order confirmation", "/WEB-INF/orderconfirmation.jsp", req, resp);
         
         clearCart(session,req); //TODO: Fix bugs
         
+    }
+    
+    private domain.order.Order createNewOrder(HttpServletRequest req){
+        User curUser = (User) req.getAttribute("currentUser");
+        HashMap<Cake, Integer> cakesFromPost = (HashMap<Cake, Integer>) req.getAttribute("cakes");
+        String comment = (String) req.getAttribute("comment");
+    
+        return new DBOrder(api.getDatabase()).createOrder(curUser, cakesFromPost, comment);
     }
     
     /**

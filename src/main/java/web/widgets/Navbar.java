@@ -21,7 +21,7 @@ public class Navbar {
     private final List<Item> items = List.of(
             new Item("Opret konto", "/Register", true),
             new Item("Log ind", "/Login", true),
-            new Item("Log out", "/Logout", false)
+            new Item("Log ud", "/Logout", false)
     );
     
     public List<Item> getItems() {

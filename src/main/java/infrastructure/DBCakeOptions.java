@@ -1,5 +1,6 @@
 package infrastructure;
 
+import domain.items.Cake;
 import domain.items.CakeOptions;
 import domain.items.Option;
 
@@ -130,8 +131,39 @@ public class DBCakeOptions {
     }
     
     
-
-
+    public int getToppingIdFromName(String topping) {
+        try(Connection conn = db.getConnection()){
+            String sqlQuery = "SELECT id FROM CakeToppings WHERE name=?";
+        
+            PreparedStatement s = conn.prepareStatement(sqlQuery);
+            s.setString(1,topping);
+            ResultSet rs = s.executeQuery();
+        
+            while(rs.next()){
+                return rs.getInt(1);
+            }
+        
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+        return 0;
+    }
     
-
+    public int getBottomIdFromName(String topping) {
+        try(Connection conn = db.getConnection()){
+            String sqlQuery = "SELECT id FROM CakeBottoms WHERE name=?";
+            
+            PreparedStatement s = conn.prepareStatement(sqlQuery);
+            s.setString(1,topping);
+            ResultSet rs = s.executeQuery();
+            
+            while(rs.next()){
+                return rs.getInt(1);
+            }
+            
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+        return 0;
+    }
 }

@@ -2,7 +2,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <div class="container text-center">
     <h1>
-        Din ordre ${requestScope.orderId} er bekræftet.
+        Din ordre ${requestScope.order.orderId} er bekræftet.
     </h1>
     <p>
     <table class="table table-striped">
@@ -16,7 +16,7 @@
         </thead>
         <tbody>
         <!-- print all cupcakes in session cart -->
-        <c:forEach items="${cakes}" var="cake">
+        <c:forEach items="${requestScope.order.cakes}" var="cake">
             <tr>
                 <td>${cake.value}</td>
                 <td>${cake.key.bottom}</td>
