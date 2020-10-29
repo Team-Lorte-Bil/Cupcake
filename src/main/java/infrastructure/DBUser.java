@@ -1,6 +1,7 @@
 package infrastructure;
 
 import domain.items.Option;
+import domain.user.InvalidPassword;
 import domain.user.User;
 import domain.user.UserExists;
 
@@ -9,6 +10,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class DBUser {
@@ -41,6 +43,50 @@ public class DBUser {
                 tmpList.add(tmpUser);
             }
             return tmpList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    public User checkLogin(String usrEmail, String usrPassword) throws InvalidPassword {
+        User tmpUser = null;
+    
+        System.out.println(tmpUser);
+        
+        try (Connection conn = db.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Users WHERE email=?;");
+            ps.setString(1,usrEmail);
+    
+            ResultSet rs = ps.executeQuery();
+    
+            System.out.println("Provided mail: " + usrEmail);
+            
+            while(rs.next()) {
+                int id = rs.getInt(1);
+                String email = rs.getString(2);
+                String name = rs.getString(3);
+                int phoneno = rs.getInt(4);
+                byte[] salt = rs.getBytes(5);
+                byte[] secret = rs.getBytes(6);
+                Enum<User.Role> role = User.Role.valueOf(rs.getString(7));
+                Timestamp createdAt = rs.getTimestamp(8);
+                double accountBalance = rs.getDouble(9);
+    
+                byte[] providedSecret = User.calculateSecret(salt, usrPassword);
+                
+                
+                System.out.println("Provided: " + Arrays.toString(providedSecret));
+                System.out.println("Correct: " + Arrays.toString(secret));
+                
+                if(! Arrays.equals(providedSecret, secret)){
+                    throw new InvalidPassword();
+                }
+    
+                tmpUser = new User(id,email,name,phoneno,salt,secret,role,createdAt,accountBalance);
+                
+                return tmpUser;
+            }
+            return null;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -158,20 +204,14 @@ public class DBUser {
         return new Option(id,option.getName(),option.getType(),option.getPrice());
     }
     
-    public boolean deleteCakeOption(Option option) {
-        int id = option.getId();
-        PreparedStatement ps;
-        
+    public boolean deleteUser(int userId) {
         try (Connection conn = db.getConnection()) {
-            if(option.getType().equalsIgnoreCase("bottom")){
-                ps = conn.prepareStatement(
-                        "DELETE FROM CakeBottoms WHERE id = ?;");
-            } else {
-                ps = conn.prepareStatement(
-                        "DELETE FROM CakeToppings WHERE id = ?;");
-            }
             
-            ps.setInt(1, id);
+            PreparedStatement ps = conn.prepareStatement(
+                        "DELETE FROM Users WHERE id = ?;");
+            
+            
+            ps.setInt(1, userId);
             
             try {
                 ps.executeUpdate();
@@ -188,10 +228,4 @@ public class DBUser {
             throw new RuntimeException(e);
         }
     }
-    
-    
-    
-    
-    
-    
 }

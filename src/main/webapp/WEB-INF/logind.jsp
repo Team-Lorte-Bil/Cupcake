@@ -6,17 +6,23 @@
         <div class="col-sm">
         </div>
         <div class="col-sm">
-            <form>
+            <form action="Login" method="POST">
                 <div class="form-group">
-                    <label for="exampleInputEmail1">E-mail addresse</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Indtast din e-mail...">
+                    <label for="inputEmail">E-mail addresse</label>
+                    <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="Indtast din e-mail...">
 
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword1">Kodeord</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Indtast dit kodeord...">
+                    <label for="inputPassword">Kodeord</label>
+                    <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Indtast dit kodeord...">
                 </div>
-                <button type="submit" class="btn btn-primary" aria-describedby="emailHelp">Log ind</button>
+                <c:if test="${requestScope.error}">
+                <div class="alert alert-danger" role="alert">
+                    ${requestScope.errorMsg}
+                </div>
+                </c:if>
+
+                <input type="submit" value="Log ind" class="btn btn-primary" />
 
                 <a href="${pageContext.request.contextPath}/Reset">
                     <small id="emailHelp" class="form-text text-muted">Har du glemt dit kodeord? Tryk her</small>
