@@ -30,7 +30,11 @@ public class Login extends BaseServlet {
             throws ServletException, IOException {
         try {
             login(req, req.getSession());
-            resp.sendRedirect(req.getContextPath() + "/");
+            if(req.getSession().getAttribute("cakes") != null){
+                resp.sendRedirect(req.getContextPath() + "/Cart");
+            } else {
+                resp.sendRedirect(req.getContextPath() + "/");
+            }
         } catch (InvalidPassword e){
             req.setAttribute("errorMsg", e.getMessage());
             req.setAttribute("error", true);

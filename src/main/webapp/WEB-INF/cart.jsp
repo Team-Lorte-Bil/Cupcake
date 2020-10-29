@@ -63,11 +63,19 @@
 
     <p><b>Total pris:</b></p>
     <p><b><u>${sessionScope.totalprice},- kr</u></b></p>
-
-
         <input type="hidden" name="cakes" value="${sessionScope.cakes}">
         <input type="hidden" name="totalprice" value="${sessionScope.totalprice}">
-        <input type="submit" class="btn btn-primary" value="Afgiv ordre"></input>
+
+
+        <c:choose>
+            <c:when test="${sessionScope.currentUser == null}">
+                <a class="btn btn-primary" href="${pageContext.request.contextPath}/Login">Log ind og bestil</a>
+            </c:when>
+            <c:otherwise>
+                <input type="submit" class="btn btn-primary" value="Afgiv ordre"></input>
+            </c:otherwise>
+        </c:choose>
+
     </form>
 
     <br><br>
