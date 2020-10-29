@@ -74,6 +74,10 @@ CREATE TABLE `properties` (
   `value` varchar(255) COLLATE utf8_danish_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
 
+BEGIN;
+INSERT INTO `properties` VALUES ('version', '1');
+COMMIT;
+
 -- ----------------------------
 -- Table structure for Users
 -- ----------------------------
