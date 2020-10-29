@@ -1,5 +1,7 @@
 package web.pages.admin;
 
+import domain.order.Order;
+import domain.user.User;
 import web.pages.BaseServlet;
 
 import javax.servlet.ServletException;
@@ -9,10 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-@WebServlet("/AdminCustommers")
+@WebServlet("/AdminCustomers")
 public class Customers extends BaseServlet {
-
-
+    
     /**
      * Renders the index.jsp page
      * @see BaseServlet
@@ -20,13 +21,13 @@ public class Customers extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
-      //  ArrayList<Customers> custommers = api.;
-
-      //  System.out.println(custommers);
-
-      //  req.setAttribute("custommers", custommers);
-
-        render("Administrator - Vis kunder", "/WEB-INF/admin/Costummers.jsp", req, resp);
+        
+        ArrayList<User> customers = api.getCustomers();
+    
+        System.out.println(customers);
+        
+        req.setAttribute("customers", customers);
+        
+        render("Administrator - Vis kunder", "/WEB-INF/admin/customers.jsp", req, resp);
     }
 }

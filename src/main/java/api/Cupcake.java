@@ -3,8 +3,10 @@ package api;
 import domain.items.Cake;
 import domain.items.CakeOptions;
 import domain.order.Order;
+import domain.user.User;
 import infrastructure.DBCakeOptions;
 import infrastructure.DBOrder;
+import infrastructure.DBUser;
 import infrastructure.Database;
 
 import java.util.ArrayList;
@@ -106,5 +108,9 @@ public class Cupcake {
     
     public ArrayList<Order> getOrders() {
         return new DBOrder(database).getAllOrders();
+    }
+    
+    public ArrayList<User> getCustomers() {
+        return new DBUser(database).getAllUsers();
     }
 }
