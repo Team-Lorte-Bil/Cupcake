@@ -16,9 +16,7 @@
         <c:forEach items="${requestScope.orders}" var="order" varStatus="vs">
         <tr>
             <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal${vs.index}">
-                    Launch demo modal
-                </button>
+                <a href="#" data-toggle="modal" data-target="#modal${vs.index}">${order.orderId}</a>
 
             </td>
             <td>${order.getUser().getName()}</td>
