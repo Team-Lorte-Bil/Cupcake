@@ -17,7 +17,7 @@ public class DBCakeOptions {
     }
     
     private HashMap<String, Integer> getAllCakeBottoms(){
-        try (Connection conn = db.getConnection()) {
+        try (Connection conn = Database.getConnection()) {
             PreparedStatement s = conn.prepareStatement("SELECT * FROM CakeBottoms;");
             ResultSet rs = s.executeQuery();
             HashMap<String, Integer> tmpList = new HashMap<>();
@@ -38,7 +38,7 @@ public class DBCakeOptions {
     }
     
     private HashMap<String, Integer> getAllCakeToppings(){
-        try (Connection conn = db.getConnection()) {
+        try (Connection conn = Database.getConnection()) {
             PreparedStatement s = conn.prepareStatement("SELECT * FROM CakeToppings;");
             ResultSet rs = s.executeQuery();
             HashMap<String, Integer> tmpList = new HashMap<>();
@@ -88,7 +88,7 @@ public class DBCakeOptions {
             try {
                 ps.executeUpdate();
             } catch (SQLIntegrityConstraintViolationException e) {
-                System.out.println(e);
+                throw new RuntimeException(e);
             }
             
             ResultSet rs = ps.getGeneratedKeys();
@@ -106,7 +106,7 @@ public class DBCakeOptions {
     public boolean deleteCakeOption(int id, String type) {
         PreparedStatement ps;
         
-        try (Connection conn = db.getConnection()) {
+        try (Connection conn = Database.getConnection()) {
             if(type.equalsIgnoreCase("bottom")){
                 ps = conn.prepareStatement(
                         "DELETE FROM CakeBottoms WHERE id = ?;");
@@ -120,14 +120,10 @@ public class DBCakeOptions {
             try {
                 ps.executeUpdate();
             } catch (SQLIntegrityConstraintViolationException e) {
-                System.out.println(e);
+                throw new RuntimeException(e);
             }
-            
-            if (ps.getUpdateCount() == 1) {
-                return true;
-            } else {
-                return false;
-            }
+    
+            return ps.getUpdateCount() == 1;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -136,7 +132,7 @@ public class DBCakeOptions {
     
     public int getToppingIdFromName(String topping) {
         topping = Utils.encodeHtml(topping);
-        try(Connection conn = db.getConnection()){
+        try(Connection conn = Database.getConnection()){
             String sqlQuery = "SELECT id FROM CakeToppings WHERE name=?";
             
             PreparedStatement s = conn.prepareStatement(sqlQuery);
@@ -155,7 +151,7 @@ public class DBCakeOptions {
     
     public int getBottomIdFromName(String bottom) {
         bottom = Utils.encodeHtml(bottom);
-        try(Connection conn = db.getConnection()){
+        try(Connection conn = Database.getConnection()){
             String sqlQuery = "SELECT id FROM CakeBottoms WHERE name=?";
             
             PreparedStatement s = conn.prepareStatement(sqlQuery);
@@ -174,7 +170,7 @@ public class DBCakeOptions {
     
     public ArrayList<Option> getAllCakeOptions() {
         ArrayList<Option> cakeOptions = new ArrayList<>();
-        try(Connection conn = db.getConnection()){
+        try(Connection conn = Database.getConnection()){
             String toppingQuery = "SELECT * FROM CakeToppings;";
             String bottomQuery = "SELECT * FROM CakeBottoms;";
         

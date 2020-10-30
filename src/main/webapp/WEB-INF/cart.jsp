@@ -45,7 +45,7 @@
                     <form action="Cart" method="post">
                         <input type="hidden" name="action" value="remove">
                         <input type="hidden" name="id" value="${cake.key.id}">
-                        <input type="submit" class="btn btn-danger" value="Fjern fra kurv"></input>
+                        <input type="submit" class="btn btn-danger" value="Fjern fra kurv"/>
                     </form>
                 </td>
             </tr>
@@ -53,7 +53,7 @@
         </tbody>
     </table>
 
-    </label>
+
     <form action="CreateOrder" method="post">
     <div class="form-group">
         <label for="comment">Kommentar til ordren</label>
@@ -72,7 +72,7 @@
                 <a class="btn btn-primary" href="${pageContext.request.contextPath}/Login">Log ind og bestil</a>
             </c:when>
             <c:otherwise>
-                <input type="submit" class="btn btn-primary" value="Afgiv ordre"></input>
+                <input type="submit" class="btn btn-primary" value="Afgiv ordre"/>
             </c:otherwise>
         </c:choose>
 

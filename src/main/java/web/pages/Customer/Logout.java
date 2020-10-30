@@ -1,15 +1,11 @@
 package web.pages.Customer;
 
-import domain.user.InvalidPassword;
-import domain.user.User;
-import infrastructure.DBUser;
 import web.pages.BaseServlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet("/Logout")

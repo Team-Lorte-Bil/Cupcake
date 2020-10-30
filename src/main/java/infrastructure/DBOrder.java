@@ -18,7 +18,7 @@ public class DBOrder {
     }
     
     public ArrayList<Order> getAllOrders() {
-        try (Connection conn = db.getConnection()) {
+        try (Connection conn = Database.getConnection()) {
             PreparedStatement s = conn.prepareStatement("SELECT * FROM Orders;");
             ResultSet rs = s.executeQuery();
             ArrayList<Order> tmpList = new ArrayList<>();
@@ -45,9 +45,9 @@ public class DBOrder {
     }
     
     public HashMap<Cake, Integer> getCakesOnOrder(int orderId) {
-        HashMap<Cake, Integer> cakeList = new HashMap<Cake, Integer>();
+        HashMap<Cake, Integer> cakeList = new HashMap<>();
         
-        try (Connection conn = db.getConnection()) {
+        try (Connection conn = Database.getConnection()) {
             String sqlQuery = "SELECT CakesOnOrder.orderId, Cupcake.CakesOnOrder.quantity, \n" +
                     "CakeBottoms.`name` as \"bottomName\", CakeBottoms.price as \"bottomPrice\",\n" +
                     "CakeToppings.`name` as \"toppingName\", CakeToppings.price as \"toppingPrice\"\n" +
@@ -84,17 +84,16 @@ public class DBOrder {
     
     
     public Order createOrder(User user, HashMap<Cake, Integer> cakes, String comment) {
-        Order tmpOrder = null;
+        Order tmpOrder;
         
         int orderId = 0;
-        User tmpUser = user;
         String orderComment = Utils.encodeHtml(comment);
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         boolean paid = false; //TODO: Implement user account balance usage.
         boolean completed = false;
         
         
-        try (Connection conn = db.getConnection()) {
+        try (Connection conn = Database.getConnection()) {
             
             PreparedStatement ps =
                     conn.prepareStatement(
@@ -102,7 +101,7 @@ public class DBOrder {
                                     "VALUE (?,?,?,?,?);",
                             Statement.RETURN_GENERATED_KEYS);
             
-            ps.setInt(1, tmpUser.getId());
+            ps.setInt(1, user.getId());
             ps.setString(2, orderComment);
             ps.setTimestamp(3, timestamp);
             ps.setBoolean(4, paid);
@@ -122,7 +121,7 @@ public class DBOrder {
             createCakesOnOrder(orderId, cakes);
             System.out.println("Creating cakes on order: " + orderId);
             
-            tmpOrder = new Order(orderId, tmpUser, comment, timestamp, paid, completed);
+            tmpOrder = new Order(orderId, user, comment, timestamp, paid, completed);
             
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -136,7 +135,7 @@ public class DBOrder {
         System.out.println("Antal kager som skal indsættes: " + cakeno);
         for (Map.Entry<Cake, Integer> c : cakes.entrySet()) {
             System.out.println("cakeno: " + cakeno);
-            try (Connection conn = db.getConnection()) {
+            try (Connection conn = Database.getConnection()) {
             
                 String sql = "INSERT INTO CakesOnOrder (orderId, bottomId, toppingId, quantity) VALUE (?,?,?,?);";
             
@@ -173,7 +172,7 @@ public class DBOrder {
     }
     
     private HashMap<String, Integer> getAllCakeToppings() {
-        try (Connection conn = db.getConnection()) {
+        try (Connection conn = Database.getConnection()) {
             PreparedStatement s = conn.prepareStatement("SELECT * FROM CakeToppings;");
             ResultSet rs = s.executeQuery();
             HashMap<String, Integer> tmpList = new HashMap<>();
@@ -218,7 +217,7 @@ public class DBOrder {
             try {
                 ps.executeUpdate();
             } catch (SQLIntegrityConstraintViolationException e) {
-                System.out.println(e);
+                throw new RuntimeException(e);
             }
             
             ResultSet rs = ps.getGeneratedKeys();
@@ -234,7 +233,7 @@ public class DBOrder {
     }
     
     public boolean deleteOrder(int orderId) {
-        try (Connection conn = db.getConnection()) {
+        try (Connection conn = Database.getConnection()) {
         
             PreparedStatement ps = conn.prepareStatement(
                     "DELETE FROM Orders WHERE id=?;");
@@ -245,21 +244,17 @@ public class DBOrder {
             try {
                 ps.executeUpdate();
             } catch (SQLIntegrityConstraintViolationException e) {
-                System.out.println(e);
+                throw new RuntimeException(e);
             }
-        
-            if (ps.getUpdateCount() == 1) {
-                return true;
-            } else {
-                return false;
-            }
+    
+            return ps.getUpdateCount() == 1;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
     
     public void markDone(int orderId) {
-        try (Connection conn = db.getConnection()) {
+        try (Connection conn = Database.getConnection()) {
             
             PreparedStatement ps = conn.prepareStatement(
                     "UPDATE Orders SET completed=1, paid = 1 WHERE id=?;");
@@ -270,7 +265,7 @@ public class DBOrder {
             try {
                 ps.executeUpdate();
             } catch (SQLIntegrityConstraintViolationException e) {
-                System.out.println(e);
+                throw new RuntimeException(e);
             }
             
         } catch (Exception e) {
@@ -292,7 +287,7 @@ public class DBOrder {
     
     public LinkedHashMap<Order, Double> getAllOrdersMap() {
         LinkedHashMap<Order, Double> tmpMap = new LinkedHashMap<>();
-        try (Connection conn = db.getConnection()) {
+        try (Connection conn = Database.getConnection()) {
             PreparedStatement s = conn.prepareStatement("SELECT * FROM Orders ORDER BY id DESC;");
             ResultSet rs = s.executeQuery();
         

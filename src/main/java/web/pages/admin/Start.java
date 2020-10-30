@@ -1,6 +1,5 @@
 package web.pages.admin;
 
-import domain.user.User;
 import infrastructure.DBOrder;
 import infrastructure.DBUser;
 import web.pages.BaseServlet;
@@ -10,7 +9,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 
 @WebServlet("/AdminStart")
 public class Start extends BaseServlet {

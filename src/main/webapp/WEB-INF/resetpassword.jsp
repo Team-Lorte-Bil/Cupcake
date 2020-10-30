@@ -16,7 +16,6 @@
                 <div>
                     <button type="submit" class="btn btn-primary" aria-describedby="emailreset">Send ny kode</button>
                 </div>
-                </a>
             </form>
         </div>
         <div class="col-sm">

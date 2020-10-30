@@ -20,7 +20,7 @@ public class DBUser {
     }
     
     public ArrayList<User> getAllUsers(){
-        try (Connection conn = db.getConnection()) {
+        try (Connection conn = Database.getConnection()) {
             PreparedStatement s = conn.prepareStatement("SELECT * FROM Users;");
             ResultSet rs = s.executeQuery();
             ArrayList<User> tmpList = new ArrayList<>();
@@ -52,9 +52,8 @@ public class DBUser {
         usrEmail = Utils.encodeHtml(usrEmail);
         usrPassword = Utils.encodeHtml(usrPassword);
     
-        System.out.println(tmpUser);
         
-        try (Connection conn = db.getConnection()) {
+        try (Connection conn = Database.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM Users WHERE email=?;");
             ps.setString(1,usrEmail);
     
@@ -105,7 +104,7 @@ public class DBUser {
         
         User tmpUser;
     
-        try (Connection conn = db.getConnection()) {
+        try (Connection conn = Database.getConnection()) {
         
             
                 PreparedStatement ps =
@@ -126,7 +125,7 @@ public class DBUser {
             try {
                 ps.executeUpdate();
             } catch (SQLIntegrityConstraintViolationException e) {
-                System.out.println(e);
+                throw new RuntimeException(e);
             }
         
             ResultSet rs = ps.getGeneratedKeys();
@@ -138,7 +137,6 @@ public class DBUser {
                         timestamp,
                         accountBalance);
             } else {
-                tmpUser = null;
                 throw new UserExists(name);
             }
         } catch (Exception e) {
@@ -148,7 +146,7 @@ public class DBUser {
         return tmpUser;
     }
     private HashMap<String, Integer> getAllCakeToppings(){
-        try (Connection conn = db.getConnection()) {
+        try (Connection conn = Database.getConnection()) {
             PreparedStatement s = conn.prepareStatement("SELECT * FROM CakeToppings;");
             ResultSet rs = s.executeQuery();
             HashMap<String, Integer> tmpList = new HashMap<>();
@@ -211,7 +209,7 @@ public class DBUser {
 
     
     public boolean deleteUser(int userId) {
-        try (Connection conn = db.getConnection()) {
+        try (Connection conn = Database.getConnection()) {
             
             PreparedStatement ps = conn.prepareStatement(
                         "DELETE FROM Users WHERE id = ?;");
@@ -222,23 +220,19 @@ public class DBUser {
             try {
                 ps.executeUpdate();
             } catch (SQLIntegrityConstraintViolationException e) {
-                System.out.println(e);
+                throw new RuntimeException(e);
             }
-            
-            if (ps.getUpdateCount() == 1) {
-                return true;
-            } else {
-                return false;
-            }
+    
+            return ps.getUpdateCount() == 1;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
     
     public User getUserFromId(int userId) {
-        User tmpUser = null;
+        User tmpUser;
     
-        try (Connection conn = db.getConnection()) {
+        try (Connection conn = Database.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM Users WHERE id=?;");
             ps.setInt(1,userId);
         
@@ -266,7 +260,7 @@ public class DBUser {
     }
     
     public void changeBalance(int userId, double newBalance) {
-        try (Connection conn = db.getConnection()) {
+        try (Connection conn = Database.getConnection()) {
         
             PreparedStatement ps = conn.prepareStatement(
                     "UPDATE Users SET Cupcake.Users.accountBalance=? WHERE id=?");
@@ -278,7 +272,7 @@ public class DBUser {
             try {
                 ps.executeUpdate();
             } catch (SQLIntegrityConstraintViolationException e) {
-                System.out.println(e);
+                throw new RuntimeException(e);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

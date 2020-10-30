@@ -1,11 +1,7 @@
 package web.pages.admin;
 
-import domain.items.CakeOptions;
 import domain.items.Option;
-import domain.order.Order;
-import domain.user.User;
 import infrastructure.DBCakeOptions;
-import infrastructure.DBUser;
 import web.pages.BaseServlet;
 
 import javax.servlet.ServletException;
@@ -14,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 @WebServlet("/AdminItems")
 public class Items extends BaseServlet {

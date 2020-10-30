@@ -5,17 +5,12 @@ import domain.user.User;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Navbar {
     private final HttpServletRequest request;
     
     public Navbar(HttpServletRequest request) {
         this.request = request;
-    }
-    
-    public String getWebpageName() {
-        return "Olsker Cupcake";
     }
     
     private final List<Item> items = List.of(

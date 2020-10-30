@@ -69,6 +69,7 @@
                           <button type="button" class="btn btn-danger" data-dismiss="modal">Annuller</button>
                           <button type="submit" class="btn btn-success">Opret Bund/Top</button>
                 </div>
+                </div>
             </form>
         </div>
     </div>

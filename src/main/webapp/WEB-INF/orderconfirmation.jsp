@@ -38,7 +38,6 @@
         </tr>
         </tbody>
     </table>
-    </p>
     <p>
         Vi glæder os til at se dig i butikken!
         <br/> <br/>

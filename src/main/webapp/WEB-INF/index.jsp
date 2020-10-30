@@ -6,7 +6,7 @@
     <p style="font-size:25px">Velkommen ombord til øens bedste cupcakes!</p>
 
 
-    <p1> Vælg og bestil herunder! </p1>
+    <p> Vælg og bestil herunder! </p>
 
 
     <br/> <br/>
@@ -58,7 +58,7 @@
 
 
     <br/> <br/>
-    <a class="nav-link" href="/Cart">
+    <a class="nav-link" href="<c:url value="/Cart"/>">
         <input type="submit" value="Gå til betaling" class="btn btn-success" />
 
     </a>
