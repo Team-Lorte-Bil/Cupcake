@@ -252,10 +252,10 @@ public class DBOrder {
         }
     }
     
-    public HashMap<Order, Double> getAllOrdersMap() {
-        HashMap<Order, Double> tmpMap = new HashMap<>();
+    public LinkedHashMap<Order, Double> getAllOrdersMap() {
+        LinkedHashMap<Order, Double> tmpMap = new LinkedHashMap<>();
             try (Connection conn = db.getConnection()) {
-                PreparedStatement s = conn.prepareStatement("SELECT * FROM Orders;");
+                PreparedStatement s = conn.prepareStatement("SELECT * FROM Orders ORDER BY id DESC;");
                 ResultSet rs = s.executeQuery();
             
                 while(rs.next()) {
@@ -269,7 +269,42 @@ public class DBOrder {
                     User tmpUsr = new DBUser(db).getUserFromId(userId);
                     Order tmpOrder = new Order(id,tmpUsr,comment,timestamp,paid,completed);
                     tmpOrder.addCakes(getCakesOnOrder(id));
-                
+    
+                    String sql = "SELECT\n" +
+                            "\tOrders.id,\n" +
+                            "\t((CakeBottoms.price + CakeToppings.price) * CakesOnOrder.quantity) AS \"price\"\n" +
+                            "FROM\n" +
+                            "\tOrders\n" +
+                            "\tINNER JOIN\n" +
+                            "\tCakesOnOrder\n" +
+                            "\tON \n" +
+                            "\t\tOrders.id = CakesOnOrder.orderId\n" +
+                            "\tINNER JOIN\n" +
+                            "\tCakeBottoms\n" +
+                            "\tON \n" +
+                            "\t\tCakesOnOrder.bottomId = CakeBottoms.id\n" +
+                            "\tINNER JOIN\n" +
+                            "\tCakeToppings\n" +
+                            "\tON\n" +
+                            "\t\tCakesOnOrder.toppingId = CakeToppings.id\n" +
+                            "WHERE Orders.id = ?\n" +
+                            "GROUP BY\n" +
+                            "\tOrders.id,\n" +
+                            "\tCakesOnOrder.quantity,\n" +
+                            "\tCakeBottoms.id,\n" +
+                            "\tCakeToppings.id";
+    
+                    PreparedStatement ps = conn.prepareStatement(sql);
+                    ps.setInt(1,id);
+                    ResultSet rss = ps.executeQuery();
+    
+                    double price = 0.0;
+    
+                    while(rss.next()){
+                        price += rss.getDouble(2);
+                    }
+                    
+                    tmpMap.put(tmpOrder, price);
                 }
                 return tmpMap;
             } catch (SQLException e) {

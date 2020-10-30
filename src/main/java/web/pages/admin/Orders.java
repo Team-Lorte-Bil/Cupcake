@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 @WebServlet("/AdminOrders")
 public class Orders extends BaseServlet {
@@ -31,9 +32,9 @@ public class Orders extends BaseServlet {
                 resp.sendError(401);
     
             ArrayList<Order> orders = api.getOrders();
-            HashMap<Order, Double> ordersNew = api.getAllOrders();
+            LinkedHashMap<Order, Double> ordersNew = api.getAllOrders();
     
-            req.setAttribute("orders", orders);
+            req.setAttribute("orders", ordersNew);
     
             render("Administrator - Vis ordre", "/WEB-INF/admin/orders.jsp", req, resp);
         } catch (Exception e){

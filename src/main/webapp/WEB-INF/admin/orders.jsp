@@ -17,10 +17,10 @@
         <tbody>
         <c:forEach items="${requestScope.orders}" var="order" varStatus="vs">
             <tr>
-                <td>${order.id}</td>
-                <td>${order.user.name}</td>
-                <td>${order.user.phoneno}</td>
-                <td>${order.}</td>
+                <td>${order.key.orderId}</td>
+                <td>${order.key.user.name}</td>
+                <td>${order.key.user.phoneno}</td>
+                <td>${order.value}</td>
                 <td>${customer.accountBalance}</td>
                 <td>
                     <div class="btn-group" role="group">

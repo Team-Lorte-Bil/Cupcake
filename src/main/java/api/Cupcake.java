@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Cupcake {
@@ -125,7 +126,7 @@ public class Cupcake {
         return new DBOrder(database).getAllOrders();
     }
     
-    public HashMap<Order, Double> getAllOrders(){
+    public LinkedHashMap<Order, Double> getAllOrders(){
         return new DBOrder(database).getAllOrdersMap();
     }
     
