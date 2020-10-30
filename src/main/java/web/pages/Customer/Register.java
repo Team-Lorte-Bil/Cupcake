@@ -32,6 +32,7 @@ public class Register extends BaseServlet {
             resp.sendRedirect(req.getContextPath() + "/");
         } catch (Exception e){
             resp.sendError(400);
+            throw new RuntimeException(e);
         }
     }
     
@@ -42,7 +43,7 @@ public class Register extends BaseServlet {
         int usrPhone = Integer.parseInt(req.getParameter("inputPhone"));
         String usrPsw = req.getParameter("inputPsw");
     
-        User curUsr = new DBUser(api.getDatabase()).createUser(usrName,usrPsw,usrMail,usrPhone,0, "user");
+        User curUsr = new DBUser(api.getDatabase()).createUser(usrName,usrPsw,usrMail,usrPhone,0, "User");
         System.out.println(curUsr);
         
         session.setAttribute("currentUser", curUsr);
