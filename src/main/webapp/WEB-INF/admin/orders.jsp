@@ -10,34 +10,45 @@
             <th scope="col">Kundenavn</th>
             <th scope="col">Telefon</th>
             <th scope="col">Samlet pris</th>
-            <th scope="col">Betalt med saldo</th>
+            <th scope="col">Betalt</th>
             <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
         <c:forEach items="${requestScope.orders}" var="order" varStatus="vs">
             <tr>
-                <td>${order.key.orderId}</td>
+                <td><a href="#" data-toggle="modal" data-target="#modalChangeBalance${vs.index}">${order.key.orderId}</a></td>
                 <td>${order.key.user.name}</td>
                 <td>${order.key.user.phoneno}</td>
                 <td>${order.value}</td>
-                <td>${customer.accountBalance}</td>
+                <td>${order.key.paid}</td>
                 <td>
                     <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalChangeBalance${vs.index}">
-                            Ændre saldo
-                        </button>
                         <c:choose>
                             <c:when test="${customer.admin}">
-                                <form action="AdminCustomers" method="post">
-                                    <input type="submit" class="btn btn-danger" value="Slet bruger" disabled>
+                                <form action="AdminOrders" method="post">
+                                    <input type="submit" class="btn btn-success" value="Marker som færdig" disabled>
                                 </form>
                             </c:when>
                             <c:otherwise>
-                                <form action="AdminCustomers" method="post">
+                                <form action="AdminOrders" method="post">
                                     <input type="hidden" name="action" value="deleteUser">
                                     <input type="hidden" name="userId" value="${customer.id}">
-                                    <input type="submit" class="btn btn-danger" value="Slet bruger">
+                                    <input type="submit" class="btn btn-success" value="Marker som færdig">
+                                </form>
+                            </c:otherwise>
+                        </c:choose>
+                        <c:choose>
+                            <c:when test="${customer.admin}">
+                                <form action="AdminOrders" method="post">
+                                    <input type="submit" class="btn btn-danger" value="Slet ordre" disabled>
+                                </form>
+                            </c:when>
+                            <c:otherwise>
+                                <form action="AdminOrders" method="post">
+                                    <input type="hidden" name="action" value="deleteUser">
+                                    <input type="hidden" name="userId" value="${customer.id}">
+                                    <input type="submit" class="btn btn-danger" value="Slet ordre">
                                 </form>
                             </c:otherwise>
                         </c:choose>
