@@ -1,5 +1,4 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!doctype html>
 <html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <head>
@@ -29,19 +28,16 @@
             <img src="images/olskercupcakes.png" class="img-fluid" alt="Responsive image">
         </div>
     </div>
-    <!-- nav bar -->
-    <c:choose>
-        <c:when test="${sessionScope.currentUser.admin}">
-            <%@include file="admin-navbar.jsp"%>
-        </c:when>
-        <c:otherwise>
-            <%@include file="navbar.jsp"%>
-        </c:otherwise>
-    </c:choose>
-    <!-- navbar end -->
     <!-- header end -->
 
-
+    <div class="container text-center">
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-4">Der skete 400 fejl</h1>
+                <p class="lead">Og ud af de 400 fejl, fandt vi ud af at du nok har lavet en tastefejl 🙉</p>
+            </div>
+        </div>
+    </div>
 
     <!-- Optional JavaScript; choose one of the two! -->
 

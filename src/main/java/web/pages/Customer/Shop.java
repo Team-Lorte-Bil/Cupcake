@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("")
-public class Index extends BaseServlet {
+@WebServlet("/Shop")
+public class Shop extends BaseServlet {
     
     /**
      * Renders the index.jsp page
@@ -18,7 +18,10 @@ public class Index extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        
+        req.setAttribute("toppings", api.getCakeOptions().getToppings());
+        req.setAttribute("bottoms", api.getCakeOptions().getBottoms());
     
-        render("Start", "/WEB-INF/v"+api.getVersion()+"/index.jsp", req, resp);
+        render("Shop", "/WEB-INF/v"+api.getVersion()+"/shop.jsp", req, resp);
     }
 }

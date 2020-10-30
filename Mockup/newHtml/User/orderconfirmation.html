@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Store - Cupcake</title>
+    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../assets/css/Google-Style-Login.css">
+    <link rel="stylesheet" href="../assets/css/Navigation-with-Button.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+</head>
+
+<body style="background: linear-gradient(rgba(47, 23, 15, 0.65), rgba(47, 23, 15, 0.65)), url(&quot;../assets/img/cupcakes-4068129_1920.jpg&quot;) repeat;background-size: auto, cover;font-family: Raleway, sans-serif;">
+    <h1 class="text-center text-white d-none d-lg-block site-heading"><span class="site-heading-lower">Olsker Cupcakes</span></h1>
+    <nav class="navbar navbar-dark navbar-expand-md bg-dark navigation-clean-button" style="font-family: Raleway, sans-serif;font-weight: 800;">
+        <div class="container"><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav mr-auto">
+                    <li class="nav-item"><a class="nav-link active" href="#">Startside</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Menukort</a></li>
+                </ul><span class="navbar-text actions"> <a class="login" href="#">Log ind</a><a class="login" href="#">Opret konto</a><a class="login" href="#">Cart <i class="fa fa-cart"></a> </span>
+            </div>
+        </div>
+    </nav>
+    <section class="page-section cta" style="background: rgba(109,67,73,0.74);">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-9 mx-auto">
+                    <div class="cta-inner text-center rounded">
+                        <h2 class="section-heading mb-5"><span class="section-heading-lower">Din ordre ${requestScope.order.orderId} er bekræftet</span></h2><div class="shopping-cart">
+<div class="px-4 px-lg-0">
+
+  <div class="pb-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 p-5 bg-white rounded shadow-sm mb-5">
+
+        	
+          <!-- Shopping cart table -->
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col" class="border-0 bg-light">
+                    <div class="p-2 px-3 text-uppercase">Bund</div>
+                  </th>
+                  <th scope="col" class="border-0 bg-light">
+                    <div class="py-2 text-uppercase">Top</div>
+                  </th>
+                  <th scope="col" class="border-0 bg-light">
+                    <div class="py-2 text-uppercase">Antal</div>
+                  </th>
+                    <th scope="col" class="border-0 bg-light">
+                    <div class="py-2 text-uppercase">Linjepris</div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+              	<c:forEach items="${requestScope.cakes}" var="cake">
+                <tr>
+                	<td class="border-1 align-middle"><strong>${cake.key.bottom}</strong></td>
+                  <td class="border-1 align-middle"><strong>${cake.key.topping}</strong></td>
+                  <td class="border-1 align-middle"><strong>${cake.value}</strong></td>
+                    <td class="border-1 align-middle"><strong>${cake.key.price * cake.value} kr</strong></td>
+                </tr>
+                <!-- end of foreach -->
+                
+              </tbody>
+                  
+            </table>
+          </div>
+          <!-- End -->
+        </div>
+      </div>
+<a href="${pageContext.request.contextPath}">
+        <button type="button" class="btn btn-dark rounded-pill py-2 btn-block">Gå til forsiden</button>
+    </a>
+    </div>
+  </div>
+</div>
+</div>
+                        <p class="address mb-5"><em></em></p>
+                        <p class="address mb-0"><small></small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="page-section about-heading">
+        <div class="container"><img class="img-fluid rounded about-heading-img mb-3 mb-lg-0" src="../assets/img/bornholm.jpg">
+            <div class="about-heading-content">
+                <div class="row">
+                    <div class="col-lg-10 col-xl-9 mx-auto">
+                        <div class="bg-faded rounded p-5">
+                            <h2 class="section-heading mb-4"><span class="section-heading-upper">dybdeøkologisk iværksættereventyr fra Bornholm</span><span class="section-heading-lower">Mums filibaba</span></h2>
+                            <p>Som ægte iværksættere startet vi virksomheden d. 21 December 2012 hvor vores sårede Jorden blev dømt til at gå under.</p>
+                            <p class="mb-0"><span>Det skete imidlertidig ikke og derfor har vi stadig gang i biksen indtil Jorden en dag går under fordi folk stadig dræber dyr for at få aftensmad.<br>Vores vision er at redde planeten ved at lave biodynamiske, økologiske, gluten-, sukker- og laktosefrie cupcakes<br></span><span></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="footer text-faded text-center py-5" style="background: rgb(52,58,64);">
+        <div class="container">
+            <p class="m-0 small" style="color: rgb(255,255,255);">Copyright&nbsp;© Team Lorte Bil 2020</p>
+        </div>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/current-day.js"></script>
+</body>
+
+</html>
