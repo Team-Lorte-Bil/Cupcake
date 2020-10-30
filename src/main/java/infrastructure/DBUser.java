@@ -1,14 +1,12 @@
 package infrastructure;
 
+import api.Utils;
 import domain.items.Option;
 import domain.user.InvalidPassword;
 import domain.user.User;
 import domain.user.UserExists;
 
 import java.sql.*;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -50,6 +48,9 @@ public class DBUser {
     
     public User checkLogin(String usrEmail, String usrPassword) throws InvalidPassword {
         User tmpUser = null;
+        
+        usrEmail = Utils.encodeHtml(usrEmail);
+        usrPassword = Utils.encodeHtml(usrPassword);
     
         System.out.println(tmpUser);
         
@@ -93,6 +94,10 @@ public class DBUser {
     }
     
     public User createUser(String name, String password, String email, int phoneno, double accountBalance, String role){
+        name = Utils.encodeHtml(name);
+        password = Utils.encodeHtml(password);
+        email = Utils.encodeHtml(email);
+        role = Utils.encodeHtml(role);
         int id;
         byte[] userSalt = User.generateSalt();
         byte[] userSecret = User.calculateSecret(userSalt, password);

@@ -1,5 +1,6 @@
 package infrastructure;
 
+import api.Utils;
 import domain.items.CakeOptions;
 import domain.items.Option;
 
@@ -25,6 +26,8 @@ public class DBCakeOptions {
                 String name = rs.getString("name");
                 int price = (int) rs.getDouble("price");
                 
+                name = Utils.encodeHtml(name);
+                
                 tmpList.put(name,price);
             }
             return tmpList;
@@ -42,6 +45,7 @@ public class DBCakeOptions {
             
             while(rs.next()) {
                 String name = rs.getString("name");
+                name = Utils.encodeHtml(name);
                 int price = (int) rs.getDouble("price");
                 
                 tmpList.put(name,price);
@@ -131,6 +135,7 @@ public class DBCakeOptions {
     
     
     public int getToppingIdFromName(String topping) {
+        topping = Utils.encodeHtml(topping);
         try(Connection conn = db.getConnection()){
             String sqlQuery = "SELECT id FROM CakeToppings WHERE name=?";
             
@@ -149,6 +154,7 @@ public class DBCakeOptions {
     }
     
     public int getBottomIdFromName(String bottom) {
+        bottom = Utils.encodeHtml(bottom);
         try(Connection conn = db.getConnection()){
             String sqlQuery = "SELECT id FROM CakeBottoms WHERE name=?";
             

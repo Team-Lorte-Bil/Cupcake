@@ -1,5 +1,6 @@
 package infrastructure;
 
+import api.Utils;
 import domain.items.Cake;
 import domain.items.Option;
 import domain.order.Order;
@@ -87,7 +88,7 @@ public class DBOrder {
         
         int orderId = 0;
         User tmpUser = user;
-        String orderComment = comment;
+        String orderComment = Utils.encodeHtml(comment);
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         boolean paid = false; //TODO: Implement user account balance usage.
         boolean completed = false;
@@ -299,6 +300,7 @@ public class DBOrder {
                 int id = rs.getInt(1);
                 int userId = rs.getInt(2);
                 String comment = rs.getString(3);
+                comment = Utils.encodeHtml(comment);
                 Timestamp timestamp = rs.getTimestamp(4);
                 boolean paid = rs.getBoolean(5);
                 boolean completed = rs.getBoolean(6);

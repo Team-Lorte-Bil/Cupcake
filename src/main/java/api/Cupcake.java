@@ -136,6 +136,8 @@ public class Cupcake {
     }
 
     public Option createCakeOption (String name, double price, String type) {
+        name = Utils.encodeHtml(name);
+        type = Utils.encodeHtml(type);
         return new DBCakeOptions(database).createCakeOption(new Option(0, name, type, (int) price));
 
     }
