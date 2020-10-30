@@ -3,6 +3,10 @@
 <div class="container text-center">
     <h3>Menu Kort</h3>
     <br/> <br/>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCreateItem">
+        Opret ny Bund/Top
+    </button>
+    <br/> <br/>
     <table class="table">
         <thead>
         <tr>
@@ -24,12 +28,8 @@
 
                 <td>
                     <form action="AdminOrders" method="post">
-                        <input type="hidden" name="action" value="complete">
-                        <input type="submit" value="mark complete">
-                    </form>
-                    <form action="AdminOrders" method="post">
                         <input type="hidden" name="action" value="delete">
-                        <input type="submit" value="delete">
+                        <input type="submit" class="btn btn-danger" value="Slet">
                     </form>
                 </td>
             </tr>
@@ -62,4 +62,41 @@
         </c:forEach>
         </tbody>
     </table>
+</div>
+
+<div class="modal fade" id="modalCreateItem" tabindex="-1" aria-labelledby="modalCreateItem" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="">Opret ny bruger</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="AdminItems" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="action" value="createItem">
+
+                    <div class="form-group">
+                    <input type="itemname" class="form-control" id="inputItemName" name="inputItemName" placeholder="Indtast navn på din nye bund/top">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="price" class="form-control" id="inputPrice" name="inputPrice" placeholder="Indtast Pris på varen">
+                    </div>
+
+                    <div class="form-group">
+                        <select class="form-control" type="inputRole" >
+                            <option value="cakebottoms">Bund</option>
+                            <option value="caketoppings">Top</option>
+                        </select>
+                    </div>
+
+                    <div class="modal-footer">
+                          <button type="button" class="btn btn-danger" data-dismiss="modal">Annuller</button>
+                          <button type="submit" class="btn btn-success">Opret Bund/Top</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>

@@ -6,6 +6,7 @@
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCreateUser">
         Opret ny bruger
     </button>
+    <br/> <br/>
     <table class="table">
         <thead>
         <tr>
