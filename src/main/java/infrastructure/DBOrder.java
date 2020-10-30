@@ -261,7 +261,7 @@ public class DBOrder {
         try (Connection conn = db.getConnection()) {
             
             PreparedStatement ps = conn.prepareStatement(
-                    "UPDATE Orders SET Cupcake.Orders.completed=1 WHERE id=?;");
+                    "UPDATE Orders SET completed=1, paid = 1 WHERE id=?;");
             
             
             ps.setInt(1,orderId);
