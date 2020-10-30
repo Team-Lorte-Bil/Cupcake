@@ -40,16 +40,13 @@ public class NewOrder extends BaseServlet {
         
         render("NewOrder confirmation", "/WEB-INF/orderconfirmation.jsp", req, resp);
         
-        clearCart(session,req); //TODO: Fix bugs
+        clearCart(session,req);
         
     }
     
     private Order createNewOrder(HttpServletRequest req){
         User curUser = (User) req.getSession().getAttribute("currentUser");
         String comment = req.getParameter("comment");
-        if(comment == null){
-            comment = "";
-        }
     
         return new DBOrder(api.getDatabase()).createOrder(curUser, cakes, comment);
     }
