@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Store - Cupcake</title>
+    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../assets/css/Google-Style-Login.css">
+    <link rel="stylesheet" href="../assets/css/Navigation-with-Button.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+</head>
+
+<body style="background: linear-gradient(rgba(47, 23, 15, 0.65), rgba(47, 23, 15, 0.65)), url(&quot;../assets/img/cupcakes-4068129_1920.jpg&quot;) repeat;background-size: auto, cover;font-family: Raleway, sans-serif;">
+    <h1 class="text-center text-white d-none d-lg-block site-heading"><span class="site-heading-lower">Administration</span></h1><nav class="navbar navbar-dark navbar-expand-md bg-dark navigation-clean-button" style="font-family: Raleway, sans-serif;font-weight: 800;">
+    <div class="container"><button data-toggle="collapse" data-target="#navcol-1" class="navbar-toggler"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navcol-1">
+            <ul class="nav navbar-nav mr-auto">
+                <li class="nav-item"><a class="nav-link active" href="${pageContext.request.contextPath}/AdminStart">Start</a></li>
+                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/AdminOrders">Ordre</a></li>
+                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/AdminCustomers">Kunder</a></li>
+                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/AdminItems">Produkter</a></li>
+            </ul>
+            <span class="navbar-text actions">
+                <p class="navbar-text">${sessionScope.currentUser.email} (Saldo: ${sessionScope.currentUser.accountBalance} kr)</p>
+                <a class="login" href="${pageContext.request.contextPath}/Logout">Log ud</a></span></div>
+    </div>
+</nav>
+    <section class="page-section cta" style="background: rgba(109,67,73,0.74);">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-9 mx-auto"><div class="cta-inner text-center rounded">
+    <h2 class="section-heading mb-5"><span class="section-heading-lower">Produkter</span></h2>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCreateItem">
+        Opret ny Bund/Top
+    </button>
+    <br/> <br/>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Navn</th>
+            <th scope="col">Type</th>
+            <th scope="col">Pris</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach items="${requestScope.items}" var="item" varStatus="vs">
+            <tr>
+                <td>${item.name}</td>
+                <td>${item.type}</td>
+                <td>${item.price} kr</td>
+
+                <td>
+                    <form action="AdminItems" method="post">
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="itemId" value="${item.id}">
+                        <input type="hidden" name="type" value="${item.type}">
+                        <input type="submit" class="btn btn-danger" value="Slet">
+                    </form>
+                </td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="modalCreateItem" tabindex="-1" aria-labelledby="modalCreateItem" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="">Opret ny bund/top</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="AdminItems" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="action" value="createItem">
+
+                    <div class="form-group">
+                    <input type="itemname" class="form-control" id="inputItemName" name="inputItemName" placeholder="Indtast navn på din nye bund/top">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="price" class="form-control" id="inputPrice" name="inputPrice" placeholder="Indtast Pris på varen">
+                    </div>
+
+                    <div class="form-group">
+                        <select class="form-control" type="inputRole" name="inputType" >
+                            <option value="bottom">Bund</option>
+                            <option value="topping">Top</option>
+                        </select>
+                    </div>
+
+                    <div class="modal-footer">
+                          <button type="button" class="btn btn-danger" data-dismiss="modal">Annuller</button>
+                          <button type="submit" class="btn btn-success">Opret Bund/Top</button>
+                </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div></div>
+            </div>
+        </div>
+    </section>
+    <section class="page-section about-heading">
+        <div class="container">
+            <div class="about-heading-content"></div>
+        </div>
+    </section>
+    <footer class="footer text-faded text-center py-5" style="background: rgb(52,58,64);">
+        <div class="container">
+            <p class="m-0 small" style="color: rgb(255,255,255);">Copyright&nbsp;© Team Lorte Bil 2020</p>
+        </div>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/current-day.js"></script>
+</body>
+
+</html>

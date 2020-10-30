@@ -118,16 +118,17 @@ public class DBOrder {
                 orderId = rs.getInt(1);
             }
             
-            createCakesOnOrder(orderId, cakes);
+            HashMap<Cake, Integer> cakesOnOrder = createCakesOnOrder(orderId, cakes);
             System.out.println("Creating cakes on order: " + orderId);
             
-            tmpOrder = new Order(orderId, user, comment, timestamp, paid, completed);
+            tmpOrder = new Order(orderId, user, comment, timestamp, paid, completed,cakesOnOrder);
+            
+            
+            return tmpOrder;
             
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        
-        return tmpOrder;
     }
     
     public HashMap<Cake, Integer> createCakesOnOrder(int orderId, HashMap<Cake, Integer> cakes) {

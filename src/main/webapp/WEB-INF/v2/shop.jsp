@@ -19,7 +19,7 @@
                     <div class="form-group"><label>Vælg topping:</label>
                         <select name="topping" id="topping">
                             <c:forEach items="${requestScope.toppings.entrySet()}" var="topping">
-                                <option value="${bottom.key}">${topping.key} - ${topping.value}kr</option>
+                                <option value="${topping.key}">${topping.key} - ${topping.value}kr</option>
                             </c:forEach>
                         </select>
                     </div>

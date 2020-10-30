@@ -14,22 +14,22 @@
 
   <error-page>
     <error-code>404</error-code>
-    <location>/WEB-INF/errors/404.jsp</location>
+    <location>/WEB-INF/v2/errors/404.jsp</location>
   </error-page>
   <error-page>
     <error-code>400</error-code>
-    <location>/WEB-INF/errors/400.jsp</location>
+    <location>/WEB-INF/v2/errors/400.jsp</location>
   </error-page>
   <error-page>
     <error-code>401</error-code>
-    <location>/WEB-INF/errors/401.jsp</location>
+    <location>/WEB-INF/v2/errors/401.jsp</location>
   </error-page>
   <error-page>
     <error-code>500</error-code>
-    <location>/WEB-INF/errors/500.jsp</location>
+    <location>/WEB-INF/v2/errors/500.jsp</location>
   </error-page>
   <error-page>
-    <location>/WEB-INF/errors/error.jsp</location>
+    <location>/WEB-INF/v2/errors/error.jsp</location>
   </error-page>
 
 <session-config>
