@@ -150,3 +150,5 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/maven,macos,windows,java-web,intellij# Created by .ignore support plugin (hsz.mobi)
+/Mockup/
+src/test/
