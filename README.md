@@ -9,7 +9,7 @@
 ### 💾 [Assignment description](https://datsoftlyngby.github.io/dat2sem2020Spring/uge11/cupcake/cupcake.html)
 
 
-### ✨ [Live Demo](lortebil.team:8080/cupcake)
+### ✨ [Live Demo](http://lortebil.team:8080/cupcake)
 
 ## Team
 

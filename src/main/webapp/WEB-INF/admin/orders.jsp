@@ -16,124 +16,89 @@
         </thead>
         <tbody>
         <c:forEach items="${requestScope.orders}" var="order" varStatus="vs">
-            <tr>
+            <c:if test="${order.key.paid}"><tr class="table-success"></c:if>
+            <c:if test="${!order.key.paid}"><tr class="table-warning"></c:if>
+            <c:if test="${order.key.completed}"><tr class="table-active"></c:if>
                 <td><a href="#" data-toggle="modal" data-target="#modalChangeBalance${vs.index}">${order.key.orderId}</a></td>
                 <td>${order.key.user.name}</td>
                 <td>${order.key.user.phoneno}</td>
                 <td>${order.value}</td>
                 <td>${order.key.paid}</td>
                 <td>
-                    <div class="btn-group" role="group">
-                        <c:choose>
-                            <c:when test="${customer.admin}">
+                    <c:choose>
+                        <c:when test="${order.key.completed}">
+                            Ordren er blevet afhentet.
+                        </c:when>
+                        <c:otherwise>
+                            <div class="btn-group" role="group">
                                 <form action="AdminOrders" method="post">
-                                    <input type="submit" class="btn btn-success" value="Marker som færdig" disabled>
+                                    <input type="hidden" name="action" value="markDone">
+                                    <input type="hidden" name="orderId" value="${order.key.orderId}">
+                                    <input type="submit" class="btn btn-success" value="Marker som færdig" <c:if test="${order.key.completed}">disabled</c:if>>
                                 </form>
-                            </c:when>
-                            <c:otherwise>
+
                                 <form action="AdminOrders" method="post">
-                                    <input type="hidden" name="action" value="deleteUser">
-                                    <input type="hidden" name="userId" value="${customer.id}">
-                                    <input type="submit" class="btn btn-success" value="Marker som færdig">
+                                    <input type="hidden" name="action" value="deleteOrder">
+                                    <input type="hidden" name="orderId" value="${order.key.orderId}">
+                                    <input type="submit" class="btn btn-danger" value="Slet ordre" <c:if test="${order.key.completed}">disabled</c:if>>
                                 </form>
-                            </c:otherwise>
-                        </c:choose>
-                        <c:choose>
-                            <c:when test="${customer.admin}">
-                                <form action="AdminOrders" method="post">
-                                    <input type="submit" class="btn btn-danger" value="Slet ordre" disabled>
-                                </form>
-                            </c:when>
-                            <c:otherwise>
-                                <form action="AdminOrders" method="post">
-                                    <input type="hidden" name="action" value="deleteUser">
-                                    <input type="hidden" name="userId" value="${customer.id}">
-                                    <input type="submit" class="btn btn-danger" value="Slet ordre">
-                                </form>
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+
                 </td>
             </tr>
-            <!-- Change balance modal -->
-            <div class="modal fade" id="modalChangeBalance${vs.index}" tabindex="-1" aria-labelledby="modalChangeBalanceLabel${vs.index}" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Ændre saldo for</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <form action="AdminCustomers" method="POST">
-                            <div class="modal-body">
-                                <input type="hidden" name="action" value="changeBalance">
-                                <input type="hidden" name="userId" value="${customer.id}">
-                                <div class="form-group">
-                                    <input type="number" class="form-control" id="newBalance" name="newBalance" placeholder="Indtast saldo (kr)" value="${customer.accountBalance}">
-                                </div>
-
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Annuller</button>
-                                <button type="submit" class="btn btn-success">Opdater saldo</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
         </c:forEach>
         </tbody>
     </table>
 </div>
 
-<!-- Create new user modal -->
-<div class="modal fade" id="modalCreateUser" tabindex="-1" aria-labelledby="modalCreateUserLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Opret ny bruger</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form action="AdminCustomers" method="POST">
-                <div class="modal-body">
-                    <input type="hidden" name="action" value="createUser">
-                    <div class="form-group">
-                        <input type="name" class="form-control" id="inputName" name="inputName" placeholder="Indtast navn...">
+<c:forEach items="${requestScope.orders}" var="order" varStatus="vs">
+    <!-- Show order details -->
+    <div class="modal fade" id="modalChangeBalance${vs.index}" tabindex="-1" aria-labelledby="modalChangeBalanceLabel${vs.index}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ordre nummer ${order.key.orderId}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="overflow-x: auto;!important">
+                    <div id="custinfo">
+                        <p>Kunde: ${order.key.user.name}</p>
+                        <p>Mail: ${order.key.user.email}</p>
+                        <p>Telefon: ${order.key.user.phoneno}</p>
+                        <p>Ordretidspunkt: ${order.key.timestamp.toLocaleString()}</p>
+                        <p>Kommentar: ${order.key.comment}</p>
                     </div>
-
-                    <div class="form-group">
-                        <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="Indtast e-mail...">
+                    <div id="custitems">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">Antal</th>
+                                <th scope="col">Bund</th>
+                                <th scope="col">Fyld</th>
+                                <th scope="col">Linjepris</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach items="${order.key.cakes}" var="cake">
+                                <tr>
+                                    <td>${cake.value}</td>
+                                    <td>${cake.key.bottom}</td>
+                                    <td>${cake.key.topping}</td>
+                                    <td>${cake.key.price * cake.value} kr</td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
                     </div>
-
-                    <div class="form-group">
-                        <input type="tel" class="form-control" id="inputPhone" name="inputPhone" placeholder="Indtast telefon nummer...">
-                    </div>
-
-                    <div class="form-group">
-                        <input type="password" class="form-control" id="inputPsw" name="inputPsw" placeholder="Indtast kodeord...">
-                    </div>
-
-                    <div class="form-group">
-                        <input type="number" class="form-control" id="inputBalance" name="inputBalance" placeholder="Indtast saldo (kr)">
-                    </div>
-
-                    <div class="form-group">
-                        <select class="form-control" id="inputRole" name="inputRole">
-                            <option value="User">Kunde</option>
-                            <option value="Admin">Administrator</option>
-                        </select>
-                    </div>
-
-
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Annuller</button>
-                    <button type="submit" class="btn btn-success">Opret bruger</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Luk</button>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
-</div>
+</c:forEach>

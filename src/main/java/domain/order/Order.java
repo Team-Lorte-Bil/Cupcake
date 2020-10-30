@@ -7,7 +7,6 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 
 public class Order {
-    private static final int id = 1;
     private final int orderId;
     private final User user;
     private final HashMap<Cake, Integer> cakes;
@@ -24,6 +23,16 @@ public class Order {
         this.timestamp = timestamp;
         this.paid = paid;
         this.completed = completed;
+    }
+    
+    public Order(int orderId, User user, String comment, Timestamp timestamp, boolean paid, boolean completed, HashMap<Cake, Integer> cakes) {
+        this.orderId = orderId;
+        this.user = user;
+        this.comment = comment;
+        this.timestamp = timestamp;
+        this.paid = paid;
+        this.completed = completed;
+        this.cakes = cakes;
     }
     
     
@@ -53,6 +62,10 @@ public class Order {
     
     public boolean isPaid() {
         return paid;
+    }
+    
+    public boolean isCompleted() {
+        return completed;
     }
     
     public void addCakes(HashMap<Cake, Integer> cakes){

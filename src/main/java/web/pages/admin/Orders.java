@@ -1,6 +1,8 @@
 package web.pages.admin;
 
 import domain.order.Order;
+import infrastructure.DBOrder;
+import infrastructure.DBUser;
 import web.pages.BaseServlet;
 
 import javax.servlet.ServletException;
@@ -9,11 +11,41 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 @WebServlet("/AdminOrders")
 public class Orders extends BaseServlet {
+    
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        try {
+            switch (req.getParameter("action")){
+                case "markDone":
+                    markDone(req, resp);
+                    return;
+                case "deleteOrder":
+                    deleteOrder(req, resp);
+                    return;
+                default:
+                    System.out.println("default reached");
+            }
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+    
+    private void deleteOrder(HttpServletRequest req, HttpServletResponse resp) throws IOException{
+            int orderId = Integer.parseInt(req.getParameter("orderId"));
+            new DBOrder(api.getDatabase()).deleteOrder(orderId);
+            resp.sendRedirect(req.getContextPath() + "/AdminOrders");
+    }
+    
+    private void markDone(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int orderId = Integer.parseInt(req.getParameter("orderId"));
+        new DBOrder(api.getDatabase()).markDone(orderId);
+        resp.sendRedirect(req.getContextPath() + "/AdminOrders");
+    }
     
     /**
      * Renders the index.jsp page
@@ -31,7 +63,6 @@ public class Orders extends BaseServlet {
             if (! req.getSession().getAttribute("isAdmin").equals(true) || req.getSession().getAttribute("isAdmin") == null)
                 resp.sendError(401);
     
-            ArrayList<Order> orders = api.getOrders();
             LinkedHashMap<Order, Double> ordersNew = api.getAllOrders();
     
             req.setAttribute("orders", ordersNew);
