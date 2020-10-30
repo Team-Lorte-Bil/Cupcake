@@ -277,6 +277,18 @@ public class DBOrder {
         }
     }
     
+    public double getTotalSales(LinkedHashMap<Order, Double> orders){
+        double sum = 0.0;
+        
+        for(Map.Entry<Order, Double> entry: orders.entrySet()){
+            if(entry.getKey().isCompleted()){
+                sum += entry.getValue();
+            }
+        }
+        
+        return sum;
+    }
+    
     public LinkedHashMap<Order, Double> getAllOrdersMap() {
         LinkedHashMap<Order, Double> tmpMap = new LinkedHashMap<>();
         try (Connection conn = db.getConnection()) {
