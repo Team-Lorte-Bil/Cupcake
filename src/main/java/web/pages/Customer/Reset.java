@@ -18,7 +18,7 @@ public class Reset extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        
-        render("Reset password", "/WEB-INF/resetpassword.jsp", req, resp);
+    
+        render("Reset password", "/WEB-INF/v"+api.getVersion()+"/resetpassword.jsp", req, resp);
     }
 }

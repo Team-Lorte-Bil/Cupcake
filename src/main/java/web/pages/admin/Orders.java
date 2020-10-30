@@ -64,8 +64,8 @@ public class Orders extends BaseServlet {
             LinkedHashMap<Order, Double> ordersNew = api.getAllOrders();
     
             req.setAttribute("orders", ordersNew);
-    
-            render("Administrator - Vis ordre", "/WEB-INF/admin/orders.jsp", req, resp);
+
+            render("Administrator - Vis ordre", "/WEB-INF/v"+api.getVersion()+"/admin/orders.jsp", req, resp);
         } catch (Exception e){
             log(e.getMessage());
         }

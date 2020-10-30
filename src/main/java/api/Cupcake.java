@@ -17,7 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Cupcake {
-    private static final String VERSION = "0.1";
+    private static final String VERSION = "1";
     private final Database database;
     private HashMap<Cake, Integer> cakes;
     private CakeOptions cakeOptions;

@@ -37,7 +37,7 @@ public class BaseServlet extends HttpServlet {
         req.setAttribute("navbar", new Navbar(req));
         req.setAttribute("title", title);
         req.setAttribute("content", content);
-        req.getRequestDispatcher("/includes/base.jsp").forward(req, resp);
+        req.getRequestDispatcher("/includes/v" + api.getVersion() + "/base.jsp").forward(req, resp);
     }
     
     /**

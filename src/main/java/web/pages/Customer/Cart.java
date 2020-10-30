@@ -40,7 +40,7 @@ public class Cart extends BaseServlet {
                 return;
         }
         
-        render("Cart", "/WEB-INF/cart.jsp", req, resp);
+        render("Cart", "/WEB-INF/v"+api.getVersion()+"/cart.jsp", req, resp);
         
     }
     
@@ -117,8 +117,8 @@ public class Cart extends BaseServlet {
         
         HttpSession session = req.getSession();
         setup(session);
-        
-        
-        render("Cart", "/WEB-INF/cart.jsp", req, resp);
+    
+    
+        render("Cart", "/WEB-INF/v"+api.getVersion()+"/cart.jsp", req, resp);
     }
 }

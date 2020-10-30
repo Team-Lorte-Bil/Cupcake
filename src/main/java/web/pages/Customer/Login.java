@@ -21,7 +21,7 @@ public class Login extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        render("Login", "/WEB-INF/logind.jsp", req, resp);
+        render("Login", "/WEB-INF/v"+api.getVersion()+"/logind.jsp", req, resp);
     }
     
     @Override
@@ -39,7 +39,7 @@ public class Login extends BaseServlet {
         } catch (InvalidPassword e){
             req.setAttribute("errorMsg", e.getMessage());
             req.setAttribute("error", true);
-            render("Login", "/WEB-INF/logind.jsp", req, resp);
+            render("Login", "/WEB-INF/v"+api.getVersion()+"/logind.jsp", req, resp);
         }
     }
     
@@ -47,8 +47,8 @@ public class Login extends BaseServlet {
             String usrEmail = req.getParameter("inputEmail");
             String usrPassword = req.getParameter("inputPassword");
     
-        log(usrEmail);
-        log(usrPassword);
+            log(usrEmail);
+            log(usrPassword);
     
             User curUsr = new DBUser(api.getDatabase()).checkLogin(usrEmail, usrPassword);
             log("Logged in: " + curUsr);

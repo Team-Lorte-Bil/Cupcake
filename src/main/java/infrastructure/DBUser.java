@@ -59,9 +59,9 @@ public class DBUser {
     
             ResultSet rs = ps.executeQuery();
     
-            System.out.println("Provided mail: " + usrEmail);
+            System.out.println();
             
-            while(rs.next()) {
+            if(rs.next()) {
                 int id = rs.getInt(1);
                 String email = rs.getString(2);
                 String name = rs.getString(3);
@@ -71,22 +71,19 @@ public class DBUser {
                 Enum<User.Role> role = User.Role.valueOf(rs.getString(7));
                 Timestamp createdAt = rs.getTimestamp(8);
                 double accountBalance = rs.getDouble(9);
-    
                 byte[] providedSecret = User.calculateSecret(salt, usrPassword);
                 
                 
-                System.out.println("Provided: " + Arrays.toString(providedSecret));
-                System.out.println("Correct: " + Arrays.toString(secret));
-                
                 if(! Arrays.equals(providedSecret, secret)){
-                    throw new InvalidPassword();
+                    throw new InvalidPassword("Forkert kode! Prøv igen.");
                 }
     
                 tmpUser = new User(id,email,name,phoneno,salt,secret,role,createdAt,accountBalance);
                 
                 return tmpUser;
+            } else {
+                throw new InvalidPassword("Brugeren eksisterer ikke!");
             }
-            return null;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

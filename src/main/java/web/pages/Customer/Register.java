@@ -21,7 +21,7 @@ public class Register extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        render("Register", "/WEB-INF/register.jsp", req, resp);
+        render("Register user", "/WEB-INF/v"+api.getVersion()+"/register.jsp", req, resp);
     }
     
     @Override

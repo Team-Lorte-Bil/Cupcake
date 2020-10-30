@@ -32,7 +32,7 @@ public class Start extends BaseServlet {
                 resp.sendError(401);
             }
             setStats(req);
-            render("Administrator - Start", "/WEB-INF/admin/start.jsp", req, resp);
+            render("Administrator - Start", "/WEB-INF/v"+api.getVersion()+"/admin/start.jsp", req, resp);
         } catch (Exception e){
             log(e.getMessage());
         }

@@ -38,7 +38,7 @@ public class NewOrder extends BaseServlet {
         
         log(req,"Got: " + tmpOrder);
         
-        render("NewOrder confirmation", "/WEB-INF/orderconfirmation.jsp", req, resp);
+        render("Order confirmation", "/WEB-INF/v"+api.getVersion()+"/orderconfirmation.jsp", req, resp);
         
         clearCart(session,req);
         

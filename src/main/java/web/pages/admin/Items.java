@@ -81,8 +81,8 @@ public class Items extends BaseServlet {
             }
     
             req.setAttribute("items", items);
-    
-            render("Administrator - Vis produkter", "/WEB-INF/admin/items.jsp", req, resp);
+            
+            render("Administrator - Vis produkter", "/WEB-INF/v"+api.getVersion()+"/admin/items.jsp", req, resp);
     
         } catch (Exception e){
             log(e.getMessage());

@@ -35,8 +35,8 @@ public class Customers extends BaseServlet {
             System.out.println(customers);
     
             req.setAttribute("customers", customers);
-    
-            render("Administrator - Vis kunder", "/WEB-INF/admin/customers.jsp", req, resp);
+            
+            render("Administrator - Vis kunder", "/WEB-INF/v"+api.getVersion()+"/admin/customers.jsp", req, resp);
         } catch (Exception e){
             log(e.getMessage());
         }

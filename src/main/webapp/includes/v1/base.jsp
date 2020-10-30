@@ -32,10 +32,10 @@
     <!-- nav bar -->
     <c:choose>
         <c:when test="${sessionScope.currentUser.admin}">
-            <%@include file="../includes/admin-navbar.jsp"%>
+            <%@include file="admin-navbar.jsp"%>
         </c:when>
         <c:otherwise>
-            <%@include file="../includes/navbar.jsp"%>
+            <%@include file="navbar.jsp"%>
         </c:otherwise>
     </c:choose>
     <!-- navbar end -->

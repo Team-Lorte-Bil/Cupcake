@@ -21,7 +21,7 @@ public class Index extends BaseServlet {
         
         req.setAttribute("toppings", api.getCakeOptions().getToppings());
         req.setAttribute("bottoms", api.getCakeOptions().getBottoms());
-        
-        render("Olsker Cupcaks", "/WEB-INF/index.jsp", req, resp);
+    
+        render("Cart", "/WEB-INF/v"+api.getVersion()+"/index.jsp", req, resp);
     }
 }
