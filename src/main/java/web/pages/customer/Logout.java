@@ -1,4 +1,4 @@
-package web.pages.Customer;
+package web.pages.customer;
 
 import web.pages.BaseServlet;
 
@@ -8,20 +8,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/Shop")
-public class Shop extends BaseServlet {
-    
+@WebServlet("/Logout")
+public class Logout extends BaseServlet {
     /**
-     * Renders the index.jsp page
+     * Renders the Register new account page
      * @see BaseServlet
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        
-        req.setAttribute("toppings", api.getCakeOptions().getToppings());
-        req.setAttribute("bottoms", api.getCakeOptions().getBottoms());
-    
-        render("Shop", "/WEB-INF/v"+api.getVersion()+"/shop.jsp", req, resp);
+        req.getSession().invalidate();
+        log(req, "logged out");
+        resp.sendRedirect(req.getContextPath() + "/");
     }
+
 }

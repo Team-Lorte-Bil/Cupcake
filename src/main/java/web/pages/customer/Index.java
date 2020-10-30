@@ -1,4 +1,4 @@
-package web.pages.Customer;
+package web.pages.customer;
 
 import web.pages.BaseServlet;
 
@@ -8,18 +8,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/Logout")
-public class Logout extends BaseServlet {
+@WebServlet("")
+public class Index extends BaseServlet {
+    
     /**
-     * Renders the Register new account page
+     * Renders the index.jsp page
      * @see BaseServlet
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        req.getSession().invalidate();
-        log(req, "logged out");
-        resp.sendRedirect(req.getContextPath() + "/");
+    
+        render("Start", "/WEB-INF/v"+api.getVersion()+"/index.jsp", req, resp);
     }
-
 }

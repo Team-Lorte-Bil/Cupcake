@@ -1,4 +1,4 @@
-package web.pages.Customer;
+package web.pages.customer;
 
 import domain.user.InvalidPassword;
 import domain.user.User;

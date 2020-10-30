@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
-<html>
+<html lang="da">
 
 <head>
     <meta charset="utf-8">
@@ -27,7 +27,7 @@
                 <div class="cta-inner text-center rounded">
                     <h2 class="section-heading mb-5">
                         <span class="section-heading-lower">Ååååh nej!!</span>
-                        <span class="section-heading-lower" style="font-size: 23px;">Der skete <i>401</i> fejl! 😱</span>
+                        <span class="section-heading-lower" style="font-size: 23px;">Der skete <em>401</em> fejl! 😱</span>
                         <span class="section-heading-lower" style="font-size: 17px;">Og ud af de 401 fejl, fandt vi ud af at du ikke har adgang hertil 🔒👮‍</span>
                     </h2>
                     <a class="btn btn-dark btn-lg" href="${pageContext.request.contextPath}" role="button">Klik for at komme til forsiden</a>
