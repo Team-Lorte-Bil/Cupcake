@@ -4,6 +4,8 @@ import domain.items.CakeOptions;
 import domain.items.Option;
 import domain.order.Order;
 import domain.user.User;
+import infrastructure.DBCakeOptions;
+import infrastructure.DBUser;
 import web.pages.BaseServlet;
 
 import javax.servlet.ServletException;
@@ -16,6 +18,53 @@ import java.util.Arrays;
 
 @WebServlet("/AdminItems")
 public class Items extends BaseServlet {
+    
+    /**
+     * input type="hidden" name="action" value="delete">
+     *                         <input type="hidden" name="itemId" value="${item.id}">
+     *                         <input type="hidden" name="type" value="${item.type}">
+     */
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        try {
+            switch (req.getParameter("action")){
+                case "delete":
+                    deleteItem(req, resp);
+                    return;
+                case "createItem":
+                    newItem(req, resp);
+                    return;
+                default:
+                    System.out.println("default reached");
+            }
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+    
+    private void deleteItem(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String type = req.getParameter("type");
+        int itemId = Integer.parseInt(req.getParameter("itemId"));
+        new DBCakeOptions(api.getDatabase()).deleteCakeOption(itemId, type);
+        resp.sendRedirect(req.getContextPath() + "/AdminItems");
+    }
+    
+    private void newItem (HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        try {
+            String itemName = req.getParameter("inputItemName");
+            int price = Integer.parseInt(req.getParameter("inputPrice"));
+            String itemType = req.getParameter("inputType");
+            
+            api.createCakeOption(itemName, price, itemType);
+            
+            resp.sendRedirect(req.getContextPath() + "/AdminItems");
+        } catch (Exception e){
+            log(e.getMessage());
+            resp.sendError(400);
+        }
+    }
     
     /**
      * Renders the index.jsp page

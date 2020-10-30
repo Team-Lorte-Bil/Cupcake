@@ -19,46 +19,19 @@
         <tbody>
         <c:forEach items="${requestScope.items}" var="item" varStatus="vs">
             <tr>
-                <td>
-                    <a href="#" data-toggle="modal" data-target="#modal${vs.index}">${item.name}</a>
-
-                </td>
+                <td>${item.name}</td>
                 <td>${item.type}</td>
                 <td>${item.price} kr</td>
 
                 <td>
-                    <form action="AdminOrders" method="post">
+                    <form action="AdminItems" method="post">
                         <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="itemId" value="${item.id}">
+                        <input type="hidden" name="type" value="${item.type}">
                         <input type="submit" class="btn btn-danger" value="Slet">
                     </form>
                 </td>
             </tr>
-            <!-- Modals -->
-            <div class="modal fade" id="modal${vs.index}" tabindex="-1" aria-labelledby="modal${vs.index}Label" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">${item.name}</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div id="custinfo">
-                                <p>Type: ${item.type}</p>
-                                <p>Pris: ${item.price}</p>
-                            </div>
-                            <div id="custitems">
-
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </c:forEach>
         </tbody>
     </table>
@@ -86,9 +59,9 @@
                     </div>
 
                     <div class="form-group">
-                        <select class="form-control" type="inputRole" >
-                            <option value="cakebottoms">Bund</option>
-                            <option value="caketoppings">Top</option>
+                        <select class="form-control" type="inputRole" name="inputType" >
+                            <option value="bottom">Bund</option>
+                            <option value="topping">Top</option>
                         </select>
                     </div>
 

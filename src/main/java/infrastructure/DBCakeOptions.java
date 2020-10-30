@@ -99,12 +99,11 @@ public class DBCakeOptions {
         return new Option(id,option.getName(),option.getType(),option.getPrice());
     }
     
-    public boolean deleteCakeOption(Option option) {
-        int id = option.getId();
+    public boolean deleteCakeOption(int id, String type) {
         PreparedStatement ps;
         
         try (Connection conn = db.getConnection()) {
-            if(option.getType().equalsIgnoreCase("bottom")){
+            if(type.equalsIgnoreCase("bottom")){
                 ps = conn.prepareStatement(
                         "DELETE FROM CakeBottoms WHERE id = ?;");
             } else {

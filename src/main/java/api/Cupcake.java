@@ -10,9 +10,7 @@ import infrastructure.DBOrder;
 import infrastructure.DBUser;
 import infrastructure.Database;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -45,6 +43,7 @@ public class Cupcake {
     
     
     public CakeOptions getCakeOptions() {
+        cakeOptions = new DBCakeOptions(database).findAllCakeOptions();
         return cakeOptions;
     }
     
