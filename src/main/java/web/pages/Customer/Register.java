@@ -2,7 +2,6 @@ package web.pages.Customer;
 
 import domain.user.User;
 import domain.user.UserExists;
-import infrastructure.DBUser;
 import web.pages.BaseServlet;
 
 import javax.servlet.ServletException;

@@ -2,7 +2,6 @@ package infrastructure;
 
 import api.Utils;
 import domain.items.Cake;
-import domain.items.Option;
 import domain.order.NoOrderExists;
 import domain.order.Order;
 import domain.order.OrderRepository;
@@ -34,7 +33,7 @@ public class DBOrder implements OrderRepository {
                 boolean paid = rs.getBoolean(5);
                 boolean completed = rs.getBoolean(6);
                 
-                User tmpUsr = new DBUser(db).findUser(userId);
+                User tmpUsr = new DBUser().findUser(userId);
                 Order tmpOrder = new Order(id, tmpUsr, comment, timestamp, paid, completed, getCakesOnOrder(id));
                 
                 System.out.println("Cakes added: " + tmpOrder.getCakes());
@@ -112,7 +111,7 @@ public class DBOrder implements OrderRepository {
             ps.setString(2, orderComment);
             ps.setTimestamp(3, timestamp);
             ps.setBoolean(4, paid);
-            ps.setBoolean(5, completed);
+            ps.setBoolean(5, false);
             
             ps.executeUpdate();
             
@@ -124,7 +123,7 @@ public class DBOrder implements OrderRepository {
             createCakesOnOrder(orderId, cakes);
             System.out.println("Creating cakes on order: " + orderId);
             
-            tmpOrder = new Order(orderId, user, comment, timestamp, paid, completed, cakes);
+            tmpOrder = new Order(orderId, user, comment, timestamp, paid, false, cakes);
             
             
             return tmpOrder;
@@ -144,7 +143,7 @@ public class DBOrder implements OrderRepository {
                 String sql = "INSERT INTO CakesOnOrder (orderId, bottomId, toppingId, quantity) VALUE (?,?,?,?);";
                 
                 
-                try (var ps = conn.prepareStatement( sql);) {
+                try (var ps = conn.prepareStatement(sql)) {
                     
                     int cakeToppingId = new DBCakeOptions(db).getToppingIdFromName(c.getCake().getTopping());
                     int cakeBottomId = new DBCakeOptions(db).getBottomIdFromName(c.getCake().getBottom());
@@ -188,47 +187,6 @@ public class DBOrder implements OrderRepository {
         
     }
     
-    
-    public Option createCakeOption(Option option) {
-        int id;
-        PreparedStatement ps;
-        
-        try (Connection conn = db.getConnection()) {
-            
-            if (option.getType().equalsIgnoreCase("bottom")) {
-                ps =
-                        conn.prepareStatement(
-                                "INSERT INTO CakeBottoms (name, price) " +
-                                        "VALUE (?,?);",
-                                Statement.RETURN_GENERATED_KEYS);
-            } else {
-                ps =
-                        conn.prepareStatement(
-                                "INSERT INTO CakeToppings (name, price) " +
-                                        "VALUE (?,?);",
-                                Statement.RETURN_GENERATED_KEYS);
-            }
-            
-            ps.setString(1, option.getName());
-            ps.setDouble(2, option.getPrice());
-            
-            try {
-                ps.executeUpdate();
-            } catch (SQLIntegrityConstraintViolationException e) {
-                throw new RuntimeException(e);
-            }
-            
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs.next()) {
-                id = rs.getInt(1);
-            } else {
-                throw new Exception("Eksisterer allerde");
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return new Option(id, option.getName(), option.getType(), option.getPrice());
-    }
     
     public boolean deleteOrder(int orderId) {
         try (Connection conn = Database.getConnection()) {
@@ -286,7 +244,7 @@ public class DBOrder implements OrderRepository {
                 boolean paid = rs.getBoolean(5);
                 boolean completed = rs.getBoolean(6);
                 
-                User tmpUsr = new DBUser(db).findUser(userId);
+                User tmpUsr = new DBUser().findUser(userId);
                 Order tmpOrder = new Order(id, tmpUsr, comment, timestamp, paid, completed, getCakesOnOrder(id));
                 
                 String sql = "SELECT\n" +

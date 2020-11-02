@@ -40,6 +40,7 @@
 </tr>
 </thead>
 <tbody>
+<%--@elvariable id="cakes" type="java.util.List"--%>
 <c:forEach items="${cakes}" var="cake">
     <tr>
     <td class="border-1 align-middle"><strong>${cake.getCake().getBottom()}</strong></td>

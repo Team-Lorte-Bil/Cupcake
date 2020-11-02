@@ -10,7 +10,6 @@ import java.util.*;
 
 public class Cupcake {
     private static final String VERSION = "2";
-    private final Database database;
     private List<Order.Item> cakes;
     private CakeOptions cakeOptions;
     
@@ -20,10 +19,9 @@ public class Cupcake {
     
     
     public Cupcake(Database db) {
-        this.database = db;
-        dbOptions = new DBCakeOptions(database);
-        dbUser = new DBUser(database);
-        dbOrder = new DBOrder(database);
+        dbOptions = new DBCakeOptions(db);
+        dbUser = new DBUser();
+        dbOrder = new DBOrder(db);
         
         cakes = new ArrayList<>();
         cakeOptions = dbOptions.findAllCakeOptions();

@@ -7,7 +7,6 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.sql.Timestamp;
-import java.util.Arrays;
 
 public class User {
     private static final int PASSWORD_ITTERATIONS = 65536;

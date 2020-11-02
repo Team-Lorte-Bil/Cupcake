@@ -1,21 +1,16 @@
 package infrastructure;
 
 import api.Utils;
-import domain.items.Option;
 import domain.user.*;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 public class DBUser implements UserRepository {
     
-    private final Database db;
-    
-    public DBUser(Database db) {
-        this.db = db;
+    public DBUser() {
     }
     
     public List<User> getAllUsers(){
@@ -23,7 +18,7 @@ public class DBUser implements UserRepository {
     }
     
     public User checkLogin(String usrEmail, String usrPassword) throws InvalidPassword {
-        User tmpUser = null;
+        User tmpUser;
         
         usrEmail = Utils.encodeHtml(usrEmail);
         usrPassword = Utils.encodeHtml(usrPassword);
@@ -173,8 +168,6 @@ public class DBUser implements UserRepository {
         byte[] userSalt = User.generateSalt();
         byte[] userSecret = User.calculateSecret(userSalt, password);
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-    
-        User tmpUser;
     
         try (Connection conn = Database.getConnection()) {
             String sql = "INSERT INTO Users (email, name, phoneno, salt, secret, role, accountBalance, createdAt) " +

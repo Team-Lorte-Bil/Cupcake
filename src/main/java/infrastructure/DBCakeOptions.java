@@ -10,10 +10,7 @@ import java.util.List;
 
 public class DBCakeOptions {
     
-    private final Database db;
-    
     public DBCakeOptions(Database db) {
-        this.db = db;
     }
     
     private List<Option> getAllCakeBottoms(){
@@ -67,7 +64,7 @@ public class DBCakeOptions {
         int id;
         PreparedStatement ps;
         
-        try (Connection conn = db.getConnection()) {
+        try (Connection conn = Database.getConnection()) {
             
             if(option.getType().equalsIgnoreCase("bottom")){
                 ps =
@@ -136,15 +133,15 @@ public class DBCakeOptions {
         try(Connection conn = Database.getConnection()){
             String sqlQuery = "SELECT id FROM CakeToppings WHERE name=?";
             
-            PreparedStatement s = conn.prepareStatement(sqlQuery);
+            try(PreparedStatement s = conn.prepareStatement(sqlQuery)){
             s.setString(1,topping);
             ResultSet rs = s.executeQuery();
             
-            while(rs.next()){
+            if(rs.next()){
                 return rs.getInt(1);
             }
             
-        } catch (SQLException e){
+        }} catch (SQLException e){
             throw new RuntimeException(e);
         }
         return 0;

@@ -20,6 +20,7 @@
         </thead>
         <tbody>
         <!-- print all cupcakes in session cart -->
+        <%--@elvariable id="cakes" type="java.util.List"--%>
         <c:forEach items="${cakes}" var="cake">
             <tr>
                 <th scope="row">
