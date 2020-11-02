@@ -16,31 +16,31 @@
         </thead>
         <tbody>
         <c:forEach items="${requestScope.orders}" var="order" varStatus="vs">
-            <c:if test="${order.key.paid}"><tr class="table-success"></c:if>
-            <c:if test="${!order.key.paid}"><tr class="table-warning"></c:if>
-            <c:if test="${order.key.completed}"><tr class="table-active"></c:if>
-                <td><a href="#" data-toggle="modal" data-target="#modalChangeBalance${vs.index}">${order.key.orderId}</a></td>
-                <td>${order.key.user.name}</td>
-                <td>${order.key.user.phoneno}</td>
-                <td>${order.value}</td>
-                <td>${order.key.paid}</td>
+            <c:if test="${order.paid}"><tr class="table-success"></c:if>
+            <c:if test="${!order.paid}"><tr class="table-warning"></c:if>
+            <c:if test="${order.completed}"><tr class="table-active"></c:if>
+                <td><a href="#" data-toggle="modal" data-target="#modalChangeBalance${vs.index}">${order.orderId}</a></td>
+                <td>${order.user.name}</td>
+                <td>${order.user.phoneno}</td>
+                <td>${order.price}</td>
+                <td>${order.paid}</td>
                 <td>
                     <c:choose>
-                        <c:when test="${order.key.completed}">
+                        <c:when test="${order.completed}">
                             Ordren er blevet afhentet.
                         </c:when>
                         <c:otherwise>
                             <div class="btn-group" role="group">
                                 <form action="AdminOrders" method="post">
                                     <input type="hidden" name="action" value="markDone">
-                                    <input type="hidden" name="orderId" value="${order.key.orderId}">
-                                    <input type="submit" class="btn btn-success" value="Marker som færdig" <c:if test="${order.key.completed}">disabled</c:if>>
+                                    <input type="hidden" name="orderId" value="${order.orderId}">
+                                    <input type="submit" class="btn btn-success" value="Marker som færdig" <c:if test="${order.completed}">disabled</c:if>>
                                 </form>
 
                                 <form action="AdminOrders" method="post">
                                     <input type="hidden" name="action" value="deleteOrder">
-                                    <input type="hidden" name="orderId" value="${order.key.orderId}">
-                                    <input type="submit" class="btn btn-danger" value="Slet ordre" <c:if test="${order.key.completed}">disabled</c:if>>
+                                    <input type="hidden" name="orderId" value="${order.orderId}">
+                                    <input type="submit" class="btn btn-danger" value="Slet ordre" <c:if test="${order.completed}">disabled</c:if>>
                                 </form>
                             </div>
                         </c:otherwise>
@@ -59,18 +59,18 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Ordre nummer ${order.key.orderId}</h5>
+                    <h5 class="modal-title">Ordre nummer ${order.orderId}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body" style="overflow-x: auto;!important">
                     <div id="custinfo">
-                        <p>Kunde: ${order.key.user.name}</p>
-                        <p>Mail: ${order.key.user.email}</p>
-                        <p>Telefon: ${order.key.user.phoneno}</p>
-                        <p>Ordretidspunkt: ${order.key.timestamp.toLocaleString()}</p>
-                        <p>Kommentar: ${order.key.comment}</p>
+                        <p>Kunde: ${order.user.name}</p>
+                        <p>Mail: ${order.user.email}</p>
+                        <p>Telefon: ${order.user.phoneno}</p>
+                        <p>Ordretidspunkt: ${order.timestamp.toLocaleString()}</p>
+                        <p>Kommentar: ${order.comment}</p>
                     </div>
                     <div id="custitems">
                         <table class="table table-striped">
@@ -83,12 +83,12 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach items="${order.key.cakes}" var="cake">
+                            <c:forEach items="${order.cakes}" var="cake">
                                 <tr>
-                                    <td>${cake.value}</td>
-                                    <td>${cake.key.bottom}</td>
-                                    <td>${cake.key.topping}</td>
-                                    <td>${cake.key.price * cake.value} kr</td>
+                                    <td>${cake.amount}</td>
+                                    <td>${cake.cake.bottom}</td>
+                                    <td>${cake.cake.topping}</td>
+                                    <td>${cake.cake.price * cake.amount} kr</td>
                                 </tr>
                             </c:forEach>
                             </tbody>

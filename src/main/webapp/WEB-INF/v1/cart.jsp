@@ -25,7 +25,7 @@
             <tr>
                 <th scope="row">
                     <select class="custom-select text-center" disabled>
-                        <option selected>${cake.value}</option>
+                        <option selected>${cake.getAmount()}</option>
                         <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -39,13 +39,13 @@
                         <option value="10">10</option>
                     </select>
                 </th>
-                <td>${cake.key.bottom}</td>
-                <td>${cake.key.topping}</td>
-                <td>${cake.key.price},- kr</td>
+                <td>${cake.getCake().getBottom()}</td>
+                <td>${cake.getCake().getTopping()}</td>
+                <td>${cake.getCake().getPrice()},- kr</td>
                 <td>
                     <form action="Cart" method="post">
                         <input type="hidden" name="action" value="remove">
-                        <input type="hidden" name="id" value="${cake.key.id}">
+                        <input type="hidden" name="id" value="${cake.getCake().getId()}">
                         <input type="submit" class="btn btn-danger" value="Fjern fra kurv"/>
                     </form>
                 </td>

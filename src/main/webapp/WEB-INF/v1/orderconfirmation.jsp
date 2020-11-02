@@ -18,10 +18,10 @@
         <!-- print all cupcakes in session cart -->
         <c:forEach items="${requestScope.cakes}" var="cake">
             <tr>
-                <td>${cake.value}</td>
-                <td>${cake.key.bottom}</td>
-                <td>${cake.key.topping}</td>
-                <td>${cake.key.price * cake.value},- kr</td>
+                <td>${cake.getAmount()}</td>
+                <td>${cake.getCake().getBottom()}</td>
+                <td>${cake.getCake().getTopping()}</td>
+                <td>${cake.getCake().getPrice() * cake.getAmount()} kr</td>
             </tr>
         </c:forEach>
         <tr> <!-- empty row for spacing -->
