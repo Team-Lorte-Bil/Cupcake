@@ -1,0 +1,97 @@
+@startuml
+
+title Cupcake
+
+
+package api {
+ class api.Cupcake{
+ }
+
+ class api.Utils{
+    +String encodeHtml(String)
+ }
+}
+
+
+package domain{
+    package domain.items {
+        class domain.items.Cake{}
+        class domain.items.CakeOptions{}
+        class domain.items.Option{}
+    }
+
+    package domain.user {
+        class domain.user.User{}
+        class domain.user.InvalidPassword{}
+        class domain.user.UserExists{}
+        class domain.user.UserNotFound{}
+        interface domain.user.UserFactory{}
+        interface domain.user.UserRepository{}
+    }
+
+    package domain.order {
+        class domain.order.Order{}
+        class domain.order.NoOrderExists{}
+        interface domain.order.OrderRepository{}
+    }
+}
+
+package infrastructure <<Database>>{
+    class infrastructure.Database{}
+    class infrastructure.DBCakeOptions{}
+    class infrastructure.DBOrder{}
+    class infrastructure.DBUser{}
+}
+
+package web {
+    package web.pages{
+        class web.pages.BaseServlet{}
+
+        package web.pages.admin{
+            class web.pages.admin.Customers{}
+            class web.pages.admin.Items{}
+            class web.pages.admin.Orders{}
+            class web.pages.admin.Start{}
+        }
+        package web.pages.customer{
+            class web.pages.customer.Cart{}
+            class web.pages.customer.Index{}
+            class web.pages.customer.Login{}
+            class web.pages.customer.Logout{}
+            class web.pages.customer.NewOrder{}
+            class web.pages.customer.Register{}
+            class web.pages.customer.Reset{}
+            class web.pages.customer.Shop{}
+        }
+    }
+
+    package web.widgets {
+        class web.widgets.Navbar{}
+    }
+}
+
+api.Cupcake o-- domain.items.CakeOptions : cakeOptions
+  api.Cupcake o-- infrastructure.Database : database
+  api.Cupcake o-- infrastructure.DBCakeOptions : dbOptions
+  api.Cupcake o-- infrastructure.DBOrder : dbOrder
+  api.Cupcake o-- infrastructure.DBUser : dbUser
+  domain.order.Order o-- domain.user.User : user
+  domain.order.Order o-- domain.items.Cake : user
+  infrastructure.DBCakeOptions o-- infrastructure.Database : db
+  infrastructure.DBOrder o-- infrastructure.Database : db
+  infrastructure.DBUser o-- infrastructure.Database : db
+  web.pages.customer.Cart -up-|> web.pages.BaseServlet
+  web.pages.customer.Index -up-|> web.pages.BaseServlet
+  web.pages.customer.Login -up-|> web.pages.BaseServlet
+  web.pages.customer.Logout -up-|> web.pages.BaseServlet
+  web.pages.customer.NewOrder -up-|> web.pages.BaseServlet
+  web.pages.customer.Register -up-|> web.pages.BaseServlet
+  web.pages.customer.Reset -up-|> web.pages.BaseServlet
+  web.pages.customer.Shop -up-|> web.pages.BaseServlet
+  web.pages.admin.customers -up-|> web.pages.BaseServlet
+  web.pages.admin.Items -up-|> web.pages.BaseServlet
+  web.pages.admin.Orders -up-|> web.pages.BaseServlet
+  web.pages.admin.Start -up-|> web.pages.BaseServlet
+  web.widgets.Navbar -up-|> web.pages.BaseServlet
+
+@enduml
