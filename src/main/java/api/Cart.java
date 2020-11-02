@@ -44,32 +44,37 @@ public class Cart {
         return cartValue;
     }
     
-    public Cake getLastAddedCake() {
-        return lastAddedCake;
-    }
-    
     public List<Order.Item> getCakes() {
         return cakes;
     }
     
     protected void addItemToCart(Cake cake, int amount){
+        List<Order.Item> tmpList = new ArrayList<>(List.copyOf(cakes));
         Order.Item newItem = new Order.Item(cake, amount);
+    
+        System.out.println("newItem: " + newItem);
         
         for(Order.Item item: cakes){
+            System.out.println("FOR curItem: " + item);
             if(item.getCake().equals(newItem.getCake())){
-                item.setAmount(newItem.getAmount());
+                System.out.println("Same object reached");
+                item.setAmount(item.getAmount() + newItem.getAmount());
             } else {
+                System.out.println("New object added");
                 lastAddedCake = newItem.getCake();
-                cakes.add(newItem);
+                tmpList.add(newItem);
             }
         }
         
         if(cakes.isEmpty()){
-            cakes.add(newItem);
+            System.out.println("List is empty");
+            tmpList.add(newItem);
             lastAddedCake = newItem.getCake();
         }
         
+        cakes = tmpList;
         updateCartValue();
+        System.out.println("Add complete: " + this);
     }
     
     

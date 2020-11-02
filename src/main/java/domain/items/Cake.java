@@ -36,15 +36,20 @@ public class Cake {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        
         Cake cake = (Cake) o;
-        return price == cake.price &&
-                Objects.equals(bottom, cake.bottom) &&
-                Objects.equals(topping, cake.topping);
+        
+        if (price != cake.price) return false;
+        if (! bottom.equals(cake.bottom)) return false;
+        return topping.equals(cake.topping);
     }
     
     @Override
     public int hashCode() {
-        return Objects.hash(bottom, topping, price);
+        int result = bottom.hashCode();
+        result = 31 * result + topping.hashCode();
+        result = 31 * result + price;
+        return result;
     }
     
     @Override

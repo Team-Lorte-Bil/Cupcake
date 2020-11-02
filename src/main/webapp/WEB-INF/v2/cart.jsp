@@ -1,4 +1,3 @@
-<%@ page import="api.Cart" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <section class="page-section cta" style="background: rgba(109,67,73,0.74);">
@@ -7,10 +6,8 @@
 <div class="col-xl-9 mx-auto">
 <div class="cta-inner text-center rounded">
 <h2 class="section-heading mb-5"><span class="section-heading-lower">Din indkøbskurv</span></h2>
-    <%
-    Cart cart = (Cart) session.getAttribute("cart");
-    if (cart.getCakes().isEmpty()) {
-    %>
+    <c:choose>
+        <c:when test="${sessionScope.cart.cakes.size() > 0}">
 <div class="shopping-cart">
 <div class="px-4 px-lg-0">
 
@@ -46,14 +43,14 @@
 <%--@elvariable id="cakes" type="java.util.List"--%>
 <c:forEach items="${sessionScope.cart.cakes}" var="cake">
     <tr>
-    <td class="border-1 align-middle"><strong>${cake.getCake().getBottom()}</strong></td>
-    <td class="border-1 align-middle"><strong>${cake.getCake().getTopping()}</strong></td>
-    <td class="border-1 align-middle"><strong>${cake.getAmount()}</strong></td>
-    <td class="border-1 align-middle"><strong>${cake.getCake().getPrice()} kr</strong></td>
+    <td class="border-1 align-middle"><strong>${cake.cake.bottom}</strong></td>
+    <td class="border-1 align-middle"><strong>${cake.cake.topping}</strong></td>
+    <td class="border-1 align-middle"><strong>${cake.amount}</strong></td>
+    <td class="border-1 align-middle"><strong>${cake.cake.price} kr</strong></td>
     <td class="border-1 align-middle">
     <form action="Cart" method="post">
     <input type="hidden" name="action" value="remove">
-    <input type="hidden" name="id" value="${cake.getCake().getId()}">
+    <input type="hidden" name="id" value="${cake.cake.id}">
     <button type="submit" class="btn btn-danger">
     <i class="fa fa-trash"></i>
     </button>
@@ -100,14 +97,16 @@
     </div>
     </div>
     </div>
-    <% } else { %>
+
+        </c:when>
+        <c:otherwise>
     <h1>Der er ingen lækre kager i kurven!</h1><br>
 
     <a href="${pageContext.request.contextPath}/Shop">
     <button type="button" class="btn btn-dark rounded-pill py-2 btn-block">Gå til menukortet</button>
     </a>
-
-    <% }; %>
+        </c:otherwise>
+    </c:choose>
     <p class="address mb-5"><em></em></p>
     <p class="address mb-0"><small></small></p>
     </div>

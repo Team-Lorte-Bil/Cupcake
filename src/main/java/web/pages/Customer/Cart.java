@@ -24,8 +24,6 @@ public class Cart extends BaseServlet {
             throws ServletException, IOException {
         HttpSession session = req.getSession();
         req.setCharacterEncoding("UTF-8");
-    
-        setup(session);
         
         switch (req.getParameter("action")){
             case "add":
@@ -42,14 +40,6 @@ public class Cart extends BaseServlet {
         
         render("Cart", "/WEB-INF/v"+api.getVersion()+"/cart.jsp", req, resp);
         
-    }
-    
-    /**
-     * Makes sure the list is created and ready for use.
-     */
-    private void setup(HttpSession session){
-    
-    
     }
     
     /**
@@ -112,8 +102,9 @@ public class Cart extends BaseServlet {
             throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         
-        HttpSession session = req.getSession();
         req.setAttribute("value", api.getCartValue());
+    
+        System.out.println(api.getCart());
     
     
         render("Cart", "/WEB-INF/v"+api.getVersion()+"/cart.jsp", req, resp);

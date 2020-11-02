@@ -28,7 +28,7 @@ public class Login extends BaseServlet {
             throws ServletException, IOException {
         try {
             login(req, req.getSession());
-            if(req.getSession().getAttribute("cakes") != null){
+            if(req.getSession().getAttribute("cart") != null){
                 resp.sendRedirect(req.getContextPath() + "/Cart");
             } else if (req.getSession().getAttribute("isAdmin").equals(true)) {
                     resp.sendRedirect(req.getContextPath() + "/AdminStart");

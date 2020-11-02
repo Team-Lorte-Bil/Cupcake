@@ -34,12 +34,12 @@
 </tr>
 </thead>
 <tbody>
-<c:forEach items="${requestScope.cakes}" var="cake">
+<c:forEach items="${requestScope.cart.cakes}" var="cake">
     <tr>
-        <td class="border-1 align-middle"><strong>${cake.getCake().getBottom()}</strong></td>
-        <td class="border-1 align-middle"><strong>${cake.getCake().getTopping()}</strong></td>
-        <td class="border-1 align-middle"><strong>${cake.getAmount()}</strong></td>
-        <td class="border-1 align-middle"><strong>${cake.getCake().getPrice() * cake.getAmount()} kr</strong></td>
+        <td class="border-1 align-middle"><strong>${cake.cake.bottom}</strong></td>
+        <td class="border-1 align-middle"><strong>${cake.cake.topping}</strong></td>
+        <td class="border-1 align-middle"><strong>${cake.amount}</strong></td>
+        <td class="border-1 align-middle"><strong>${cake.cake.price * cake.amount} kr</strong></td>
     </tr>
     <!-- end of foreach -->
 </c:forEach>
