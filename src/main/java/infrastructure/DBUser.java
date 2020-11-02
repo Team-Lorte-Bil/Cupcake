@@ -31,8 +31,6 @@ public class DBUser implements UserRepository {
             ps.setString(1,usrEmail);
     
             ResultSet rs = ps.executeQuery();
-    
-            System.out.println();
             
             if(rs.next()) {
                 int id = rs.getInt(1);

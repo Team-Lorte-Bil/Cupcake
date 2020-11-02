@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 public class Cupcake {
-    private static final String VERSION = "2";
+    private static final int VERSION = 2;
     private List<Order.Item> cakes;
     private CakeOptions cakeOptions;
     
@@ -28,7 +28,7 @@ public class Cupcake {
         
     }
     
-    public String getVersion() {
+    public int getVersion() {
         return VERSION;
     }
     

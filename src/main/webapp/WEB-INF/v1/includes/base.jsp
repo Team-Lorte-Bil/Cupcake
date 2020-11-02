@@ -39,6 +39,10 @@
         </c:otherwise>
     </c:choose>
     <!-- navbar end -->
+    <main role="main" class="container">
+        <jsp:include page="${requestScope.content}" flush="true" />
+    </main>
+    <!-- navbar end -->
     <!-- header end -->
 
 
