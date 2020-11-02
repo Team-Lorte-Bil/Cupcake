@@ -1,4 +1,4 @@
-package web.pages.customer;
+package web.pages.Customer;
 
 import web.pages.BaseServlet;
 

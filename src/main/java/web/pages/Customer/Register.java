@@ -1,4 +1,4 @@
-package web.pages.customer;
+package web.pages.Customer;
 
 import domain.user.User;
 import infrastructure.DBUser;

@@ -1,4 +1,4 @@
-package web.pages.customer;
+package web.pages.Customer;
 
 import domain.items.Cake;
 import domain.order.Order;
