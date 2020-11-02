@@ -7,7 +7,7 @@
 <div class="cta-inner text-center rounded">
 <h2 class="section-heading mb-5"><span class="section-heading-lower">Din indkøbskurv</span></h2>
     <c:choose>
-        <c:when test="${sessionScope.cart.cakes.size() > 0}">
+        <c:when test="${sessionScope.cart != null && sessionScope.cart.cakes.size() > 0}">
 <div class="shopping-cart">
 <div class="px-4 px-lg-0">
 

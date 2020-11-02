@@ -13,10 +13,8 @@ import java.util.*;
 
 public class DBOrder implements OrderRepository {
     
-    private final Database db;
     
-    public DBOrder(Database db) {
-        this.db = db;
+    public DBOrder() {
     }
     
     public List<Order> getAllOrders() {
@@ -142,8 +140,8 @@ public class DBOrder implements OrderRepository {
                 
                 try (var ps = conn.prepareStatement(sql)) {
                     
-                    int cakeToppingId = new DBCakeOptions(db).getToppingIdFromName(c.getCake().getTopping());
-                    int cakeBottomId = new DBCakeOptions(db).getBottomIdFromName(c.getCake().getBottom());
+                    int cakeToppingId = new DBCakeOptions().getToppingIdFromName(c.getCake().getTopping());
+                    int cakeBottomId = new DBCakeOptions().getBottomIdFromName(c.getCake().getBottom());
                     
                     System.out.println("Trying to insert cake...");
                     System.out.println("orderID: " + orderId);
@@ -191,7 +189,7 @@ public class DBOrder implements OrderRepository {
         }
     }
     
-    public List<Order> getAllOrdersMap() {
+    public List<Order> getAllOrdersSorted() {
         List<Order> tmpList = new LinkedList<>();
         try (Connection conn = Database.getConnection()) {
             try (PreparedStatement s = conn.prepareStatement("SELECT * FROM Orders ORDER BY id DESC;")){
@@ -254,7 +252,7 @@ public class DBOrder implements OrderRepository {
     
     @Override
     public Iterable<Order> findAll() {
-        return getAllOrdersMap();
+        return getAllOrdersSorted();
     }
     
     @Override

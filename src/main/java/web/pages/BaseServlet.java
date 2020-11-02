@@ -20,8 +20,8 @@ public class BaseServlet extends HttpServlet {
     }
     
     private static Cupcake createApplication() {
-        Database db = new Database();
-        return new Cupcake(db);
+        new Database();
+        return new Cupcake();
     }
     
     

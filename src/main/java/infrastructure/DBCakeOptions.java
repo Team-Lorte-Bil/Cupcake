@@ -10,7 +10,7 @@ import java.util.List;
 
 public class DBCakeOptions {
     
-    public DBCakeOptions(Database db) {
+    public DBCakeOptions() {
     }
     
     private List<Option> getAllCakeBottoms(){

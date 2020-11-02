@@ -60,7 +60,7 @@ public class Orders extends BaseServlet {
             if (! req.getSession().getAttribute("isAdmin").equals(true) || req.getSession().getAttribute("isAdmin") == null)
                 resp.sendError(401);
     
-            List<Order> ordersNew = api.getAllOrders();
+            List<Order> ordersNew = api.getAllOrdersSorted();
     
             req.setAttribute("orders", ordersNew);
 

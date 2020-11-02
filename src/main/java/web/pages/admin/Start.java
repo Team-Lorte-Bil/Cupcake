@@ -12,7 +12,7 @@ import java.io.IOException;
 public class Start extends BaseServlet {
     
     private void setStats(HttpServletRequest req){
-        req.setAttribute("countOrders", api.getAllOrders().size());
+        req.setAttribute("countOrders", api.getAllOrdersSorted().size());
         req.setAttribute("countCustomers", api.getAllUsers().size());
         req.setAttribute("totalSale", api.getTotalSales());
     }

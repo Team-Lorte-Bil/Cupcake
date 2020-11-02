@@ -93,11 +93,18 @@ public class Cart {
         lastAddedCake = null;
     }
     
-    protected int getCartValue() {
+    /**
+     * @return Total value of cart as Integer
+     */
+    public int getCartValue() {
         return cartValue;
     }
     
-    protected List<Order.Item> getCakes() {
+    /**
+     * @return List of Cakes on Order
+     * @see Order
+     */
+    public List<Order.Item> getCakes() {
         return cakes;
     }
     

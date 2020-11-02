@@ -18,16 +18,19 @@ public class Cupcake {
     private final DBOrder dbOrder;
     
     
-    public Cupcake(Database db) {
-        dbOptions = new DBCakeOptions(db);
+    public Cupcake() {
+        dbOptions = new DBCakeOptions();
         dbUser = new DBUser();
-        dbOrder = new DBOrder(db);
+        dbOrder = new DBOrder();
         
         cart = new Cart();
         cakeOptions = dbOptions.findAllCakeOptions();
         
     }
     
+    /**
+     * @return Front-end version to be used.
+     */
     public int getVersion() {
         return VERSION;
     }
@@ -55,6 +58,10 @@ public class Cupcake {
         return cakeOptions;
     }
     
+    /**
+     * @return List of cakes in Cart
+     * @see Cart
+     */
     public List<Order.Item> getCakes() {
         return cart.getCakes();
     }
@@ -68,16 +75,26 @@ public class Cupcake {
         cart.addItemToCart(cake, amount);
     }
     
+    /**
+     * @return Cart object
+     */
     public Cart getCart() {
         return cart;
     }
     
+    /**
+     * @param id Item by ID to be removed from the cart
+     * @see Cart
+     */
     public void removeFromCart(int id){
     cart.removeItemFromCart(id);
     }
     
     
-    
+    /**
+     * Resets the Cart
+     * @see Cart
+     */
     public void clearCart(){
         cart.clearCart();
     }
@@ -85,25 +102,40 @@ public class Cupcake {
     
     /**
      * Calculates total value of cart.
-     * @link calculateTotalPrice()
      */
     public int getCartValue(){
         return cart.getCartValue();
     }
     
     
+    /**
+     * @return List of Orders from Database
+     * @see Order
+     */
     public List<Order> getOrders() {
         return dbOrder.getAllOrders();
     }
     
-    public List<Order> getAllOrders(){
+    /**
+     * @return List of Orders from Database sorted by ID
+     * @see Order
+     */
+    public List<Order> getAllOrdersSorted(){
         return (List<Order>) dbOrder.findAll();
     }
     
+    /**
+     * @return List of Customers from Database
+     * @see User
+     */
     public List<User> getCustomers() {
         return dbUser.getAllUsers();
     }
     
+    /**
+     * @return List of CakeOptions from Database
+     * @see CakeOptions
+     */
     public List<Option> getAllCakeOptions() {
         return dbOptions.getAllCakeOptions();
     }
@@ -122,30 +154,74 @@ public class Cupcake {
     }
     
     
+    /**
+     * @param userId ID to be deleted from Database
+     */
     public void deleteUser(int userId) {
         dbUser.deleteUser(userId);
     }
     
+    /**
+     * @param userId ID to be deleted
+     * @param newBalance Account balance
+     */
     public void changeUserBalance(int userId, double newBalance) {
         dbUser.changeBalance(userId, newBalance);
     }
     
+    /**
+     * @param usrName Username
+     * @param usrPsw Password
+     * @param usrMail E-mail
+     * @param usrPhone Phone number
+     * @param balance Account balance
+     * @param role User Role. Options:
+     *             Admin
+     *             User
+     * @return Newly created user
+     * @see User
+     *
+     * @throws UserExists If user already exists.
+     */
     public User createNewUser(String usrName, String usrPsw, String usrMail, int usrPhone, double balance, String role) throws UserExists {
         return dbUser.createUser(usrName, usrPsw, usrMail, usrPhone, balance, role);
     }
     
+    /**
+     * @param itemId Option to be deleted by ID
+     * @param type Either:
+     *             Bottom
+     *             Topping
+     * @see Option
+     * @see CakeOptions
+     */
     public void deleteCakeOption(int itemId, String type) {
         dbOptions.deleteCakeOption(itemId, type);
     }
     
+    /**
+     * @param orderId Order to be deleted by ID
+     * @see Order
+     */
     public void deleteOrder(int orderId) {
         dbOrder.deleteOrder(orderId);
     }
     
+    /**
+     * @param orderId Order to be marked as complete by ID
+     * @see Order
+     */
     public void markOrderDone(int orderId) {
         dbOrder.markDone(orderId);
     }
     
+    /**
+     * @param usrEmail E-mail
+     * @param usrPassword Password
+     * @return User object if valid
+     *
+     * @throws InvalidPassword If password or email is wrong.
+     */
     public User checkLogin(String usrEmail, String usrPassword) throws InvalidPassword {
         return dbUser.checkLogin(usrEmail, usrPassword);
     }
@@ -173,6 +249,10 @@ public class Cupcake {
         return dbOrder.create(curUser,cakes,comment,paid);
     }
     
+    /**
+     * @return List of customers from database
+     * @see User
+     */
     public List<User> getAllUsers() {
         return dbUser.getAllUsers();
     }
@@ -184,7 +264,7 @@ public class Cupcake {
     public double getTotalSales() {
         double sum = 0.0;
         
-        for(Order o: getAllOrders()){
+        for(Order o: getAllOrdersSorted()){
             if(o.isCompleted()){
                 sum += o.getPrice();
             }
