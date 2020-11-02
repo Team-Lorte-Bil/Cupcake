@@ -62,32 +62,26 @@ public class DBCakeOptions {
     
     public Option createCakeOption(Option option) {
         int id;
-        PreparedStatement ps;
+        String table = "";
+    
+        if(option.getType().equalsIgnoreCase("bottom")) {
+            table = "CakeBottoms";
+        } else {
+            table = "CakeToppings";
+        }
+        
+        
+        String sql = "INSERT INTO " + table + " (name, price) VALUE (?,?);";
         
         try (Connection conn = Database.getConnection()) {
             
-            if(option.getType().equalsIgnoreCase("bottom")){
-                ps =
-                        conn.prepareStatement(
-                                "INSERT INTO CakeBottoms (name, price) " +
-                                        "VALUE (?,?);",
-                                Statement.RETURN_GENERATED_KEYS);
-            } else {
-                ps =
-                        conn.prepareStatement(
-                                "INSERT INTO CakeToppings (name, price) " +
-                                        "VALUE (?,?);",
-                                Statement.RETURN_GENERATED_KEYS);
-            }
+            try(PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
             
             ps.setString(1,option.getName());
             ps.setDouble(2, option.getPrice());
             
-            try {
-                ps.executeUpdate();
-            } catch (SQLIntegrityConstraintViolationException e) {
-                throw new RuntimeException(e);
-            }
+            ps.executeUpdate();
+            
             
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
@@ -95,34 +89,33 @@ public class DBCakeOptions {
             } else {
                 throw new Exception("Eksisterer allerde");
             }
-        } catch (Exception e) {
+        }} catch (Exception e) {
             throw new RuntimeException(e);
         }
         return new Option(id,option.getName(),option.getType(),option.getPrice());
     }
     
     public boolean deleteCakeOption(int id, String type) {
-        PreparedStatement ps;
+        String table = "";
+    
+        if(type.equalsIgnoreCase("bottom")) {
+            table = "CakeBottoms";
+        } else {
+            table = "CakeToppings";
+        }
+    
+    
+        String sql = "DELETE FROM " + table + " WHERE id = ?;";
         
         try (Connection conn = Database.getConnection()) {
-            if(type.equalsIgnoreCase("bottom")){
-                ps = conn.prepareStatement(
-                        "DELETE FROM CakeBottoms WHERE id = ?;");
-            } else {
-                ps = conn.prepareStatement(
-                        "DELETE FROM CakeToppings WHERE id = ?;");
-            }
+            try(PreparedStatement ps = conn.prepareStatement(sql)){
             
             ps.setInt(1, id);
-            
-            try {
-                ps.executeUpdate();
-            } catch (SQLIntegrityConstraintViolationException e) {
-                throw new RuntimeException(e);
-            }
+            ps.executeUpdate();
     
             return ps.getUpdateCount() == 1;
-        } catch (Exception e) {
+            
+        }} catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

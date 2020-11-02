@@ -62,23 +62,16 @@ public class DBUser implements UserRepository {
         }
     }
     
-    public boolean deleteUser(int userId) {
+    public void deleteUser(int userId) {
         try (Connection conn = Database.getConnection()) {
             
-            PreparedStatement ps = conn.prepareStatement(
-                        "DELETE FROM Users WHERE id = ?;");
-            
+            try(PreparedStatement ps = conn.prepareStatement("DELETE FROM Users WHERE id = ?;")){
             
             ps.setInt(1, userId);
-            
-            try {
-                ps.executeUpdate();
-            } catch (SQLIntegrityConstraintViolationException e) {
-                throw new RuntimeException(e);
-            }
+            ps.executeUpdate();
     
-            return ps.getUpdateCount() == 1;
-        } catch (Exception e) {
+            ps.getUpdateCount();
+        }} catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -86,8 +79,7 @@ public class DBUser implements UserRepository {
     public void changeBalance(int userId, double newBalance) {
         try (Connection conn = Database.getConnection()) {
         
-            try(PreparedStatement ps = conn.prepareStatement(
-                    "UPDATE Users SET Cupcake.Users.accountBalance=? WHERE id=?")){
+            try(PreparedStatement ps = conn.prepareStatement("UPDATE Users SET Cupcake.Users.accountBalance=? WHERE id=?")){
         
         
             ps.setDouble(1, newBalance);

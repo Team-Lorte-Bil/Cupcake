@@ -78,8 +78,6 @@ public class DBOrder implements OrderRepository {
                 }
             }
             
-            System.out.println("Cakes added to map: " + cakeList);
-            
             return cakeList;
             
         }} catch (SQLException e) {
@@ -95,7 +93,6 @@ public class DBOrder implements OrderRepository {
         int orderId = 0;
         String orderComment = Utils.encodeHtml(comment);
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        boolean completed = false;
         
         
         try (Connection conn = Database.getConnection()) {
@@ -168,63 +165,28 @@ public class DBOrder implements OrderRepository {
         }
     }
     
-    private HashMap<String, Integer> getAllCakeToppings() {
-        try (Connection conn = Database.getConnection()) {
-            PreparedStatement s = conn.prepareStatement("SELECT * FROM CakeToppings;");
-            ResultSet rs = s.executeQuery();
-            HashMap<String, Integer> tmpList = new HashMap<>();
-            
-            while (rs.next()) {
-                String name = rs.getString("name");
-                int price = (int) rs.getDouble("price");
-                
-                tmpList.put(name, price);
-            }
-            return tmpList;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        
-    }
     
-    
-    public boolean deleteOrder(int orderId) {
+    public void deleteOrder(int orderId) {
         try (Connection conn = Database.getConnection()) {
             
-            PreparedStatement ps = conn.prepareStatement(
-                    "DELETE FROM Orders WHERE id=?;");
-            
-            
+            try(PreparedStatement ps = conn.prepareStatement("DELETE FROM Orders WHERE id=?;")){
             ps.setInt(1, orderId);
-            
-            try {
-                ps.executeUpdate();
-            } catch (SQLIntegrityConstraintViolationException e) {
-                throw new RuntimeException(e);
-            }
-            
-            return ps.getUpdateCount() == 1;
-        } catch (Exception e) {
+            ps.executeUpdate();
+            ps.getUpdateCount();
+        }} catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
     
     public void markDone(int orderId) {
         try (Connection conn = Database.getConnection()) {
-            
-            PreparedStatement ps = conn.prepareStatement(
-                    "UPDATE Orders SET completed=1, paid = 1 WHERE id=?;");
-            
+            try(PreparedStatement ps = conn.prepareStatement("UPDATE Orders SET completed=1, paid = 1 WHERE id=?;")){
             
             ps.setInt(1, orderId);
+            ps.executeUpdate();
+           
             
-            try {
-                ps.executeUpdate();
-            } catch (SQLIntegrityConstraintViolationException e) {
-                throw new RuntimeException(e);
-            }
-            
-        } catch (Exception e) {
+        }} catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
