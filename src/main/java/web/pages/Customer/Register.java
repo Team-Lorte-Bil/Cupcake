@@ -1,6 +1,7 @@
 package web.pages.Customer;
 
 import domain.user.User;
+import domain.user.UserExists;
 import infrastructure.DBUser;
 import web.pages.BaseServlet;
 
@@ -36,7 +37,7 @@ public class Register extends BaseServlet {
         }
     }
     
-    private void registerNewUser(HttpServletRequest req, HttpSession session){
+    private void registerNewUser(HttpServletRequest req, HttpSession session) throws UserExists {
         
         String usrName = req.getParameter("inputName");
         String usrMail = req.getParameter("inputEmail");

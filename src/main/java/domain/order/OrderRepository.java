@@ -1,15 +1,12 @@
 package domain.order;
 
-import domain.items.Cake;
 import domain.user.User;
-
-import java.sql.Timestamp;
-import java.util.HashMap;
+import java.util.List;
 
 public interface OrderRepository {
     Iterable<Order> findAll();
     
     Order find(int id) throws NoOrderExists;
     
-    Order create(int id, User user, HashMap<Cake, Integer> cakes, String comment, Timestamp timestamp, boolean paid);
+    Order create(User user, List<Order.Item> cakes, String comment, boolean paid);
 }

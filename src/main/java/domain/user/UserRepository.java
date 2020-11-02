@@ -2,7 +2,7 @@ package domain.user;
 
 
 public interface UserRepository extends UserFactory {
-    User findUser(String name) throws UserNotFound;
+    User findUser(int id) throws UserNotFound;
     Iterable<User> findAllUsers();
 
 }

@@ -57,7 +57,19 @@ public class Cupcake {
     }
     
     public void addCake(Cake cake, int amount){
-        cakes.add(new Order.Item(cake, amount));
+        if(cakes == null) cakes = new ArrayList<>();
+        
+        System.out.println(cakes);
+        System.out.println(cake);
+        System.out.println(amount);
+        
+        if(cake != null && amount > 0) {
+            cakes.add(new Order.Item(cake, amount));
+        }
+        
+        System.out.println(cakes);
+        System.out.println(cake);
+        System.out.println(amount);
     }
     
     public void setCakes(List<Order.Item> cakes) {
@@ -66,14 +78,12 @@ public class Cupcake {
     
 
     public void removeFromCart(int id){
-        Cake tmpCake = null;
         for(Order.Item c: cakes){
             if(c.getCake().getId() == id){
-                tmpCake = c.getCake();
+                cakes.remove(c);
                 break;
             }
         }
-        cakes.remove(tmpCake);
         
         if(cakes.isEmpty()) cakes = null;
     }
@@ -104,7 +114,7 @@ public class Cupcake {
     }
     
     public List<Order> getAllOrders(){
-        return dbOrder.getAllOrdersMap();
+        return (List<Order>) dbOrder.findAll();
     }
     
     public List<User> getCustomers() {
@@ -131,7 +141,7 @@ public class Cupcake {
         dbUser.changeBalance(userId, newBalance);
     }
     
-    public User createNewUser(String usrName, String usrPsw, String usrMail, int usrPhone, double balance, String role) {
+    public User createNewUser(String usrName, String usrPsw, String usrMail, int usrPhone, double balance, String role) throws UserExists {
         return dbUser.createUser(usrName, usrPsw, usrMail, usrPhone, balance, role);
     }
     
@@ -165,7 +175,7 @@ public class Cupcake {
             paid = true;
         }
         
-        return dbOrder.createOrder(curUser,cakes,comment, paid);
+        return dbOrder.create(curUser,cakes,comment,paid);
     }
     
     public List<User> getAllUsers() {

@@ -101,8 +101,8 @@ public class Cart extends BaseServlet {
         int antal = Integer.parseInt(antalStr);
     
         Cake tmpCake = new Cake(bottom,topping,price);
-            System.out.println(tmpCake);
-            api.addCake(tmpCake, antal);
+        
+        api.addCake(tmpCake, antal);
     
         session.setAttribute("lastcake", tmpCake);
         session.setAttribute("totalprice", String.format("%d", api.getCartValue()));

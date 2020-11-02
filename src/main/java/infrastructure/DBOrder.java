@@ -3,13 +3,16 @@ package infrastructure;
 import api.Utils;
 import domain.items.Cake;
 import domain.items.Option;
+import domain.order.NoOrderExists;
 import domain.order.Order;
+import domain.order.OrderRepository;
 import domain.user.User;
+import domain.user.UserNotFound;
 
 import java.sql.*;
 import java.util.*;
 
-public class DBOrder {
+public class DBOrder implements OrderRepository {
     
     private final Database db;
     
@@ -31,7 +34,7 @@ public class DBOrder {
                 boolean paid = rs.getBoolean(5);
                 boolean completed = rs.getBoolean(6);
                 
-                User tmpUsr = new DBUser(db).getUserFromId(userId);
+                User tmpUsr = new DBUser(db).findUser(userId);
                 Order tmpOrder = new Order(id, tmpUsr, comment, timestamp, paid, completed, getCakesOnOrder(id));
                 
                 System.out.println("Cakes added: " + tmpOrder.getCakes());
@@ -39,7 +42,7 @@ public class DBOrder {
                 tmpList.add(tmpOrder);
             }
             return tmpList;
-        }} catch (SQLException e) {
+        }} catch (SQLException | UserNotFound e) {
             throw new RuntimeException(e);
         }
     }
@@ -283,7 +286,7 @@ public class DBOrder {
                 boolean paid = rs.getBoolean(5);
                 boolean completed = rs.getBoolean(6);
                 
-                User tmpUsr = new DBUser(db).getUserFromId(userId);
+                User tmpUsr = new DBUser(db).findUser(userId);
                 Order tmpOrder = new Order(id, tmpUsr, comment, timestamp, paid, completed, getCakesOnOrder(id));
                 
                 String sql = "SELECT\n" +
@@ -324,8 +327,28 @@ public class DBOrder {
                 tmpList.add(tmpOrder);
             }}
             return tmpList;
-        } catch (SQLException e) {
+        } catch (SQLException | UserNotFound e) {
             throw new RuntimeException(e);
         }
+    }
+    
+    @Override
+    public Iterable<Order> findAll() {
+        return getAllOrdersMap();
+    }
+    
+    @Override
+    public Order find(int id) throws NoOrderExists {
+        for(Order o: findAll()){
+            if(o.getOrderId() == id){
+                return o;
+            }
+        }
+        throw new NoOrderExists();
+    }
+    
+    @Override
+    public Order create(User user, List<Order.Item> cakes, String comment, boolean paid) {
+        return createOrder(user, cakes, comment, paid);
     }
 }

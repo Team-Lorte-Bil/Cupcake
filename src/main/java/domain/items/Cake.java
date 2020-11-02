@@ -37,15 +37,14 @@ public class Cake {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Cake cake = (Cake) o;
-        return id == cake.id &&
-                Double.compare(cake.price, price) == 0 &&
+        return price == cake.price &&
                 Objects.equals(bottom, cake.bottom) &&
                 Objects.equals(topping, cake.topping);
     }
     
     @Override
     public int hashCode() {
-        return Objects.hash(id, bottom, topping, price);
+        return Objects.hash(bottom, topping, price);
     }
     
     @Override
