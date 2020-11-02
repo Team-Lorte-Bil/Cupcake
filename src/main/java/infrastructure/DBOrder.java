@@ -116,7 +116,6 @@ public class DBOrder implements OrderRepository {
             }
             
             createCakesOnOrder(orderId, cakes);
-            System.out.println("Creating cakes on order: " + orderId);
             
             tmpOrder = new Order(orderId, user, comment, timestamp, paid, false, cakes);
             
@@ -129,10 +128,7 @@ public class DBOrder implements OrderRepository {
     }
     
     public void createCakesOnOrder(int orderId, List<Order.Item> cakes) {
-        int cakeno = cakes.size();
-        System.out.println("Antal kager som skal indsættes: " + cakeno);
         for (Order.Item c : cakes) {
-            System.out.println("cakeno: " + cakeno);
             try (Connection conn = Database.getConnection()) {
                 
                 String sql = "INSERT INTO CakesOnOrder (orderId, bottomId, toppingId, quantity) VALUE (?,?,?,?);";
@@ -159,7 +155,6 @@ public class DBOrder implements OrderRepository {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-            cakeno--;
         }
     }
     
