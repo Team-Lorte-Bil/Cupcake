@@ -6,15 +6,12 @@ import domain.user.*;
 import infrastructure.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Cupcake {
     private static final String VERSION = "2";
     private final Database database;
-    private HashMap<Cake, Integer> cakes;
+    private List<Order.Item> cakes;
     private CakeOptions cakeOptions;
     
     private final DBCakeOptions dbOptions;
@@ -28,7 +25,7 @@ public class Cupcake {
         dbUser = new DBUser(database);
         dbOrder = new DBOrder(database);
         
-        cakes = new HashMap<>();
+        cakes = new ArrayList<>();
         cakeOptions = dbOptions.findAllCakeOptions();
         
     }
@@ -55,27 +52,24 @@ public class Cupcake {
         this.cakeOptions = cakeOptions;
     }
     
-    public HashMap<Cake, Integer> getCakes() {
+    public List<Order.Item> getCakes() {
         return cakes;
     }
     
     public void addCake(Cake cake, int amount){
-        if(cakes==null){
-            cakes = new HashMap<>();
-        }
-        cakes.put(cake,amount);
+        cakes.add(new Order.Item(cake, amount));
     }
     
-    public void setCakes(HashMap<Cake, Integer> cakes) {
+    public void setCakes(List<Order.Item> cakes) {
         this.cakes = cakes;
     }
     
 
     public void removeFromCart(int id){
         Cake tmpCake = null;
-        for(Cake c: cakes.keySet()){
-            if(c.getId() == id){
-                tmpCake = c;
+        for(Order.Item c: cakes){
+            if(c.getCake().getId() == id){
+                tmpCake = c.getCake();
                 break;
             }
         }
@@ -95,38 +89,37 @@ public class Cupcake {
     }
     
  
-    private int calculateTotalPrice(Map<Cake,Integer> cakes){
+    private int calculateTotalPrice(List<Order.Item> cakes){
         int totalprice = 0;
-        for (Map.Entry<Cake, Integer> entry : cakes.entrySet()) {
-            Cake k = entry.getKey();
-            Integer v = entry.getValue();
-            totalprice += k.getPrice() * v;
+        for(Order.Item item: cakes){
+            
+            totalprice += item.getCake().getPrice() * item.getAmount();
         }
         return totalprice;
     }
 
     
-    public ArrayList<Order> getOrders() {
+    public List<Order> getOrders() {
         return dbOrder.getAllOrders();
     }
     
-    public LinkedHashMap<Order, Double> getAllOrders(){
+    public List<Order> getAllOrders(){
         return dbOrder.getAllOrdersMap();
     }
     
-    public ArrayList<User> getCustomers() {
+    public List<User> getCustomers() {
         return dbUser.getAllUsers();
     }
     
-    public ArrayList<Option> getAllCakeOptions() {
+    public List<Option> getAllCakeOptions() {
         return dbOptions.getAllCakeOptions();
     }
 
-    public Option createCakeOption (String name, double price, String type) {
+    public void createCakeOption (String name, double price, String type) {
         name = Utils.encodeHtml(name);
         type = Utils.encodeHtml(type);
-        return dbOptions.createCakeOption(new Option(0, name, type, (int) price));
-
+        dbOptions.createCakeOption(new Option(0, name, type, (int) price));
+    
     }
     
     
@@ -158,20 +151,33 @@ public class Cupcake {
         return dbUser.checkLogin(usrEmail, usrPassword);
     }
     
-    public Order createNewOrder(User curUser, HashMap<Cake, Integer> cakes, String comment) {
-        return dbOrder.createOrder(curUser,cakes,comment);
+    public Order createNewOrder(User curUser, List<Order.Item> cakes, String comment) {
+        double newAccountBalance = curUser.getAccountBalance() - getCartValue();
+        boolean paid = false;
+    
+        System.out.println("Current balance: " + curUser.getAccountBalance());
+        System.out.println("Order value: " + getCartValue());
+        System.out.println("New balance: " + newAccountBalance);
+    
+        if(newAccountBalance >= 0){
+            changeUserBalance(curUser.getId(), newAccountBalance);
+            curUser.setAccountBalance(newAccountBalance);
+            paid = true;
+        }
+        
+        return dbOrder.createOrder(curUser,cakes,comment, paid);
     }
     
-    public ArrayList<User> getAllUsers() {
+    public List<User> getAllUsers() {
         return dbUser.getAllUsers();
     }
     
     public double getTotalSales() {
         double sum = 0.0;
-    
-        for(Map.Entry<Order, Double> entry: getAllOrders().entrySet()){
-            if(entry.getKey().isCompleted()){
-                sum += entry.getValue();
+        
+        for(Order o: getAllOrders()){
+            if(o.isCompleted()){
+                sum += o.getPrice();
             }
         }
     

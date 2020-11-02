@@ -8,7 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet("/AdminItems")
 public class Items extends BaseServlet {
@@ -67,7 +67,7 @@ public class Items extends BaseServlet {
                 resp.sendError(401);
             }
     
-            ArrayList<Option> items = api.getAllCakeOptions();
+            List<Option> items = api.getAllCakeOptions();
     
             for (Option o : items) {
                 System.out.println(o);

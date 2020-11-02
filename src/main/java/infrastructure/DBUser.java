@@ -10,6 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class DBUser {
     
@@ -19,11 +20,11 @@ public class DBUser {
         this.db = db;
     }
     
-    public ArrayList<User> getAllUsers(){
+    public List<User> getAllUsers(){
         try (Connection conn = Database.getConnection()) {
-            PreparedStatement s = conn.prepareStatement("SELECT * FROM Users;");
+            try(PreparedStatement s = conn.prepareStatement("SELECT * FROM Users;")){
             ResultSet rs = s.executeQuery();
-            ArrayList<User> tmpList = new ArrayList<>();
+            List<User> tmpList = new ArrayList<>();
             
             while(rs.next()) {
                 int id = rs.getInt(1);
@@ -41,7 +42,7 @@ public class DBUser {
                 tmpList.add(tmpUser);
             }
             return tmpList;
-        } catch (SQLException e) {
+        }} catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
@@ -54,7 +55,9 @@ public class DBUser {
     
         
         try (Connection conn = Database.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Users WHERE email=?;");
+            try(PreparedStatement ps = conn.prepareStatement("SELECT * FROM Users WHERE email=?;")) {
+            
+            
             ps.setString(1,usrEmail);
     
             ResultSet rs = ps.executeQuery();
@@ -84,7 +87,7 @@ public class DBUser {
             } else {
                 throw new InvalidPassword("Brugeren eksisterer ikke!");
             }
-        } catch (SQLException e) {
+        }} catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
@@ -102,13 +105,10 @@ public class DBUser {
         User tmpUser;
     
         try (Connection conn = Database.getConnection()) {
-        
+        String sql = "INSERT INTO Users (email, name, phoneno, salt, secret, role, accountBalance, createdAt) " +
+                "VALUE (?,?,?,?,?,?,?,?);";
             
-                PreparedStatement ps =
-                        conn.prepareStatement(
-                                "INSERT INTO Users (email, name, phoneno, salt, secret, role, accountBalance, createdAt) " +
-                                        "VALUE (?,?,?,?,?,?,?,?);",
-                                Statement.RETURN_GENERATED_KEYS);
+                try(PreparedStatement ps = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)){
         
             ps.setString(1,email);
             ps.setString(2,name);
@@ -118,12 +118,8 @@ public class DBUser {
             ps.setString(6, User.Role.valueOf(role).name());
             ps.setDouble(7,accountBalance);
             ps.setTimestamp(8,timestamp);
-        
-            try {
-                ps.executeUpdate();
-            } catch (SQLIntegrityConstraintViolationException e) {
-                throw new RuntimeException(e);
-            }
+            
+            ps.executeUpdate();
         
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
@@ -136,31 +132,12 @@ public class DBUser {
             } else {
                 throw new UserExists(name);
             }
-        } catch (Exception e) {
+        }} catch (Exception e) {
             throw new RuntimeException(e);
         }
         
         return tmpUser;
     }
-    private HashMap<String, Integer> getAllCakeToppings(){
-        try (Connection conn = Database.getConnection()) {
-            PreparedStatement s = conn.prepareStatement("SELECT * FROM CakeToppings;");
-            ResultSet rs = s.executeQuery();
-            HashMap<String, Integer> tmpList = new HashMap<>();
-
-            while(rs.next()) {
-                String name = rs.getString("name");
-                int price = (int) rs.getDouble("price");
-
-                tmpList.put(name,price);
-            }
-            return tmpList;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
 
     public Option createCakeOption(Option option) {
         int id;
@@ -259,19 +236,15 @@ public class DBUser {
     public void changeBalance(int userId, double newBalance) {
         try (Connection conn = Database.getConnection()) {
         
-            PreparedStatement ps = conn.prepareStatement(
-                    "UPDATE Users SET Cupcake.Users.accountBalance=? WHERE id=?");
+            try(PreparedStatement ps = conn.prepareStatement(
+                    "UPDATE Users SET Cupcake.Users.accountBalance=? WHERE id=?")){
         
         
             ps.setDouble(1, newBalance);
             ps.setInt(2, userId);
-        
-            try {
-                ps.executeUpdate();
-            } catch (SQLIntegrityConstraintViolationException e) {
-                throw new RuntimeException(e);
-            }
-        } catch (Exception e) {
+            ps.executeUpdate();
+            
+        }} catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

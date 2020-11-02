@@ -1,9 +1,7 @@
 package web.pages.Customer;
 
-import domain.items.Cake;
 import domain.order.Order;
 import domain.user.User;
-import infrastructure.DBOrder;
 import web.pages.BaseServlet;
 
 import javax.servlet.ServletException;
@@ -12,12 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet("/CreateOrder")
 public class NewOrder extends BaseServlet {
     
-    private HashMap<Cake, Integer> cakes = new HashMap<>();
+    private List<Order.Item> cakes = new ArrayList<>();
     
     /**
      * Create the order and redirects to order confirmation page.
@@ -28,15 +27,18 @@ public class NewOrder extends BaseServlet {
             throws ServletException, IOException {
         HttpSession session = req.getSession();
         
-        cakes = (HashMap<Cake, Integer>) session.getAttribute("cakes");
+        cakes = (List<Order.Item>) session.getAttribute("cakes");
         User curUser = (User) req.getSession().getAttribute("currentUser");
         String comment = req.getParameter("comment");
         
         
         Order tmpOrder = api.createNewOrder(curUser, cakes, comment);
         
+        
+        
         req.setAttribute("order",tmpOrder);
         req.setAttribute("cakes", cakes);
+        req.setAttribute("currentUser", curUser);
         
         log(req,"Got: " + tmpOrder);
         

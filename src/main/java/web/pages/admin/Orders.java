@@ -8,7 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.LinkedHashMap;
+import java.util.List;
 
 @WebServlet("/AdminOrders")
 public class Orders extends BaseServlet {
@@ -60,7 +60,7 @@ public class Orders extends BaseServlet {
             if (! req.getSession().getAttribute("isAdmin").equals(true) || req.getSession().getAttribute("isAdmin") == null)
                 resp.sendError(401);
     
-            LinkedHashMap<Order, Double> ordersNew = api.getAllOrders();
+            List<Order> ordersNew = api.getAllOrders();
     
             req.setAttribute("orders", ordersNew);
 

@@ -6,7 +6,7 @@ import domain.items.Option;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 public class DBCakeOptions {
     
@@ -16,11 +16,11 @@ public class DBCakeOptions {
         this.db = db;
     }
     
-    private HashMap<String, Integer> getAllCakeBottoms(){
+    private List<Option> getAllCakeBottoms(){
         try (Connection conn = Database.getConnection()) {
-            PreparedStatement s = conn.prepareStatement("SELECT * FROM CakeBottoms;");
+            try(PreparedStatement s = conn.prepareStatement("SELECT * FROM CakeBottoms;")){
             ResultSet rs = s.executeQuery();
-            HashMap<String, Integer> tmpList = new HashMap<>();
+            List<Option> tmpList = new ArrayList<>();
             
             while(rs.next()) {
                 String name = rs.getString("name");
@@ -28,30 +28,31 @@ public class DBCakeOptions {
                 
                 name = Utils.encodeHtml(name);
                 
-                tmpList.put(name,price);
+                tmpList.add(new Option(0,name, "bottom", price));
             }
             return tmpList;
-        } catch (SQLException e) {
+        }} catch (SQLException e) {
             throw new RuntimeException(e);
         }
         
     }
     
-    private HashMap<String, Integer> getAllCakeToppings(){
+    private List<Option> getAllCakeToppings(){
         try (Connection conn = Database.getConnection()) {
-            PreparedStatement s = conn.prepareStatement("SELECT * FROM CakeToppings;");
+            try(PreparedStatement s = conn.prepareStatement("SELECT * FROM CakeToppings;")){
             ResultSet rs = s.executeQuery();
-            HashMap<String, Integer> tmpList = new HashMap<>();
+            List<Option> tmpList = new ArrayList<>();
             
             while(rs.next()) {
                 String name = rs.getString("name");
-                name = Utils.encodeHtml(name);
                 int price = (int) rs.getDouble("price");
                 
-                tmpList.put(name,price);
+                name = Utils.encodeHtml(name);
+                
+                tmpList.add(new Option(0,name, "topping", price));
             }
             return tmpList;
-        } catch (SQLException e) {
+        }} catch (SQLException e) {
             throw new RuntimeException(e);
         }
         
@@ -154,27 +155,25 @@ public class DBCakeOptions {
         try(Connection conn = Database.getConnection()){
             String sqlQuery = "SELECT id FROM CakeBottoms WHERE name=?";
             
-            PreparedStatement s = conn.prepareStatement(sqlQuery);
+            try(PreparedStatement s = conn.prepareStatement(sqlQuery)){
             s.setString(1,bottom);
             ResultSet rs = s.executeQuery();
             
-            while(rs.next()){
-                return rs.getInt(1);
-            }
+            if(rs.next()) return rs.getInt(1);
             
-        } catch (SQLException e){
+        }} catch (SQLException e){
             throw new RuntimeException(e);
         }
         return 0;
     }
     
-    public ArrayList<Option> getAllCakeOptions() {
-        ArrayList<Option> cakeOptions = new ArrayList<>();
+    public List<Option> getAllCakeOptions() {
+        List<Option> cakeOptions = new ArrayList<>();
         try(Connection conn = Database.getConnection()){
             String toppingQuery = "SELECT * FROM CakeToppings;";
             String bottomQuery = "SELECT * FROM CakeBottoms;";
         
-            PreparedStatement s = conn.prepareStatement(toppingQuery);
+            try(PreparedStatement s = conn.prepareStatement(toppingQuery)){
             ResultSet toppingRs = s.executeQuery();
         
             while(toppingRs.next()){
@@ -187,8 +186,8 @@ public class DBCakeOptions {
                 cakeOptions.add(option);
             }
     
-            s = conn.prepareStatement(bottomQuery);
-            ResultSet bottomRs = s.executeQuery();
+            try(PreparedStatement ps = conn.prepareStatement(bottomQuery)){
+            ResultSet bottomRs = ps.executeQuery();
     
             while(bottomRs.next()){
                 int id = bottomRs.getInt(1);
@@ -202,7 +201,7 @@ public class DBCakeOptions {
             
             return cakeOptions;
         
-        } catch (SQLException e){
+        }}} catch (SQLException e){
             throw new RuntimeException(e);
         }
         

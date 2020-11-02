@@ -42,14 +42,14 @@
 <tbody>
 <c:forEach items="${cakes}" var="cake">
     <tr>
-    <td class="border-1 align-middle"><strong>${cake.key.bottom}</strong></td>
-    <td class="border-1 align-middle"><strong>${cake.key.topping}</strong></td>
-    <td class="border-1 align-middle"><strong>${cake.value}</strong></td>
-    <td class="border-1 align-middle"><strong>${cake.key.price} kr</strong></td>
+    <td class="border-1 align-middle"><strong>${cake.getCake().getBottom()}</strong></td>
+    <td class="border-1 align-middle"><strong>${cake.getCake().getTopping()}</strong></td>
+    <td class="border-1 align-middle"><strong>${cake.getAmount()}</strong></td>
+    <td class="border-1 align-middle"><strong>${cake.getCake().getPrice()} kr</strong></td>
     <td class="border-1 align-middle">
     <form action="Cart" method="post">
     <input type="hidden" name="action" value="remove">
-    <input type="hidden" name="id" value="${cake.key.id}">
+    <input type="hidden" name="id" value="${cake.getCake().getId()}">
     <button type="submit" class="btn btn-danger">
     <i class="fa fa-trash"></i>
     </button>

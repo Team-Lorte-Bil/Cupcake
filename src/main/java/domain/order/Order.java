@@ -4,12 +4,12 @@ import domain.items.Cake;
 import domain.user.User;
 
 import java.sql.Timestamp;
-import java.util.HashMap;
+import java.util.*;
 
 public class Order {
     private final int orderId;
     private final User user;
-    private final HashMap<Cake, Integer> cakes;
+    private final List<Item> cakes;
     private final String comment;
     private final Timestamp timestamp;
     private final boolean paid;
@@ -18,14 +18,14 @@ public class Order {
     public Order(int orderId, User user, String comment, Timestamp timestamp, boolean paid, boolean completed) {
         this.orderId = orderId;
         this.user = user;
-        this.cakes = new HashMap<>();
+        this.cakes = new ArrayList<>();
         this.comment = comment;
         this.timestamp = timestamp;
         this.paid = paid;
         this.completed = completed;
     }
     
-    public Order(int orderId, User user, String comment, Timestamp timestamp, boolean paid, boolean completed, HashMap<Cake, Integer> cakes) {
+    public Order(int orderId, User user, String comment, Timestamp timestamp, boolean paid, boolean completed, List<Item> cakes) {
         this.orderId = orderId;
         this.user = user;
         this.comment = comment;
@@ -33,6 +33,16 @@ public class Order {
         this.paid = paid;
         this.completed = completed;
         this.cakes = cakes;
+    }
+    
+    public double getPrice(){
+        double price = 0.0;
+        
+        for(var c: cakes){
+            price += c.cake.getPrice() * c.amount;
+        }
+        
+        return price;
     }
     
     
@@ -48,8 +58,8 @@ public class Order {
         return user;
     }
     
-    public HashMap<Cake, Integer> getCakes() {
-        return cakes;
+    public List<Item> getCakes() {
+        return Collections.unmodifiableList(cakes);
     }
     
     public String getComment() {
@@ -68,11 +78,25 @@ public class Order {
         return completed;
     }
     
-    public void addCakes(HashMap<Cake, Integer> cakes){
-        cakes.putAll(cakes);
+    public void addCake(Cake cake, int amount){
+        cakes.add(new Item(cake, amount));
     }
     
-    public void addCake(Cake cake, int amount){
-        cakes.put(cake,amount);
+    public static class Item{
+        private final Cake cake;
+        private final int amount;
+    
+        public Item(Cake cake, int amount) {
+            this.cake = cake;
+            this.amount = amount;
+        }
+    
+        public Cake getCake() {
+            return cake;
+        }
+    
+        public int getAmount() {
+            return amount;
+        }
     }
 }

@@ -36,10 +36,10 @@
 <tbody>
 <c:forEach items="${requestScope.cakes}" var="cake">
     <tr>
-    <td class="border-1 align-middle"><strong>${cake.key.bottom}</strong></td>
-    <td class="border-1 align-middle"><strong>${cake.key.topping}</strong></td>
-    <td class="border-1 align-middle"><strong>${cake.value}</strong></td>
-    <td class="border-1 align-middle"><strong>${cake.key.price * cake.value} kr</strong></td>
+        <td class="border-1 align-middle"><strong>${cake.getCake().getBottom()}</strong></td>
+        <td class="border-1 align-middle"><strong>${cake.getCake().getTopping()}</strong></td>
+        <td class="border-1 align-middle"><strong>${cake.getAmount()}</strong></td>
+        <td class="border-1 align-middle"><strong>${cake.getCake().getPrice() * cake.getAmount()} kr</strong></td>
     </tr>
     <!-- end of foreach -->
 </c:forEach>
@@ -50,6 +50,22 @@
     </div>
     <!-- End -->
     </div>
+    <c:choose>
+        <c:when test="${requestScope.order.paid}">
+            <div>
+                <p>
+                    Ordren er betalt!
+                </p>
+            </div>
+        </c:when>
+        <c:otherwise>
+            <div>
+                <p>
+                    Ordren er ikke betalt!
+                </p>
+            </div>
+        </c:otherwise>
+    </c:choose>
     </div>
     <a href="${pageContext.request.contextPath}">
     <button type="button" class="btn btn-dark rounded-pill py-2 btn-block">Gå til forsiden</button>

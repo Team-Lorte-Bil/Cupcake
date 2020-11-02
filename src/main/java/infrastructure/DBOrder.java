@@ -17,11 +17,11 @@ public class DBOrder {
         this.db = db;
     }
     
-    public ArrayList<Order> getAllOrders() {
+    public List<Order> getAllOrders() {
         try (Connection conn = Database.getConnection()) {
-            PreparedStatement s = conn.prepareStatement("SELECT * FROM Orders;");
+            try(PreparedStatement s = conn.prepareStatement("SELECT * FROM Orders;")){
             ResultSet rs = s.executeQuery();
-            ArrayList<Order> tmpList = new ArrayList<>();
+            List<Order> tmpList = new ArrayList<>();
             
             while (rs.next()) {
                 int id = rs.getInt(1);
@@ -33,19 +33,19 @@ public class DBOrder {
                 
                 User tmpUsr = new DBUser(db).getUserFromId(userId);
                 Order tmpOrder = new Order(id, tmpUsr, comment, timestamp, paid, completed, getCakesOnOrder(id));
-    
+                
                 System.out.println("Cakes added: " + tmpOrder.getCakes());
                 
                 tmpList.add(tmpOrder);
             }
             return tmpList;
-        } catch (SQLException e) {
+        }} catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
     
-    public HashMap<Cake, Integer> getCakesOnOrder(int orderId) {
-        HashMap<Cake, Integer> cakeList = new HashMap<>();
+    public List<Order.Item> getCakesOnOrder(int orderId) {
+        List<Order.Item> cakeList = new ArrayList<>();
         
         try (Connection conn = Database.getConnection()) {
             String sqlQuery = "SELECT CakesOnOrder.orderId, Cupcake.CakesOnOrder.quantity, \n" +
@@ -55,7 +55,9 @@ public class DBOrder {
                     " INNER JOIN CakeBottoms ON CakesOnOrder.bottomId = CakeBottoms.id\n" +
                     " INNER JOIN CakeToppings ON CakesOnOrder.toppingId = CakeToppings.id";
             
-            PreparedStatement s = conn.prepareStatement(sqlQuery);
+            try(PreparedStatement s = conn.prepareStatement(sqlQuery)) {
+            
+            
             ResultSet rs = s.executeQuery();
             
             while (rs.next()) {
@@ -69,37 +71,39 @@ public class DBOrder {
                     
                     Cake tmpCake = new Cake(bottomName, toppingName, (int) cakePrice);
                     
-                    cakeList.put(tmpCake, quantity);
+                    Order.Item tmpItem = new Order.Item(tmpCake, quantity);
+                    cakeList.add(tmpItem);
                 }
             }
-    
+            
             System.out.println("Cakes added to map: " + cakeList);
             
             return cakeList;
             
-        } catch (SQLException e) {
+        }} catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
     
     
-    public Order createOrder(User user, HashMap<Cake, Integer> cakes, String comment) {
+    
+    public Order createOrder(User user, List<Order.Item> cakes, String comment, boolean paid) {
         Order tmpOrder;
         
         int orderId = 0;
         String orderComment = Utils.encodeHtml(comment);
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        boolean paid = false; //TODO: Implement user account balance usage.
         boolean completed = false;
         
         
         try (Connection conn = Database.getConnection()) {
+            String sql = "INSERT INTO Orders (userId, comment, createdAt, paid, completed) " +
+                    "VALUE (?,?,?,?,?);";
             
-            PreparedStatement ps =
+            try(PreparedStatement ps =
                     conn.prepareStatement(
-                            "INSERT INTO Orders (userId, comment, createdAt, paid, completed) " +
-                                    "VALUE (?,?,?,?,?);",
-                            Statement.RETURN_GENERATED_KEYS);
+                            sql,
+                            Statement.RETURN_GENERATED_KEYS)){
             
             ps.setInt(1, user.getId());
             ps.setString(2, orderComment);
@@ -107,69 +111,59 @@ public class DBOrder {
             ps.setBoolean(4, paid);
             ps.setBoolean(5, completed);
             
-            try {
-                ps.executeUpdate();
-            } catch (SQLIntegrityConstraintViolationException e) {
-                throw new RuntimeException(e);
-            }
+            ps.executeUpdate();
             
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
                 orderId = rs.getInt(1);
             }
             
-            HashMap<Cake, Integer> cakesOnOrder = createCakesOnOrder(orderId, cakes);
+            createCakesOnOrder(orderId, cakes);
             System.out.println("Creating cakes on order: " + orderId);
             
-            tmpOrder = new Order(orderId, user, comment, timestamp, paid, completed,cakesOnOrder);
+            tmpOrder = new Order(orderId, user, comment, timestamp, paid, completed, cakes);
             
             
             return tmpOrder;
             
-        } catch (Exception e) {
+        }} catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
     
-    public HashMap<Cake, Integer> createCakesOnOrder(int orderId, HashMap<Cake, Integer> cakes) {
+    public void createCakesOnOrder(int orderId, List<Order.Item> cakes) {
         int cakeno = cakes.size();
         System.out.println("Antal kager som skal indsættes: " + cakeno);
-        for (Map.Entry<Cake, Integer> c : cakes.entrySet()) {
+        for (Order.Item c : cakes) {
             System.out.println("cakeno: " + cakeno);
             try (Connection conn = Database.getConnection()) {
-            
+                
                 String sql = "INSERT INTO CakesOnOrder (orderId, bottomId, toppingId, quantity) VALUE (?,?,?,?);";
-            
-                PreparedStatement ps =
-                        conn.prepareStatement(
-                                sql,
-                                Statement.RETURN_GENERATED_KEYS);
-            
-                int cakeToppingId = new DBCakeOptions(db).getToppingIdFromName(c.getKey().getTopping());
-                int cakeBottomId = new DBCakeOptions(db).getBottomIdFromName(c.getKey().getBottom());
-            
-                System.out.println("Trying to insert cake...");
-                System.out.println("orderID: " + orderId);
-                System.out.println("bottomId: " + cakeBottomId);
-                System.out.println("toppingId: " + cakeToppingId);
-                System.out.println("quantity: " + c.getValue());
-            
-                ps.setInt(1, orderId);
-                ps.setInt(2, cakeBottomId);
-                ps.setInt(3, cakeToppingId);
-                ps.setInt(4, c.getValue());
-            
-                try {
+                
+                
+                try (var ps = conn.prepareStatement( sql);) {
+                    
+                    int cakeToppingId = new DBCakeOptions(db).getToppingIdFromName(c.getCake().getTopping());
+                    int cakeBottomId = new DBCakeOptions(db).getBottomIdFromName(c.getCake().getBottom());
+                    
+                    System.out.println("Trying to insert cake...");
+                    System.out.println("orderID: " + orderId);
+                    System.out.println("bottomId: " + cakeBottomId);
+                    System.out.println("toppingId: " + cakeToppingId);
+                    System.out.println("quantity: " + c.getAmount());
+                    
+                    ps.setInt(1, orderId);
+                    ps.setInt(2, cakeBottomId);
+                    ps.setInt(3, cakeToppingId);
+                    ps.setInt(4, c.getAmount());
                     ps.executeUpdate();
-                } catch (SQLIntegrityConstraintViolationException e) {
-                    throw new RuntimeException(e);
+                    
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
             cakeno--;
         }
-        return cakes;
     }
     
     private HashMap<String, Integer> getAllCakeToppings() {
@@ -235,19 +229,19 @@ public class DBOrder {
     
     public boolean deleteOrder(int orderId) {
         try (Connection conn = Database.getConnection()) {
-        
+            
             PreparedStatement ps = conn.prepareStatement(
                     "DELETE FROM Orders WHERE id=?;");
-        
-        
-            ps.setInt(1,orderId);
-        
+            
+            
+            ps.setInt(1, orderId);
+            
             try {
                 ps.executeUpdate();
             } catch (SQLIntegrityConstraintViolationException e) {
                 throw new RuntimeException(e);
             }
-    
+            
             return ps.getUpdateCount() == 1;
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -261,7 +255,7 @@ public class DBOrder {
                     "UPDATE Orders SET completed=1, paid = 1 WHERE id=?;");
             
             
-            ps.setInt(1,orderId);
+            ps.setInt(1, orderId);
             
             try {
                 ps.executeUpdate();
@@ -274,16 +268,12 @@ public class DBOrder {
         }
     }
     
-    public double getTotalSales(LinkedHashMap<Order, Double> orders){
-    
-    }
-    
-    public LinkedHashMap<Order, Double> getAllOrdersMap() {
-        LinkedHashMap<Order, Double> tmpMap = new LinkedHashMap<>();
+    public List<Order> getAllOrdersMap() {
+        List<Order> tmpList = new LinkedList<>();
         try (Connection conn = Database.getConnection()) {
-            PreparedStatement s = conn.prepareStatement("SELECT * FROM Orders ORDER BY id DESC;");
+            try (PreparedStatement s = conn.prepareStatement("SELECT * FROM Orders ORDER BY id DESC;")){
             ResultSet rs = s.executeQuery();
-        
+            
             while (rs.next()) {
                 int id = rs.getInt(1);
                 int userId = rs.getInt(2);
@@ -292,10 +282,10 @@ public class DBOrder {
                 Timestamp timestamp = rs.getTimestamp(4);
                 boolean paid = rs.getBoolean(5);
                 boolean completed = rs.getBoolean(6);
-            
+                
                 User tmpUsr = new DBUser(db).getUserFromId(userId);
                 Order tmpOrder = new Order(id, tmpUsr, comment, timestamp, paid, completed, getCakesOnOrder(id));
-            
+                
                 String sql = "SELECT\n" +
                         "\tOrders.id,\n" +
                         "\t((CakeBottoms.price + CakeToppings.price) * CakesOnOrder.quantity) AS \"price\"\n" +
@@ -319,20 +309,21 @@ public class DBOrder {
                         "\tCakesOnOrder.quantity,\n" +
                         "\tCakeBottoms.id,\n" +
                         "\tCakeToppings.id";
-            
+                
                 PreparedStatement ps = conn.prepareStatement(sql);
                 ps.setInt(1, id);
                 ResultSet rss = ps.executeQuery();
-            
+                
                 double price = 0.0;
-            
+                
                 while (rss.next()) {
                     price += rss.getDouble(2);
                 }
-            
-                tmpMap.put(tmpOrder, price);
-            }
-            return tmpMap;
+                
+                
+                tmpList.add(tmpOrder);
+            }}
+            return tmpList;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

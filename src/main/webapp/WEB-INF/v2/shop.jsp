@@ -11,15 +11,15 @@
 
                     <div class="form-group"><label>Vælg bund:</label>
                         <select name="bund" id="bund">
-                            <c:forEach items="${requestScope.bottoms.entrySet()}" var="bottom">
-                                <option value="${bottom.key}">${bottom.key} - ${bottom.value}kr</option>
+                            <c:forEach items="${requestScope.bottoms}" var="bottom">
+                                <option value="${bottom.name}">${bottom.name} - ${bottom.price}kr</option>
                             </c:forEach>
                         </select>
                     </div>
                     <div class="form-group"><label>Vælg topping:</label>
                         <select name="topping" id="topping">
-                            <c:forEach items="${requestScope.toppings.entrySet()}" var="topping">
-                                <option value="${topping.key}">${topping.key} - ${topping.value}kr</option>
+                            <c:forEach items="${requestScope.toppings}" var="topping">
+                                <option value="${topping.name}">${topping.name} - ${topping.price}kr</option>
                             </c:forEach>
                         </select>
                     </div>

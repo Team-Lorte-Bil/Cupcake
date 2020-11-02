@@ -2,6 +2,8 @@ package web.pages.Customer;
 
 import domain.items.Cake;
 import domain.items.CakeOptions;
+import domain.items.Option;
+import domain.order.Order;
 import web.pages.BaseServlet;
 
 import javax.servlet.ServletException;
@@ -10,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.List;
 
 @WebServlet("/Cart")
 public class Cart extends BaseServlet {
@@ -49,7 +51,7 @@ public class Cart extends BaseServlet {
      */
     private void setup(HttpSession session){
         if(session.getAttribute("cakes") != null){
-            api.setCakes((HashMap<Cake, Integer>) session.getAttribute("cakes"));
+            api.setCakes((List<Order.Item>) session.getAttribute("cakes"));
         }
     }
     
@@ -80,22 +82,22 @@ public class Cart extends BaseServlet {
         String bottom = req.getParameter("bund");
         String topping = req.getParameter("topping");
         String antalStr = req.getParameter("antal");
-    
-        final int[] bottomPrice = {0};
-        final int[] toppingPrice = {0};
-    
-        cakeOptions.getBottoms().forEach((k, v) -> {
-            if(k.equalsIgnoreCase(bottom)){
-                bottomPrice[0] = v;
+        
+        int bottomPrice = 0;
+        for(Option bottoms: cakeOptions.getBottoms()){
+            if(bottoms.getName().equalsIgnoreCase(bottom)){
+                bottomPrice += bottoms.getPrice();
             }
-        });
-        cakeOptions.getToppings().forEach((k, v) -> {
-            if(k.equalsIgnoreCase(topping)){
-                toppingPrice[0] = v;
-            }
-        });
+        }
     
-        int price = bottomPrice[0]+toppingPrice[0];
+        int toppingPrice = 0;
+        for(Option toppings: cakeOptions.getToppings()){
+            if(toppings.getName().equalsIgnoreCase(topping)){
+                toppingPrice += toppings.getPrice();
+            }
+        }
+    
+        int price = bottomPrice + toppingPrice;
         int antal = Integer.parseInt(antalStr);
     
         Cake tmpCake = new Cake(bottom,topping,price);

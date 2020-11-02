@@ -8,7 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet("/AdminCustomers")
 public class Customers extends BaseServlet {
@@ -29,7 +29,7 @@ public class Customers extends BaseServlet {
             if (! req.getSession().getAttribute("isAdmin").equals(true) || req.getSession().getAttribute("isAdmin") == null)
                 resp.sendError(401);
     
-            ArrayList<User> customers = api.getCustomers();
+            List<User> customers = api.getCustomers();
     
     
             req.setAttribute("customers", customers);
