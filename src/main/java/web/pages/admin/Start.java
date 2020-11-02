@@ -1,7 +1,5 @@
 package web.pages.admin;
 
-import infrastructure.DBOrder;
-import infrastructure.DBUser;
 import web.pages.BaseServlet;
 
 import javax.servlet.ServletException;
@@ -14,9 +12,9 @@ import java.io.IOException;
 public class Start extends BaseServlet {
     
     private void setStats(HttpServletRequest req){
-        req.setAttribute("countOrders", new DBOrder(api.getDatabase()).getAllOrders().size());
-        req.setAttribute("countCustomers", new DBUser(api.getDatabase()).getAllUsers().size());
-        req.setAttribute("totalSale", new DBOrder(api.getDatabase()).getTotalSales(new DBOrder(api.getDatabase()).getAllOrdersMap()));
+        req.setAttribute("countOrders", api.getAllOrders().size());
+        req.setAttribute("countCustomers", api.getAllUsers().size());
+        req.setAttribute("totalSale", api.getTotalSales());
     }
     
     /**

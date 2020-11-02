@@ -1,14 +1,9 @@
 package api;
 
-import domain.items.Cake;
-import domain.items.CakeOptions;
-import domain.items.Option;
-import domain.order.Order;
-import domain.user.User;
-import infrastructure.DBCakeOptions;
-import infrastructure.DBOrder;
-import infrastructure.DBUser;
-import infrastructure.Database;
+import domain.order.*;
+import domain.items.*;
+import domain.user.*;
+import infrastructure.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -22,11 +17,20 @@ public class Cupcake {
     private HashMap<Cake, Integer> cakes;
     private CakeOptions cakeOptions;
     
+    private final DBCakeOptions dbOptions;
+    private final DBUser dbUser;
+    private final DBOrder dbOrder;
+    
     
     public Cupcake(Database db) {
         this.database = db;
+        dbOptions = new DBCakeOptions(database);
+        dbUser = new DBUser(database);
+        dbOrder = new DBOrder(database);
+        
         cakes = new HashMap<>();
-        cakeOptions = new DBCakeOptions(database).findAllCakeOptions();
+        cakeOptions = dbOptions.findAllCakeOptions();
+        
     }
     
     public String getVersion() {
@@ -43,7 +47,7 @@ public class Cupcake {
     
     
     public CakeOptions getCakeOptions() {
-        cakeOptions = new DBCakeOptions(database).findAllCakeOptions();
+        cakeOptions = dbOptions.findAllCakeOptions();
         return cakeOptions;
     }
     
@@ -66,11 +70,7 @@ public class Cupcake {
         this.cakes = cakes;
     }
     
-    /**
-     * Tries to remove the request cake from the list.
-     * @param id Cake object ID
-     * @see Cake
-     */
+
     public void removeFromCart(int id){
         Cake tmpCake = null;
         for(Cake c: cakes.keySet()){
@@ -84,26 +84,17 @@ public class Cupcake {
         if(cakes.isEmpty()) cakes = null;
     }
     
-    
-    /**
-     * Clears the list.
-     */
+ 
     public void clearCart(){
         cakes.clear();
     }
     
-    /**
-     * Calculates the total sum of the current list/basket.
-     * @return Total value of cart as int.
-     */
+
     public int getCartValue(){
         return calculateTotalPrice(cakes);
     }
     
-    /**
-     * @param cakes Map with cakes and amounts.
-     * @return Value of provided Map
-     */
+ 
     private int calculateTotalPrice(Map<Cake,Integer> cakes){
         int totalprice = 0;
         for (Map.Entry<Cake, Integer> entry : cakes.entrySet()) {
@@ -115,33 +106,75 @@ public class Cupcake {
     }
 
     
-    public Database getDatabase() {
-        return database;
-    }
-    
     public ArrayList<Order> getOrders() {
-        return new DBOrder(database).getAllOrders();
+        return dbOrder.getAllOrders();
     }
     
     public LinkedHashMap<Order, Double> getAllOrders(){
-        return new DBOrder(database).getAllOrdersMap();
+        return dbOrder.getAllOrdersMap();
     }
     
     public ArrayList<User> getCustomers() {
-        return new DBUser(database).getAllUsers();
+        return dbUser.getAllUsers();
     }
     
     public ArrayList<Option> getAllCakeOptions() {
-        return new DBCakeOptions(database).getAllCakeOptions();
+        return dbOptions.getAllCakeOptions();
     }
 
     public Option createCakeOption (String name, double price, String type) {
         name = Utils.encodeHtml(name);
         type = Utils.encodeHtml(type);
-        return new DBCakeOptions(database).createCakeOption(new Option(0, name, type, (int) price));
+        return dbOptions.createCakeOption(new Option(0, name, type, (int) price));
 
     }
-
-
-
+    
+    
+    public void deleteUser(int userId) {
+        dbUser.deleteUser(userId);
+    }
+    
+    public void changeUserBalance(int userId, double newBalance) {
+        dbUser.changeBalance(userId, newBalance);
+    }
+    
+    public User createNewUser(String usrName, String usrPsw, String usrMail, int usrPhone, double balance, String role) {
+        return dbUser.createUser(usrName, usrPsw, usrMail, usrPhone, balance, role);
+    }
+    
+    public void deleteCakeOption(int itemId, String type) {
+        dbOptions.deleteCakeOption(itemId, type);
+    }
+    
+    public void deleteOrder(int orderId) {
+        dbOrder.deleteOrder(orderId);
+    }
+    
+    public void markOrderDone(int orderId) {
+        dbOrder.markDone(orderId);
+    }
+    
+    public User checkLogin(String usrEmail, String usrPassword) throws InvalidPassword {
+        return dbUser.checkLogin(usrEmail, usrPassword);
+    }
+    
+    public Order createNewOrder(User curUser, HashMap<Cake, Integer> cakes, String comment) {
+        return dbOrder.createOrder(curUser,cakes,comment);
+    }
+    
+    public ArrayList<User> getAllUsers() {
+        return dbUser.getAllUsers();
+    }
+    
+    public double getTotalSales() {
+        double sum = 0.0;
+    
+        for(Map.Entry<Order, Double> entry: getAllOrders().entrySet()){
+            if(entry.getKey().isCompleted()){
+                sum += entry.getValue();
+            }
+        }
+    
+        return sum;
+    }
 }

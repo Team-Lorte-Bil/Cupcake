@@ -1,7 +1,6 @@
 package web.pages.admin;
 
 import domain.order.Order;
-import infrastructure.DBOrder;
 import web.pages.BaseServlet;
 
 import javax.servlet.ServletException;
@@ -35,14 +34,14 @@ public class Orders extends BaseServlet {
     
     private void deleteOrder(HttpServletRequest req, HttpServletResponse resp) throws IOException{
             int orderId = Integer.parseInt(req.getParameter("orderId"));
-            new DBOrder(api.getDatabase()).deleteOrder(orderId);
+            api.deleteOrder(orderId);
             resp.sendRedirect(req.getContextPath() + "/AdminOrders");
     }
     
     private void markDone(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        int orderId = Integer.parseInt(req.getParameter("orderId"));
-        new DBOrder(api.getDatabase()).markDone(orderId);
-        resp.sendRedirect(req.getContextPath() + "/AdminOrders");
+            int orderId = Integer.parseInt(req.getParameter("orderId"));
+            api.markOrderDone(orderId);
+            resp.sendRedirect(req.getContextPath() + "/AdminOrders");
     }
     
     /**

@@ -1,7 +1,6 @@
 package web.pages.admin;
 
 import domain.items.Option;
-import infrastructure.DBCakeOptions;
 import web.pages.BaseServlet;
 
 import javax.servlet.ServletException;
@@ -13,12 +12,6 @@ import java.util.ArrayList;
 
 @WebServlet("/AdminItems")
 public class Items extends BaseServlet {
-    
-    /**
-     * input type="hidden" name="action" value="delete">
-     *                         <input type="hidden" name="itemId" value="${item.id}">
-     *                         <input type="hidden" name="type" value="${item.type}">
-     */
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -42,7 +35,7 @@ public class Items extends BaseServlet {
     private void deleteItem(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String type = req.getParameter("type");
         int itemId = Integer.parseInt(req.getParameter("itemId"));
-        new DBCakeOptions(api.getDatabase()).deleteCakeOption(itemId, type);
+        api.deleteCakeOption(itemId, type);
         resp.sendRedirect(req.getContextPath() + "/AdminItems");
     }
     

@@ -43,8 +43,7 @@ public class Register extends BaseServlet {
         int usrPhone = Integer.parseInt(req.getParameter("inputPhone"));
         String usrPsw = req.getParameter("inputPsw");
     
-        User curUsr = new DBUser(api.getDatabase()).createUser(usrName,usrPsw,usrMail,usrPhone,0, "User");
-        System.out.println(curUsr);
+        User curUsr = api.createNewUser(usrName, usrPsw, usrMail, usrPhone, 0, "User");
         
         session.setAttribute("currentUser", curUsr);
         session.setAttribute("isAdmin", curUsr.isAdmin());

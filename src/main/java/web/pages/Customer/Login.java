@@ -50,7 +50,7 @@ public class Login extends BaseServlet {
             log(usrEmail);
             log(usrPassword);
     
-            User curUsr = new DBUser(api.getDatabase()).checkLogin(usrEmail, usrPassword);
+            User curUsr = api.checkLogin(usrEmail, usrPassword);
             log("Logged in: " + curUsr);
     
             session.setAttribute("currentUser", curUsr);

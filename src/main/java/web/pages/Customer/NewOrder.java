@@ -29,9 +29,11 @@ public class NewOrder extends BaseServlet {
         HttpSession session = req.getSession();
         
         cakes = (HashMap<Cake, Integer>) session.getAttribute("cakes");
+        User curUser = (User) req.getSession().getAttribute("currentUser");
+        String comment = req.getParameter("comment");
         
         
-        Order tmpOrder = createNewOrder(req);
+        Order tmpOrder = api.createNewOrder(curUser, cakes, comment);
         
         req.setAttribute("order",tmpOrder);
         req.setAttribute("cakes", cakes);
@@ -42,13 +44,6 @@ public class NewOrder extends BaseServlet {
         
         clearCart(session,req);
         
-    }
-    
-    private Order createNewOrder(HttpServletRequest req){
-        User curUser = (User) req.getSession().getAttribute("currentUser");
-        String comment = req.getParameter("comment");
-    
-        return new DBOrder(api.getDatabase()).createOrder(curUser, cakes, comment);
     }
     
     /**

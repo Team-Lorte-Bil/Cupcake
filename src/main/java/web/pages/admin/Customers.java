@@ -1,7 +1,6 @@
 package web.pages.admin;
 
 import domain.user.User;
-import infrastructure.DBUser;
 import web.pages.BaseServlet;
 
 import javax.servlet.ServletException;
@@ -32,7 +31,6 @@ public class Customers extends BaseServlet {
     
             ArrayList<User> customers = api.getCustomers();
     
-            System.out.println(customers);
     
             req.setAttribute("customers", customers);
             
@@ -66,14 +64,14 @@ public class Customers extends BaseServlet {
     
     private void deleteUser(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int userId = Integer.parseInt(req.getParameter("userId"));
-        new DBUser(api.getDatabase()).deleteUser(userId);
+        api.deleteUser(userId);
         resp.sendRedirect(req.getContextPath() + "/AdminCustomers");
     }
     
     private void changeBalance(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int userId = Integer.parseInt(req.getParameter("userId"));
         double newBalance = Double.parseDouble(req.getParameter("newBalance"));
-        new DBUser(api.getDatabase()).changeBalance(userId, newBalance);
+        api.changeUserBalance(userId, newBalance);
         resp.sendRedirect(req.getContextPath() + "/AdminCustomers");
     }
     
@@ -86,9 +84,16 @@ public class Customers extends BaseServlet {
             String role = req.getParameter("inputRole");
             String usrPsw = req.getParameter("inputPsw");
     
-            new DBUser(api.getDatabase()).createUser(usrName, usrPsw, usrMail, usrPhone, balance, role);
+            
+            User newUsr = api.createNewUser(usrName, usrPsw, usrMail, usrPhone, balance, role);
+            
+            if(newUsr != null){
+                resp.sendRedirect(req.getContextPath() + "/AdminCustomers");
+            } else {
+                throw new Exception("Error in creating new user");
+            }
     
-            resp.sendRedirect(req.getContextPath() + "/AdminCustomers");
+            
         } catch (Exception e){
             log(e.getMessage());
             resp.sendError(400);
