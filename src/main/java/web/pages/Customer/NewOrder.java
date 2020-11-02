@@ -10,13 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @WebServlet("/CreateOrder")
 public class NewOrder extends BaseServlet {
-    
-    private List<Order.Item> cakes = new ArrayList<>();
     
     /**
      * Create the order and redirects to order confirmation page.
@@ -27,17 +23,17 @@ public class NewOrder extends BaseServlet {
             throws ServletException, IOException {
         HttpSession session = req.getSession();
         
-        cakes = (List<Order.Item>) session.getAttribute("cakes");
+        
         User curUser = (User) req.getSession().getAttribute("currentUser");
         String comment = req.getParameter("comment");
         
         
-        Order tmpOrder = api.createNewOrder(curUser, cakes, comment);
+        Order tmpOrder = api.createNewOrder(curUser, api.getCart().getCakes(), comment);
         
         
         
         req.setAttribute("order",tmpOrder);
-        req.setAttribute("cakes", cakes);
+        req.setAttribute("cart", api.getCart());
         req.setAttribute("currentUser", curUser);
         
         log(req,"Got: " + tmpOrder);
@@ -65,10 +61,6 @@ public class NewOrder extends BaseServlet {
      */
     private void clearCart(HttpSession session, HttpServletRequest req){
         api.clearCart();
-        session.removeAttribute("cakes");
-        req.removeAttribute("cakes");
-        cakes.clear();
-        session.removeAttribute("totalprice");
-        session.removeAttribute("lastcake");
+        session.setAttribute("cart", api.getCart());
     }
 }

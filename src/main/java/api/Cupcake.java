@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 public class Cupcake {
-    private static final int VERSION = 2;
-    private List<Order.Item> cakes;
+    private static final int VERSION = 2; //Either 1 or 2 is valid.
+    private final Cart cart;
     private CakeOptions cakeOptions;
     
     private final DBCakeOptions dbOptions;
@@ -23,7 +23,7 @@ public class Cupcake {
         dbUser = new DBUser();
         dbOrder = new DBOrder(db);
         
-        cakes = new ArrayList<>();
+        cart = new Cart();
         cakeOptions = dbOptions.findAllCakeOptions();
         
     }
@@ -32,6 +32,11 @@ public class Cupcake {
         return VERSION;
     }
     
+    /**
+     * Check whether the current user is admin or not.
+     * @param req Current HttpRequest
+     * @return boolean
+     */
     public boolean checkAdminRights(HttpServletRequest req){
         if(req.getSession().getAttribute("isAdmin") != null){
             return (boolean) req.getSession().getAttribute("isAdmin");
@@ -51,61 +56,38 @@ public class Cupcake {
     }
     
     public List<Order.Item> getCakes() {
-        return cakes;
+        return cart.getCakes();
     }
     
+    
+ 
     public void addCake(Cake cake, int amount){
-        if(cakes == null) cakes = new ArrayList<>();
-        
-        System.out.println(cakes);
-        System.out.println(cake);
-        System.out.println(amount);
-        
-        if(cake != null && amount > 0) {
-            cakes.add(new Order.Item(cake, amount));
-        }
-        
-        System.out.println(cakes);
-        System.out.println(cake);
-        System.out.println(amount);
+        cart.addItemToCart(cake, amount);
     }
     
-    public void setCakes(List<Order.Item> cakes) {
-        this.cakes = cakes;
+    public Cart getCart() {
+        return cart;
     }
     
-
     public void removeFromCart(int id){
-        for(Order.Item c: cakes){
-            if(c.getCake().getId() == id){
-                cakes.remove(c);
-                break;
-            }
-        }
-        
-        if(cakes.isEmpty()) cakes = null;
+    cart.removeItemFromCart(id);
     }
     
- 
+    
+    
     public void clearCart(){
-        cakes.clear();
+        cart.clearCart();
     }
     
-
+    
+    /**
+     * Calculates total value of cart.
+     * @link calculateTotalPrice()
+     */
     public int getCartValue(){
-        return calculateTotalPrice(cakes);
+        return cart.getCartValue();
     }
     
- 
-    private int calculateTotalPrice(List<Order.Item> cakes){
-        int totalprice = 0;
-        for(Order.Item item: cakes){
-            
-            totalprice += item.getCake().getPrice() * item.getAmount();
-        }
-        return totalprice;
-    }
-
     
     public List<Order> getOrders() {
         return dbOrder.getAllOrders();
@@ -162,10 +144,6 @@ public class Cupcake {
     public Order createNewOrder(User curUser, List<Order.Item> cakes, String comment) {
         double newAccountBalance = curUser.getAccountBalance() - getCartValue();
         boolean paid = false;
-    
-        System.out.println("Current balance: " + curUser.getAccountBalance());
-        System.out.println("Order value: " + getCartValue());
-        System.out.println("New balance: " + newAccountBalance);
     
         if(newAccountBalance >= 0){
             changeUserBalance(curUser.getId(), newAccountBalance);

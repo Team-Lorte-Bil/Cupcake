@@ -3,7 +3,6 @@ package web.pages.Customer;
 import domain.items.Cake;
 import domain.items.CakeOptions;
 import domain.items.Option;
-import domain.order.Order;
 import web.pages.BaseServlet;
 
 import javax.servlet.ServletException;
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
 
 @WebServlet("/Cart")
 public class Cart extends BaseServlet {
@@ -50,9 +48,8 @@ public class Cart extends BaseServlet {
      * Makes sure the list is created and ready for use.
      */
     private void setup(HttpSession session){
-        if(session.getAttribute("cakes") != null){
-            api.setCakes((List<Order.Item>) session.getAttribute("cakes"));
-        }
+    
+    
     }
     
     /**
@@ -69,7 +66,7 @@ public class Cart extends BaseServlet {
         }
         
         api.removeFromCart(id);
-        session.setAttribute("cakes",api.getCakes());
+        session.setAttribute("cart",api.getCart());
     }
     
     /**
@@ -103,10 +100,8 @@ public class Cart extends BaseServlet {
         Cake tmpCake = new Cake(bottom,topping,price);
         
         api.addCake(tmpCake, antal);
-    
-        session.setAttribute("lastcake", tmpCake);
-        session.setAttribute("totalprice", String.format("%d", api.getCartValue()));
-        session.setAttribute("cakes",api.getCakes());
+        
+        session.setAttribute("cart",api.getCart());
     }
     
     /**
@@ -118,7 +113,7 @@ public class Cart extends BaseServlet {
         req.setCharacterEncoding("UTF-8");
         
         HttpSession session = req.getSession();
-        setup(session);
+        req.setAttribute("value", api.getCartValue());
     
     
         render("Cart", "/WEB-INF/v"+api.getVersion()+"/cart.jsp", req, resp);

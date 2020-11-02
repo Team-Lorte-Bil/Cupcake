@@ -1,3 +1,4 @@
+<%@ page import="api.Cart" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <section class="page-section cta" style="background: rgba(109,67,73,0.74);">
@@ -5,9 +6,11 @@
 <div class="row">
 <div class="col-xl-9 mx-auto">
 <div class="cta-inner text-center rounded">
-<h2 class="section-heading mb-5"><span class="section-heading-lower">Din indkøbskurv</span></h2><%
-    if (session.getAttribute("cakes") != null) {
-%>
+<h2 class="section-heading mb-5"><span class="section-heading-lower">Din indkøbskurv</span></h2>
+    <%
+    Cart cart = (Cart) session.getAttribute("cart");
+    if (cart.getCakes().isEmpty()) {
+    %>
 <div class="shopping-cart">
 <div class="px-4 px-lg-0">
 
@@ -41,7 +44,7 @@
 </thead>
 <tbody>
 <%--@elvariable id="cakes" type="java.util.List"--%>
-<c:forEach items="${cakes}" var="cake">
+<c:forEach items="${sessionScope.cart.cakes}" var="cake">
     <tr>
     <td class="border-1 align-middle"><strong>${cake.getCake().getBottom()}</strong></td>
     <td class="border-1 align-middle"><strong>${cake.getCake().getTopping()}</strong></td>
@@ -66,8 +69,6 @@
     </div>
     </div>
     <form action="CreateOrder" method="post">
-    <input type="hidden" name="cakes" value="${sessionScope.cakes}">
-    <input type="hidden" name="totalprice" value="${sessionScope.totalprice}">
     <div class="row py-5 p-4 bg-white rounded shadow-sm">
     <div class="col-lg-12">
     <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Din ordre</div>
@@ -75,7 +76,7 @@
 
     <ul class="list-unstyled mb-4">
     <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total</strong>
-    <h5 class="font-weight-bold">${sessionScope.totalprice} kr</h5>
+    <h5 class="font-weight-bold">${sessionScope.cart.cartValue} kr</h5>
     </li>
     </ul>
     <div class="input-group mb-3">

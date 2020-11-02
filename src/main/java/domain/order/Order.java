@@ -84,7 +84,7 @@ public class Order {
     
     public static class Item{
         private final Cake cake;
-        private final int amount;
+        private int amount;
     
         public Item(Cake cake, int amount) {
             this.cake = cake;
@@ -97,6 +97,18 @@ public class Order {
     
         public int getAmount() {
             return amount;
+        }
+    
+        public void setAmount(int amount) {
+            this.amount = amount;
+        }
+    
+        @Override
+        public String toString() {
+            return "Item{" +
+                    "cake=" + cake +
+                    ", amount=" + amount +
+                    '}';
         }
     }
 }
