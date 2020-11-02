@@ -33,26 +33,26 @@ public class Cupcake {
     }
     
     /**
-     * Check whether the current user is admin or not.
+     * Check whether the current session User is admin or not.
      * @param req Current HttpRequest
      * @return boolean
+     * @see User
      */
     public boolean checkAdminRights(HttpServletRequest req){
-        if(req.getSession().getAttribute("isAdmin") != null){
+        if(req.getSession().getAttribute("isAdmin") != null) {
             return (boolean) req.getSession().getAttribute("isAdmin");
-        } else {
-            return false;
         }
+        return false;
     }
     
     
+    /**
+     * @return CakeOptions object with List of toppings and bottoms
+     * @see CakeOptions
+     */
     public CakeOptions getCakeOptions() {
         cakeOptions = dbOptions.findAllCakeOptions();
         return cakeOptions;
-    }
-    
-    public void setCakeOptions(CakeOptions cakeOptions) {
-        this.cakeOptions = cakeOptions;
     }
     
     public List<Order.Item> getCakes() {
@@ -60,7 +60,10 @@ public class Cupcake {
     }
     
     
- 
+    /**
+     * @param cake Cake to be added
+     * @param amount Amount of cakes to be added
+     */
     public void addCake(Cake cake, int amount){
         cart.addItemToCart(cake, amount);
     }
@@ -104,7 +107,13 @@ public class Cupcake {
     public List<Option> getAllCakeOptions() {
         return dbOptions.getAllCakeOptions();
     }
-
+    
+    /**
+     * Creates a new option.
+     * @param name Options name
+     * @param price Options price
+     * @param type Type of option; Bottom or Topping
+     */
     public void createCakeOption (String name, double price, String type) {
         name = Utils.encodeHtml(name);
         type = Utils.encodeHtml(type);
@@ -141,6 +150,16 @@ public class Cupcake {
         return dbUser.checkLogin(usrEmail, usrPassword);
     }
     
+    /**
+     * Creates a new order in the database.
+     * If user got avaiable balance, it will be marked as paid.
+     * @param curUser Current user object
+     * @param cakes List of cakes to add to the order
+     * @param comment If any comment
+     * @return created Order object.
+     * @see DBOrder
+     * @see Order
+     */
     public Order createNewOrder(User curUser, List<Order.Item> cakes, String comment) {
         double newAccountBalance = curUser.getAccountBalance() - getCartValue();
         boolean paid = false;
@@ -158,6 +177,10 @@ public class Cupcake {
         return dbUser.getAllUsers();
     }
     
+    /**
+     * @return Total sales value of completed orders
+     * @see Order where completed is set to true.
+     */
     public double getTotalSales() {
         double sum = 0.0;
         
@@ -166,7 +189,6 @@ public class Cupcake {
                 sum += o.getPrice();
             }
         }
-    
         return sum;
     }
 }

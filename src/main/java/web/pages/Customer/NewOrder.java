@@ -28,7 +28,7 @@ public class NewOrder extends BaseServlet {
         String comment = req.getParameter("comment");
         
         
-        Order tmpOrder = api.createNewOrder(curUser, api.getCart().getCakes(), comment);
+        Order tmpOrder = api.createNewOrder(curUser, api.getCakes(), comment);
         
         
         

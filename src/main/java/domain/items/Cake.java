@@ -1,11 +1,10 @@
 package domain.items;
 
-import java.util.Objects;
-
 public class Cake {
     private static int cid = 1;
     private final int id;
-    private final String bottom, topping;
+    private final String bottom;
+    private final String topping;
     private final int price;
     
     public Cake(String bottom, String topping, int price) {
