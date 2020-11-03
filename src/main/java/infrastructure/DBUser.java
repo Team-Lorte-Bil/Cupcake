@@ -3,7 +3,6 @@ package infrastructure;
 import api.Utils;
 import domain.user.*;
 
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,11 +39,8 @@ public class DBUser implements UserRepository {
      */
 
     public User checkLogin(String usrEmail, String usrPassword) throws InvalidPassword {
-        User tmpUser;
-        
         usrEmail = Utils.encodeHtml(usrEmail);
         usrPassword = Utils.encodeHtml(usrPassword);
-    
         
         try (Connection conn = db.getConnection()) {
             try(PreparedStatement ps = conn.prepareStatement("SELECT * FROM Users WHERE email=?;")) {
@@ -69,8 +65,9 @@ public class DBUser implements UserRepository {
                 throw new InvalidPassword("Brugeren eksisterer ikke!");
             }
         }} catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
         }
+        return null;
     }
     
     /**
@@ -87,7 +84,7 @@ public class DBUser implements UserRepository {
     
             ps.getUpdateCount();
         }} catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
         }
     }
     
@@ -107,7 +104,7 @@ public class DBUser implements UserRepository {
             ps.executeUpdate();
             
         }} catch (Exception e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
         }
     }
     
@@ -119,43 +116,19 @@ public class DBUser implements UserRepository {
      *
      * @throws UserNotFound If user is not found in Database
      */
-    @SuppressWarnings("DuplicatedCode")
     @Override
     public User findUser(int id) throws UserNotFound {
-        User tmpUser;
-    
-        try (Connection conn = db.getConnection()) {
-            try(PreparedStatement ps = conn.prepareStatement("SELECT * FROM Users WHERE id=?;")){
-            ps.setInt(1,id);
-        
-            ResultSet rs = ps.executeQuery();
-        
-            if(rs.next()) {
-                int foundId = rs.getInt(1);
-                String email = rs.getString(2);
-                String name = rs.getString(3);
-                int phoneno = rs.getInt(4);
-                byte[] salt = rs.getBytes(5);
-                byte[] secret = rs.getBytes(6);
-                Enum<User.Role> role = User.Role.valueOf(rs.getString(7));
-                Timestamp createdAt = rs.getTimestamp(8);
-                double accountBalance = rs.getDouble(9);
-            
-                tmpUser = new User(foundId,email,name,phoneno,role,createdAt,accountBalance);
-            
-                return tmpUser;
-            }
-            throw new UserNotFound(id);
-        }} catch (SQLException | UserNotFound e) {
-            throw new RuntimeException(e);
+        for(User u: findAllUsers()){
+            if(u.getId() == id) return u;
         }
+        
+        throw new UserNotFound(id);
     }
     
     /**
      * @query SELECT * FROM Users
      * @return Iterable of Users
      */
-    @SuppressWarnings("DuplicatedCode")
     @Override
     public Iterable<User> findAllUsers() {
         try (Connection conn = db.getConnection()) {
@@ -169,31 +142,19 @@ public class DBUser implements UserRepository {
                 
                 return tmpList;
             }} catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
         }
+        return null;
     }
-    
-    /*
-    `id` int NOT NULL AUTO_INCREMENT,
-  `email` varchar(255) COLLATE utf8_danish_ci NOT NULL,
-  `name` varchar(255) COLLATE utf8_danish_ci NOT NULL,
-  `phoneno` int NOT NULL,
-  `salt` blob NOT NULL,
-  `secret` blob NOT NULL,
-  `role` enum('User','Admin') COLLATE utf8_danish_ci NOT NULL,
-  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `accountBalance` double(255,0) NOT NULL,
-    
-     */
     
     private User loadUser(ResultSet rs) throws SQLException {
         int id = rs.getInt("Users.id");
-        String email = rs.getString(2);
-        String name = rs.getString(3);
-        int phoneno = rs.getInt(4);
-        Enum<User.Role> role = User.Role.valueOf(rs.getString(7));
-        Timestamp createdAt = rs.getTimestamp(8);
-        double accountBalance = rs.getDouble(9);
+        String email = rs.getString("Users.email");
+        String name = rs.getString("Users.name");
+        int phoneno = rs.getInt("Users.phoneno");
+        Enum<User.Role> role = User.Role.valueOf(rs.getString("Users.role"));
+        Timestamp createdAt = rs.getTimestamp("Users.createdAt");
+        double accountBalance = rs.getDouble("Users.accountBalance");
     
         return new User(id,email,name,phoneno,role,createdAt,accountBalance);
     }

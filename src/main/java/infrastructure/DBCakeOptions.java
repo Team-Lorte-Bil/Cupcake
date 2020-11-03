@@ -1,6 +1,5 @@
 package infrastructure;
 
-import api.Cupcake;
 import api.Utils;
 import domain.items.CakeOptions;
 import domain.items.Option;
@@ -17,6 +16,21 @@ public class DBCakeOptions {
     this.db = db;
     }
     
+    private List<Option> loadOptions(ResultSet rs, String type) throws SQLException {
+        List<Option> tmpList = new ArrayList<>();
+    
+        while(rs.next()) {
+            String name = rs.getString("name");
+            int price = (int) rs.getDouble("price");
+        
+            name = Utils.encodeHtml(name);
+        
+            tmpList.add(new Option(0,name, type, price));
+        }
+        
+        return tmpList;
+    }
+    
     /**
      * @return List of Cake bottoms
      * @see Option
@@ -27,14 +41,7 @@ public class DBCakeOptions {
             try(PreparedStatement s = conn.prepareStatement("SELECT * FROM CakeBottoms;")){
             ResultSet rs = s.executeQuery();
             
-            while(rs.next()) {
-                String name = rs.getString("name");
-                int price = (int) rs.getDouble("price");
-                
-                name = Utils.encodeHtml(name);
-                
-                tmpList.add(new Option(0,name, "bottom", price));
-            }
+            return loadOptions(rs, "bottom");
         }
         } catch (SQLException e) {
             System.out.println(e);
@@ -52,14 +59,7 @@ public class DBCakeOptions {
             try(PreparedStatement s = conn.prepareStatement("SELECT * FROM CakeToppings;")){
             ResultSet rs = s.executeQuery();
             
-            while(rs.next()) {
-                String name = rs.getString("name");
-                int price = (int) rs.getDouble("price");
-                
-                name = Utils.encodeHtml(name);
-                
-                tmpList.add(new Option(0,name, "topping", price));
-            }
+            return loadOptions(rs, "topping");
         }} catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -203,33 +203,18 @@ public class DBCakeOptions {
             String toppingQuery = "SELECT * FROM CakeToppings;";
             String bottomQuery = "SELECT * FROM CakeBottoms;";
         
-            try(PreparedStatement s = conn.prepareStatement(toppingQuery)){
-            ResultSet toppingRs = s.executeQuery();
-        
-            while(toppingRs.next()){
-                int id = toppingRs.getInt(1);
-                String name = toppingRs.getString(2);
-                int price = (int) toppingRs.getDouble(3);
-                String type = "topping";
-                
-                Option option = new Option(id, name, type, price);
-                cakeOptions.add(option);
+            try(PreparedStatement s = conn.prepareStatement(toppingQuery)) {
+                ResultSet toppingRs = s.executeQuery();
+                for (Option o : loadOptions(toppingRs, "topping")) {
+                    cakeOptions.add(new Option(o.getId(), o.getName(), o.getType(), o.getPrice()));
+                }
             }
     
             try(PreparedStatement ps = conn.prepareStatement(bottomQuery)){
             ResultSet bottomRs = ps.executeQuery();
-    
-            while(bottomRs.next()){
-                int id = bottomRs.getInt(1);
-                String name = bottomRs.getString(2);
-                int price = (int) bottomRs.getDouble(3);
-                String type = "bottom";
-        
-                Option option = new Option(id, name, type, price);
-                cakeOptions.add(option);
-            }
-        
-            }
+                for(Option o: loadOptions(bottomRs, "bottom")){
+                    cakeOptions.add(new Option(o.getId(), o.getName(), o.getType(), o.getPrice()));
+                }
             }
         } catch (SQLException e){
             System.out.println(e.getMessage());

@@ -7,7 +7,6 @@ import infrastructure.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
-import java.util.logging.Logger;
 
 public class Cupcake {
     private static final int VERSION = 2; //Either 1 or 2 is valid.
