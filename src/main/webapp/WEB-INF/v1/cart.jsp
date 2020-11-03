@@ -8,7 +8,7 @@
     <%
         if (session.getAttribute("cakes") != null) {
     %>
-    <table class="table table-striped">
+    <table class="table table-striped" summary="Table of cart content">
         <thead>
         <tr>
             <th scope="col">Antal</th>
@@ -63,8 +63,8 @@
     </div>
     <br/> <br/>
 
-    <p><b>Total pris:</b></p>
-    <p><b><u>${sessionScope.totalprice},- kr</u></b></p>
+    <p><strong>Total pris:</strong></p>
+    <p><strong><u>${sessionScope.totalprice},- kr</u></strong></p>
         <input type="hidden" name="cakes" value="${sessionScope.cakes}">
         <input type="hidden" name="totalprice" value="${sessionScope.totalprice}">
 

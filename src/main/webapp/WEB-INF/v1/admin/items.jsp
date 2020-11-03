@@ -7,7 +7,7 @@
         Opret ny Bund/Top
     </button>
     <br/> <br/>
-    <table class="table">
+    <table class="table" summary="table of items">
         <thead>
         <tr>
             <th scope="col">Navn</th>

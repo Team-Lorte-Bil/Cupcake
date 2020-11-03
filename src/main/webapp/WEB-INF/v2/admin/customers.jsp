@@ -7,7 +7,7 @@
             Opret ny bruger
         </button>
         <br/> <br/>
-        <table class="table">
+        <table class="table" summary="table of customers">
             <thead>
             <tr>
                 <th scope="col">Kunde nr</th>

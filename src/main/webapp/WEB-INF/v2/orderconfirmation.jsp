@@ -16,7 +16,7 @@
 
 <!-- Shopping cart table -->
 <div class="table-responsive">
-<table class="table">
+<table class="table" summary="table with ordered items">
 <thead>
 <tr>
     <th scope="col" class="border-0 bg-light">
