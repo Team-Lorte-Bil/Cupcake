@@ -35,6 +35,9 @@ public class Order {
         this.cakes = cakes;
     }
     
+    /**
+     * @return Total price of order as double
+     */
     public double getPrice(){
         double price = 0.0;
         

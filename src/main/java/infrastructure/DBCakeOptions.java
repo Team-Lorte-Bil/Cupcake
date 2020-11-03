@@ -13,6 +13,10 @@ public class DBCakeOptions {
     public DBCakeOptions() {
     }
     
+    /**
+     * @return List of Cake bottoms
+     * @see Option
+     */
     private List<Option> getAllCakeBottoms(){
         try (Connection conn = Database.getConnection()) {
             try(PreparedStatement s = conn.prepareStatement("SELECT * FROM CakeBottoms;")){
@@ -34,6 +38,10 @@ public class DBCakeOptions {
         
     }
     
+    /**
+     * @return List of Cake toppings
+     * @see Option
+     */
     private List<Option> getAllCakeToppings(){
         try (Connection conn = Database.getConnection()) {
             try(PreparedStatement s = conn.prepareStatement("SELECT * FROM CakeToppings;")){
@@ -55,11 +63,20 @@ public class DBCakeOptions {
         
     }
     
+    /**
+     * @return CakeOptions object
+     * @see CakeOptions
+     */
     public CakeOptions findAllCakeOptions() {
         return new CakeOptions(getAllCakeBottoms(), getAllCakeToppings());
     }
     
     
+    /**
+     * @param option Option object for creation in Database
+     * @return created Option object
+     * @see Option
+     */
     public Option createCakeOption(Option option) {
         int id;
         String table = "";
@@ -95,6 +112,13 @@ public class DBCakeOptions {
         return new Option(id,option.getName(),option.getType(),option.getPrice());
     }
     
+    /**
+     * @param id Option ID
+     * @param type Option Type:
+     *             Bottom
+     *             Topping
+     * @return true if deleted
+     */
     public boolean deleteCakeOption(int id, String type) {
         String table = "";
     
@@ -121,6 +145,10 @@ public class DBCakeOptions {
     }
     
     
+    /**
+     * @param topping Topping name
+     * @return Id of topping
+     */
     public int getToppingIdFromName(String topping) {
         topping = Utils.encodeHtml(topping);
         try(Connection conn = Database.getConnection()){
@@ -140,6 +168,10 @@ public class DBCakeOptions {
         return 0;
     }
     
+    /**
+     * @param bottom Bottom name
+     * @return Id of bottom
+     */
     public int getBottomIdFromName(String bottom) {
         bottom = Utils.encodeHtml(bottom);
         try(Connection conn = Database.getConnection()){
@@ -157,6 +189,10 @@ public class DBCakeOptions {
         return 0;
     }
     
+    /**
+     * @return List of all options
+     * @see Option
+     */
     public List<Option> getAllCakeOptions() {
         List<Option> cakeOptions = new ArrayList<>();
         try(Connection conn = Database.getConnection()){

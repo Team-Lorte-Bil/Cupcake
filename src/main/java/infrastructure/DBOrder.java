@@ -17,6 +17,11 @@ public class DBOrder implements OrderRepository {
     public DBOrder() {
     }
     
+    /**
+     * @query SELECT * FROM Orders
+     * @return List of all orders in Database
+     * @see Order
+     */
     public List<Order> getAllOrders() {
         try (Connection conn = Database.getConnection()) {
             try(PreparedStatement s = conn.prepareStatement("SELECT * FROM Orders;")){
@@ -44,6 +49,11 @@ public class DBOrder implements OrderRepository {
         }
     }
     
+    /**
+     * @param orderId Order ID
+     * @return List of cakes and amount on Order
+     * @see Order.Item
+     */
     public List<Order.Item> getCakesOnOrder(int orderId) {
         List<Order.Item> cakeList = new ArrayList<>();
         
@@ -84,7 +94,15 @@ public class DBOrder implements OrderRepository {
     }
     
     
-    
+    /**
+     * @param user User object
+     * @param cakes List of Order Items (Cake and amount)
+     * @param comment Order comment
+     * @param paid Paid for or not
+     * @return Order object
+     * @see Order
+     * @see Order.Item
+     */
     public Order createOrder(User user, List<Order.Item> cakes, String comment, boolean paid) {
         Order tmpOrder;
         
@@ -127,6 +145,12 @@ public class DBOrder implements OrderRepository {
         }
     }
     
+    /**
+     * @query INSERT INTO CakesOnOrder (orderId, bottomId, toppingId, quantity)
+     * @param orderId Order ID
+     * @param cakes Item object (Cake, Amount)
+     * @see Order.Item
+     */
     public void createCakesOnOrder(int orderId, List<Order.Item> cakes) {
         for (Order.Item c : cakes) {
             try (Connection conn = Database.getConnection()) {
@@ -159,6 +183,11 @@ public class DBOrder implements OrderRepository {
     }
     
     
+    /**
+     * Deletes the specified order by ID
+     * @param orderId Order ID
+     * @query DELETE FROM Orders WHERE ID=orderId
+     */
     public void deleteOrder(int orderId) {
         try (Connection conn = Database.getConnection()) {
             
@@ -171,6 +200,10 @@ public class DBOrder implements OrderRepository {
         }
     }
     
+    /**
+     * Marks the order as completed and paid
+     * @param orderId Order ID
+     */
     public void markDone(int orderId) {
         try (Connection conn = Database.getConnection()) {
             try(PreparedStatement ps = conn.prepareStatement("UPDATE Orders SET completed=1, paid = 1 WHERE id=?;")){
@@ -184,6 +217,11 @@ public class DBOrder implements OrderRepository {
         }
     }
     
+    /**
+     * @query SELECT * FROM Orders ORDER BY id DESC
+     * @return A sorted list by ID decending.
+     * @see Order
+     */
     public List<Order> getAllOrdersSorted() {
         List<Order> tmpList = new LinkedList<>();
         try (Connection conn = Database.getConnection()) {
@@ -245,6 +283,9 @@ public class DBOrder implements OrderRepository {
         }
     }
     
+    /**
+     * @return A Iterable<Order>
+     */
     @Override
     public Iterable<Order> findAll() {
         return getAllOrdersSorted();

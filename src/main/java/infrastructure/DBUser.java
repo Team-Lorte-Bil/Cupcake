@@ -13,10 +13,27 @@ public class DBUser implements UserRepository {
     public DBUser() {
     }
     
+    /**
+     * @return List of User objects
+     * @see User
+     */
     public List<User> getAllUsers(){
         return (List<User>) findAllUsers();
     }
     
+    /**
+     * Checks if the user exists in the database and then compares the provided password with the stored password.
+     *
+     * @query SELECT * FROM Users WHERE email=usrEmail
+     *
+     * @param usrEmail User e-mail
+     * @param usrPassword User password
+     * @return User object
+     *
+     * @see User
+     *
+     * @throws InvalidPassword If password is wrong or user does not exist.
+     */
     public User checkLogin(String usrEmail, String usrPassword) throws InvalidPassword {
         User tmpUser;
         
@@ -60,6 +77,10 @@ public class DBUser implements UserRepository {
         }
     }
     
+    /**
+     * @query DELETE FROM Users WHERE id=userId
+     * @param userId User ID
+     */
     public void deleteUser(int userId) {
         try (Connection conn = Database.getConnection()) {
             
@@ -74,6 +95,11 @@ public class DBUser implements UserRepository {
         }
     }
     
+    /**
+     * @query UPDATE Users SET Users.accountBalance=newBalance WHERE id=userId
+     * @param userId User ID
+     * @param newBalance Account balance to be set
+     */
     public void changeBalance(int userId, double newBalance) {
         try (Connection conn = Database.getConnection()) {
         
@@ -89,6 +115,14 @@ public class DBUser implements UserRepository {
         }
     }
     
+    /**
+     * @query SELECT * FROM Users WHERE id=id
+     * @param id User ID
+     * @return User object
+     * @see User
+     *
+     * @throws UserNotFound If user is not found in Database
+     */
     @Override
     public User findUser(int id) throws UserNotFound {
         User tmpUser;
@@ -120,6 +154,10 @@ public class DBUser implements UserRepository {
         }
     }
     
+    /**
+     * @query SELECT * FROM Users
+     * @return Iterable of Users
+     */
     @Override
     public Iterable<User> findAllUsers() {
         try (Connection conn = Database.getConnection()) {
@@ -148,6 +186,26 @@ public class DBUser implements UserRepository {
         }
     }
     
+    /**
+     * Creates a new user and inserts it into the database
+     *
+     * @query INSERT INTO Users (email, name, phoneno, salt, secret, role, accountBalance, createdAt)
+     *
+     * @param name Users full name
+     * @param password Users password
+     * @param email Users email
+     * @param phoneno Users phone number
+     * @param accountBalance Account balance
+     * @param role Role:
+     *             Admin
+     *             User
+     * @see User.Role
+     *
+     * @return User object
+     * @see User
+     *
+     * @throws UserExists if User already exists.
+     */
     @Override
     public User createUser(String name, String password, String email, int phoneno, double accountBalance, String role) throws UserExists {
         name = Utils.encodeHtml(name);
