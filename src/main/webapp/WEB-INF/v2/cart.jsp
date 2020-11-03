@@ -19,7 +19,7 @@
 
 <!-- Shopping cart table -->
 <div class="table-responsive">
-<table class="table" summary="Table of cart content">
+<table class="table">
 <thead>
 <tr>
     <th scope="col" class="border-0 bg-light">

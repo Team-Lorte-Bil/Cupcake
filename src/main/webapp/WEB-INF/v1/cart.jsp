@@ -8,7 +8,7 @@
     <%
         if (session.getAttribute("cakes") != null) {
     %>
-    <table class="table table-striped" summary="Table of cart content">
+    <table class="table table-striped" >
         <thead>
         <tr>
             <th scope="col">Antal</th>

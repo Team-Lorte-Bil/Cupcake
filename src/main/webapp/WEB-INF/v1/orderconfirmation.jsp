@@ -5,7 +5,7 @@
         Din ordre ${requestScope.order.orderId} er bekræftet.
     </h1>
     <p>
-    <table class="table table-striped" summary="table with ordered items">
+    <table class="table table-striped">
         <thead>
         <tr>
             <th scope="col">Antal</th>

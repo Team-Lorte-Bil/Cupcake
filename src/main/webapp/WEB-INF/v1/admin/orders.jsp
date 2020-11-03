@@ -3,7 +3,7 @@
 <div class="container text-center">
     <h3>Ordre</h3>
     <br/> <br/>
-    <table class="table" summary="table with orders">
+    <table class="table">
         <thead>
         <tr>
             <th scope="col">Ordre nummer</th>
@@ -73,7 +73,7 @@
                         <p>Kommentar: ${order.comment}</p>
                     </div>
                     <div id="custitems">
-                        <table class="table table-striped" summary="table with ordered items">
+                        <table class="table table-striped">
                             <thead>
                             <tr>
                                 <th scope="col">Antal</th>

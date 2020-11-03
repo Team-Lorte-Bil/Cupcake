@@ -3,7 +3,7 @@
 <section class="page-section cta" style="background: rgba(109,67,73,0.74);">
     <div class="col-xl-9 mx-auto"><div class="cta-inner text-center rounded">
         <h2 class="section-heading mb-5"><span class="section-heading-lower">Ordre</span></h2>
-        <table class="table" summary="table with orders">
+        <table class="table">
             <thead>
             <tr>
                 <th scope="col">Ordre nummer</th>
@@ -74,7 +74,7 @@
                                 <p>Kommentar: ${order.comment}</p>
                             </div>
                             <div id="custitems">
-                                <table class="table table-striped" summary="table with ordered items">
+                                <table class="table table-striped">
                                     <thead>
                                     <tr>
                                         <th scope="col">Antal</th>
