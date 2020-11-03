@@ -8,6 +8,11 @@ public class Option {
     private final String type;
     private final int price;
     
+    public enum Type {
+        topping,
+        bottom
+    }
+    
     public Option(int id, String name, String type, int price) {
         this.id = id;
         this.name = name;

@@ -3,7 +3,6 @@ package domain.order;
 import domain.items.Cake;
 import domain.user.User;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.*;
 

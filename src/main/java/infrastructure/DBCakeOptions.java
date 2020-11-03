@@ -3,6 +3,7 @@ package infrastructure;
 import api.Utils;
 import domain.items.CakeOptions;
 import domain.items.Option;
+import domain.items.OptionExists;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -41,10 +42,10 @@ public class DBCakeOptions {
             try(PreparedStatement s = conn.prepareStatement("SELECT * FROM CakeBottoms;")){
             ResultSet rs = s.executeQuery();
             
-            return loadOptions(rs, "bottom");
+            return loadOptions(rs, Option.Type.bottom.name());
         }
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
         return tmpList;
     }
@@ -59,7 +60,7 @@ public class DBCakeOptions {
             try(PreparedStatement s = conn.prepareStatement("SELECT * FROM CakeToppings;")){
             ResultSet rs = s.executeQuery();
             
-            return loadOptions(rs, "topping");
+            return loadOptions(rs, Option.Type.topping.name());
         }} catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -84,7 +85,7 @@ public class DBCakeOptions {
         int id;
         String table;
     
-        if(option.getType().equalsIgnoreCase("bottom")) {
+        if(option.getType().equalsIgnoreCase(Option.Type.bottom.name())) {
             table = "CakeBottoms";
         } else {
             table = "CakeToppings";
@@ -107,7 +108,7 @@ public class DBCakeOptions {
             if (rs.next()) {
                 id = rs.getInt(1);
             } else {
-                throw new Exception("Eksisterer allerde");
+                throw new OptionExists("Eksisterer allerede!");
             }
                 return new Option(id,option.getName(),option.getType(),option.getPrice());
         }} catch (Exception e) {
@@ -127,7 +128,7 @@ public class DBCakeOptions {
         String table;
         boolean returnVal = false;
     
-        if(type.equalsIgnoreCase("bottom")) {
+        if(type.equalsIgnoreCase(Option.Type.bottom.name())) {
             table = "CakeBottoms";
         } else {
             table = "CakeToppings";
@@ -205,14 +206,14 @@ public class DBCakeOptions {
         
             try(PreparedStatement s = conn.prepareStatement(toppingQuery)) {
                 ResultSet toppingRs = s.executeQuery();
-                for (Option o : loadOptions(toppingRs, "topping")) {
+                for (Option o : loadOptions(toppingRs, Option.Type.topping.name())) {
                     cakeOptions.add(new Option(o.getId(), o.getName(), o.getType(), o.getPrice()));
                 }
             }
     
             try(PreparedStatement ps = conn.prepareStatement(bottomQuery)){
             ResultSet bottomRs = ps.executeQuery();
-                for(Option o: loadOptions(bottomRs, "bottom")){
+                for(Option o: loadOptions(bottomRs, Option.Type.bottom.name())){
                     cakeOptions.add(new Option(o.getId(), o.getName(), o.getType(), o.getPrice()));
                 }
             }

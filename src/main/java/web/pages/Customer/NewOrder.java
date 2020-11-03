@@ -38,7 +38,11 @@ public class NewOrder extends BaseServlet {
         
         log(req,"Got: " + tmpOrder);
         
-        render("Order confirmation", "/WEB-INF/v"+api.getVersion()+"/orderconfirmation.jsp", req, resp);
+        try{
+            render("Order confirmation", "/WEB-INF/v"+api.getVersion()+"/orderconfirmation.jsp", req, resp);
+        } catch (ServletException | IOException e){
+            log(e.getMessage());
+        }
         
         clearCart(session);
         
@@ -49,14 +53,17 @@ public class NewOrder extends BaseServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        resp.sendError(400,"No order sent");
+            throws IOException {
+        try {
+            resp.sendError(400, "No order sent");
+        } catch (IOException e){
+            log(e.getMessage());
+        }
     }
     
     /**
      * Clears the session cart.
      * @param session Current HttpSession
-     * @param req Current HttpServletRequest
      * @see api.Cupcake
      */
     private void clearCart(HttpSession session){
