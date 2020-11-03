@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SonarLintProjectSettings">
+    <option name="fileExclusions">
+      <list>
+        <option value="DIRECTORY:sqlFiles" />
+        <option value="DIRECTORY:Documentation" />
+        <option value="DIRECTORY:.idea" />
+        <option value="DIRECTORY:src/main/webapp/assets" />
+        <option value="DIRECTORY:src/main/webapp/images" />
+        <option value="DIRECTORY:src/main/webapp/META-INF" />
+      </list>
+    </option>
+  </component>
+</project>

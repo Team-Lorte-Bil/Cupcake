@@ -40,7 +40,7 @@ public class NewOrder extends BaseServlet {
         
         render("Order confirmation", "/WEB-INF/v"+api.getVersion()+"/orderconfirmation.jsp", req, resp);
         
-        clearCart(session,req);
+        clearCart(session);
         
     }
     
@@ -59,7 +59,7 @@ public class NewOrder extends BaseServlet {
      * @param req Current HttpServletRequest
      * @see api.Cupcake
      */
-    private void clearCart(HttpSession session, HttpServletRequest req){
+    private void clearCart(HttpSession session){
         api.clearCart();
         session.setAttribute("cart", api.getCart());
     }

@@ -30,7 +30,11 @@ public class Cart extends BaseServlet {
                 addToCart(req,session);
                 break;
             case "remove":
-                removeFromCart(req,resp,session);
+                try {
+                    removeFromCart(req, resp, session);
+                } catch (IOException e){
+                    resp.sendError(400, e.getMessage());
+                }
                 break;
             default:
                 log(req,"default reached");
