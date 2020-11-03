@@ -33,20 +33,16 @@ public class User {
     private final String email;
     private final String name;
     private final int phoneno;
-    private final byte[] salt;
-    private final byte[] secret;
     private final Enum<Role> role;
     private final Timestamp createdAt;
     private double accountBalance;
     
     
-    public User(int id, String email, String name, int phoneno, byte[] salt, byte[] secret, Enum<Role> role, Timestamp createdAt, double accountBalance) {
+    public User(int id, String email, String name, int phoneno, Enum<Role> role, Timestamp createdAt, double accountBalance) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.phoneno = phoneno;
-        this.salt = salt;
-        this.secret = secret;
         this.role = role;
         this.createdAt = createdAt;
         this.accountBalance = accountBalance;

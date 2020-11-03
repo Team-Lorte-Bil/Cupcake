@@ -6,7 +6,7 @@ import domain.order.Order;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cart {
+public class Cart{
     private Cake lastAddedCake;
     private int cartValue;
     private List<Order.Item> cakes;

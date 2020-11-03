@@ -28,7 +28,7 @@ public class Database {
        }
     }
     
-    public static int getCurrentVersion() {
+    public int getCurrentVersion() {
         try (Connection conn = getConnection()) {
             Statement s = conn.createStatement();
             ResultSet rs = s.executeQuery("SELECT value FROM properties WHERE name = 'version';");
@@ -45,7 +45,7 @@ public class Database {
         }
     }
     
-    public static Connection getConnection() throws SQLException {
+    public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DB_URL, USER, PASS);
         
     }

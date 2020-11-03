@@ -3,6 +3,7 @@ package infrastructure;
 import api.Utils;
 import domain.user.*;
 
+import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,7 +11,10 @@ import java.util.List;
 
 public class DBUser implements UserRepository {
     
-    public DBUser() {
+    private final Database db;
+    
+    public DBUser(Database db) {
+        this.db = db;
     }
     
     /**
@@ -34,7 +38,7 @@ public class DBUser implements UserRepository {
      *
      * @throws InvalidPassword If password is wrong or user does not exist.
      */
-    @SuppressWarnings("DuplicatedCode")
+
     public User checkLogin(String usrEmail, String usrPassword) throws InvalidPassword {
         User tmpUser;
         
@@ -42,7 +46,7 @@ public class DBUser implements UserRepository {
         usrPassword = Utils.encodeHtml(usrPassword);
     
         
-        try (Connection conn = Database.getConnection()) {
+        try (Connection conn = db.getConnection()) {
             try(PreparedStatement ps = conn.prepareStatement("SELECT * FROM Users WHERE email=?;")) {
             
             
@@ -51,25 +55,16 @@ public class DBUser implements UserRepository {
             ResultSet rs = ps.executeQuery();
             
             if(rs.next()) {
-                int id = rs.getInt(1);
-                String email = rs.getString(2);
-                String name = rs.getString(3);
-                int phoneno = rs.getInt(4);
                 byte[] salt = rs.getBytes(5);
                 byte[] secret = rs.getBytes(6);
-                Enum<User.Role> role = User.Role.valueOf(rs.getString(7));
-                Timestamp createdAt = rs.getTimestamp(8);
-                double accountBalance = rs.getDouble(9);
                 byte[] providedSecret = User.calculateSecret(salt, usrPassword);
-                
                 
                 if(! Arrays.equals(providedSecret, secret)){
                     throw new InvalidPassword("Forkert kode! Prøv igen.");
                 }
-    
-                tmpUser = new User(id,email,name,phoneno,salt,secret,role,createdAt,accountBalance);
                 
-                return tmpUser;
+
+                return loadUser(rs);
             } else {
                 throw new InvalidPassword("Brugeren eksisterer ikke!");
             }
@@ -83,7 +78,7 @@ public class DBUser implements UserRepository {
      * @param userId User ID
      */
     public void deleteUser(int userId) {
-        try (Connection conn = Database.getConnection()) {
+        try (Connection conn = db.getConnection()) {
             
             try(PreparedStatement ps = conn.prepareStatement("DELETE FROM Users WHERE id = ?;")){
             
@@ -91,7 +86,7 @@ public class DBUser implements UserRepository {
             ps.executeUpdate();
     
             ps.getUpdateCount();
-        }} catch (Exception e) {
+        }} catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
@@ -102,7 +97,7 @@ public class DBUser implements UserRepository {
      * @param newBalance Account balance to be set
      */
     public void changeBalance(int userId, double newBalance) {
-        try (Connection conn = Database.getConnection()) {
+        try (Connection conn = db.getConnection()) {
         
             try(PreparedStatement ps = conn.prepareStatement("UPDATE Users SET Cupcake.Users.accountBalance=? WHERE id=?")){
         
@@ -129,7 +124,7 @@ public class DBUser implements UserRepository {
     public User findUser(int id) throws UserNotFound {
         User tmpUser;
     
-        try (Connection conn = Database.getConnection()) {
+        try (Connection conn = db.getConnection()) {
             try(PreparedStatement ps = conn.prepareStatement("SELECT * FROM Users WHERE id=?;")){
             ps.setInt(1,id);
         
@@ -146,7 +141,7 @@ public class DBUser implements UserRepository {
                 Timestamp createdAt = rs.getTimestamp(8);
                 double accountBalance = rs.getDouble(9);
             
-                tmpUser = new User(foundId,email,name,phoneno,salt,secret,role,createdAt,accountBalance);
+                tmpUser = new User(foundId,email,name,phoneno,role,createdAt,accountBalance);
             
                 return tmpUser;
             }
@@ -163,30 +158,44 @@ public class DBUser implements UserRepository {
     @SuppressWarnings("DuplicatedCode")
     @Override
     public Iterable<User> findAllUsers() {
-        try (Connection conn = Database.getConnection()) {
+        try (Connection conn = db.getConnection()) {
             try(PreparedStatement s = conn.prepareStatement("SELECT * FROM Users;")){
                 ResultSet rs = s.executeQuery();
                 List<User> tmpList = new ArrayList<>();
             
                 while(rs.next()) {
-                    int id = rs.getInt(1);
-                    String email = rs.getString(2);
-                    String name = rs.getString(3);
-                    int phoneno = rs.getInt(4);
-                    byte[] salt = rs.getBytes(5);
-                    byte[] secret = rs.getBytes(6);
-                    Enum<User.Role> role = User.Role.valueOf(rs.getString(7));
-                    Timestamp createdAt = rs.getTimestamp(8);
-                    double accountBalance = rs.getDouble(9);
-                
-                    User tmpUser = new User(id,email,name,phoneno,salt,secret,role,createdAt,accountBalance);
-                
-                    tmpList.add(tmpUser);
+                    tmpList.add(loadUser(rs));
                 }
+                
                 return tmpList;
             }} catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+    
+    /*
+    `id` int NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) COLLATE utf8_danish_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8_danish_ci NOT NULL,
+  `phoneno` int NOT NULL,
+  `salt` blob NOT NULL,
+  `secret` blob NOT NULL,
+  `role` enum('User','Admin') COLLATE utf8_danish_ci NOT NULL,
+  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `accountBalance` double(255,0) NOT NULL,
+    
+     */
+    
+    private User loadUser(ResultSet rs) throws SQLException {
+        int id = rs.getInt("Users.id");
+        String email = rs.getString(2);
+        String name = rs.getString(3);
+        int phoneno = rs.getInt(4);
+        Enum<User.Role> role = User.Role.valueOf(rs.getString(7));
+        Timestamp createdAt = rs.getTimestamp(8);
+        double accountBalance = rs.getDouble(9);
+    
+        return new User(id,email,name,phoneno,role,createdAt,accountBalance);
     }
     
     /**
@@ -220,7 +229,7 @@ public class DBUser implements UserRepository {
         byte[] userSecret = User.calculateSecret(userSalt, password);
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
     
-        try (Connection conn = Database.getConnection()) {
+        try (Connection conn = db.getConnection()) {
             String sql = "INSERT INTO Users (email, name, phoneno, salt, secret, role, accountBalance, createdAt) " +
                     "VALUE (?,?,?,?,?,?,?,?);";
         
@@ -242,7 +251,7 @@ public class DBUser implements UserRepository {
                     id = rs.getInt(1);
                     System.out.println(timestamp);
                     return new User(id, email,name,  phoneno,
-                            userSalt, userSecret, User.Role.valueOf(role),
+                            User.Role.valueOf(role),
                             timestamp,
                             accountBalance);
                 } else {

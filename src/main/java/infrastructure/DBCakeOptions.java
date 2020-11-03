@@ -1,5 +1,6 @@
 package infrastructure;
 
+import api.Cupcake;
 import api.Utils;
 import domain.items.CakeOptions;
 import domain.items.Option;
@@ -8,10 +9,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("SyntaxError")
 public class DBCakeOptions {
     
-    public DBCakeOptions() {
+    private final Database db;
+    
+    public DBCakeOptions(Database db) {
+    this.db = db;
     }
     
     /**
@@ -19,10 +22,10 @@ public class DBCakeOptions {
      * @see Option
      */
     private List<Option> getAllCakeBottoms(){
-        try (Connection conn = Database.getConnection()) {
+        List<Option> tmpList = new ArrayList<>();
+        try (Connection conn = db.getConnection()) {
             try(PreparedStatement s = conn.prepareStatement("SELECT * FROM CakeBottoms;")){
             ResultSet rs = s.executeQuery();
-            List<Option> tmpList = new ArrayList<>();
             
             while(rs.next()) {
                 String name = rs.getString("name");
@@ -32,11 +35,11 @@ public class DBCakeOptions {
                 
                 tmpList.add(new Option(0,name, "bottom", price));
             }
-            return tmpList;
-        }} catch (SQLException e) {
-            throw new RuntimeException(e);
         }
-        
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return tmpList;
     }
     
     /**
@@ -44,10 +47,10 @@ public class DBCakeOptions {
      * @see Option
      */
     private List<Option> getAllCakeToppings(){
-        try (Connection conn = Database.getConnection()) {
+        List<Option> tmpList = new ArrayList<>();
+        try (Connection conn = db.getConnection()) {
             try(PreparedStatement s = conn.prepareStatement("SELECT * FROM CakeToppings;")){
             ResultSet rs = s.executeQuery();
-            List<Option> tmpList = new ArrayList<>();
             
             while(rs.next()) {
                 String name = rs.getString("name");
@@ -57,11 +60,10 @@ public class DBCakeOptions {
                 
                 tmpList.add(new Option(0,name, "topping", price));
             }
-            return tmpList;
         }} catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
         }
-        
+        return tmpList;
     }
     
     /**
@@ -80,7 +82,7 @@ public class DBCakeOptions {
      */
     public Option createCakeOption(Option option) {
         int id;
-        String table = "";
+        String table;
     
         if(option.getType().equalsIgnoreCase("bottom")) {
             table = "CakeBottoms";
@@ -91,7 +93,7 @@ public class DBCakeOptions {
         
         String sql = "INSERT INTO " + table + " (name, price) VALUE (?,?);";
         
-        try (Connection conn = Database.getConnection()) {
+        try (Connection conn = db.getConnection()) {
             
             try(PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
             
@@ -107,10 +109,11 @@ public class DBCakeOptions {
             } else {
                 throw new Exception("Eksisterer allerde");
             }
+                return new Option(id,option.getName(),option.getType(),option.getPrice());
         }} catch (Exception e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
         }
-        return new Option(id,option.getName(),option.getType(),option.getPrice());
+        return null;
     }
     
     /**
@@ -121,7 +124,8 @@ public class DBCakeOptions {
      * @return true if deleted
      */
     public boolean deleteCakeOption(int id, String type) {
-        String table = "";
+        String table;
+        boolean returnVal = false;
     
         if(type.equalsIgnoreCase("bottom")) {
             table = "CakeBottoms";
@@ -132,17 +136,18 @@ public class DBCakeOptions {
     
         String sql = "DELETE FROM " + table + " WHERE id = ?;";
         
-        try (Connection conn = Database.getConnection()) {
+        try (Connection conn = db.getConnection()) {
             try(PreparedStatement ps = conn.prepareStatement(sql)){
             
             ps.setInt(1, id);
             ps.executeUpdate();
     
-            return ps.getUpdateCount() == 1;
+            returnVal = ps.getUpdateCount() == 1;
             
         }} catch (Exception e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
         }
+        return returnVal;
     }
     
     
@@ -152,19 +157,17 @@ public class DBCakeOptions {
      */
     public int getToppingIdFromName(String topping) {
         topping = Utils.encodeHtml(topping);
-        try(Connection conn = Database.getConnection()){
+        try(Connection conn = db.getConnection()){
             String sqlQuery = "SELECT id FROM CakeToppings WHERE name=?";
             
             try(PreparedStatement s = conn.prepareStatement(sqlQuery)){
             s.setString(1,topping);
             ResultSet rs = s.executeQuery();
             
-            if(rs.next()){
-                return rs.getInt(1);
-            }
+            if(rs.next()) return rs.getInt(1);
             
         }} catch (SQLException e){
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
         }
         return 0;
     }
@@ -175,7 +178,7 @@ public class DBCakeOptions {
      */
     public int getBottomIdFromName(String bottom) {
         bottom = Utils.encodeHtml(bottom);
-        try(Connection conn = Database.getConnection()){
+        try(Connection conn = db.getConnection()){
             String sqlQuery = "SELECT id FROM CakeBottoms WHERE name=?";
             
             try(PreparedStatement s = conn.prepareStatement(sqlQuery)){
@@ -185,7 +188,7 @@ public class DBCakeOptions {
             if(rs.next()) return rs.getInt(1);
             
         }} catch (SQLException e){
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
         }
         return 0;
     }
@@ -196,7 +199,7 @@ public class DBCakeOptions {
      */
     public List<Option> getAllCakeOptions() {
         List<Option> cakeOptions = new ArrayList<>();
-        try(Connection conn = Database.getConnection()){
+        try(Connection conn = db.getConnection()){
             String toppingQuery = "SELECT * FROM CakeToppings;";
             String bottomQuery = "SELECT * FROM CakeBottoms;";
         
@@ -225,12 +228,12 @@ public class DBCakeOptions {
                 Option option = new Option(id, name, type, price);
                 cakeOptions.add(option);
             }
-            
-            return cakeOptions;
         
-        }}} catch (SQLException e){
-            throw new RuntimeException(e);
+            }
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
         }
-        
+        return cakeOptions;
     }
 }

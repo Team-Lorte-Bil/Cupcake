@@ -1,7 +1,6 @@
 package web.pages;
 
 import api.Cupcake;
-import infrastructure.Database;
 import web.widgets.Navbar;
 
 import javax.servlet.ServletException;
@@ -20,7 +19,6 @@ public class BaseServlet extends HttpServlet {
     }
     
     private static Cupcake createApplication() {
-        new Database();
         return new Cupcake();
     }
     

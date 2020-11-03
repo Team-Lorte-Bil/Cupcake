@@ -7,6 +7,7 @@ import infrastructure.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import java.util.logging.Logger;
 
 public class Cupcake {
     private static final int VERSION = 2; //Either 1 or 2 is valid.
@@ -19,9 +20,10 @@ public class Cupcake {
     
     
     public Cupcake() {
-        dbOptions = new DBCakeOptions();
-        dbUser = new DBUser();
-        dbOrder = new DBOrder();
+        var db = new Database();
+        dbOptions = new DBCakeOptions(db);
+        dbUser = new DBUser(db);
+        dbOrder = new DBOrder(db, dbOptions, dbUser);
         
         cart = new Cart();
         cakeOptions = dbOptions.findAllCakeOptions();
@@ -107,14 +109,6 @@ public class Cupcake {
         return cart.getCartValue();
     }
     
-    
-    /**
-     * @return List of Orders from Database
-     * @see Order
-     */
-    public List<Order> getOrders() {
-        return dbOrder.getAllOrders();
-    }
     
     /**
      * @return List of Orders from Database sorted by ID

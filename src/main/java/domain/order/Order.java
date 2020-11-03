@@ -3,6 +3,7 @@ package domain.order;
 import domain.items.Cake;
 import domain.user.User;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -85,7 +86,7 @@ public class Order {
         cakes.add(new Item(cake, amount));
     }
     
-    public static class Item{
+    public static class Item {
         private final Cake cake;
         private int amount;
     

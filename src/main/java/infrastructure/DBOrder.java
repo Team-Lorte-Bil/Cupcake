@@ -14,40 +14,14 @@ import java.util.*;
 public class DBOrder implements OrderRepository {
     
     
-    public DBOrder() {
-    }
+    private final DBCakeOptions dbCakeOptions;
+    private final DBUser dbUser;
+    private final Database db;
     
-    /**
-     * @query SELECT * FROM Orders
-     * @return List of all orders in Database
-     * @see Order
-     */
-    @SuppressWarnings("DuplicatedCode")
-    public List<Order> getAllOrders() {
-        try (Connection conn = Database.getConnection()) {
-            try(PreparedStatement s = conn.prepareStatement("SELECT * FROM Orders;")){
-            ResultSet rs = s.executeQuery();
-            List<Order> tmpList = new ArrayList<>();
-            
-            while (rs.next()) {
-                int id = rs.getInt(1);
-                int userId = rs.getInt(2);
-                String comment = rs.getString(3);
-                Timestamp timestamp = rs.getTimestamp(4);
-                boolean paid = rs.getBoolean(5);
-                boolean completed = rs.getBoolean(6);
-                
-                User tmpUsr = new DBUser().findUser(userId);
-                Order tmpOrder = new Order(id, tmpUsr, comment, timestamp, paid, completed, getCakesOnOrder(id));
-                
-                System.out.println("Cakes added: " + tmpOrder.getCakes());
-                
-                tmpList.add(tmpOrder);
-            }
-            return tmpList;
-        }} catch (SQLException | UserNotFound e) {
-            throw new RuntimeException(e);
-        }
+    public DBOrder(Database db, DBCakeOptions dbCakeOptions, DBUser dbUser) {
+        this.db = db;
+        this.dbCakeOptions = dbCakeOptions;
+        this.dbUser = dbUser;
     }
     
     /**
@@ -58,7 +32,7 @@ public class DBOrder implements OrderRepository {
     public List<Order.Item> getCakesOnOrder(int orderId) {
         List<Order.Item> cakeList = new ArrayList<>();
         
-        try (Connection conn = Database.getConnection()) {
+        try (Connection conn = db.getConnection()) {
             String sqlQuery = "SELECT CakesOnOrder.orderId, Cupcake.CakesOnOrder.quantity, \n" +
                     "CakeBottoms.`name` as \"bottomName\", CakeBottoms.price as \"bottomPrice\",\n" +
                     "CakeToppings.`name` as \"toppingName\", CakeToppings.price as \"toppingPrice\"\n" +
@@ -112,7 +86,7 @@ public class DBOrder implements OrderRepository {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         
         
-        try (Connection conn = Database.getConnection()) {
+        try (Connection conn = db.getConnection()) {
             String sql = "INSERT INTO Orders (userId, comment, createdAt, paid, completed) " +
                     "VALUE (?,?,?,?,?);";
             
@@ -154,15 +128,15 @@ public class DBOrder implements OrderRepository {
      */
     public void createCakesOnOrder(int orderId, List<Order.Item> cakes) {
         for (Order.Item c : cakes) {
-            try (Connection conn = Database.getConnection()) {
+            try (Connection conn = db.getConnection()) {
                 
                 String sql = "INSERT INTO CakesOnOrder (orderId, bottomId, toppingId, quantity) VALUE (?,?,?,?);";
                 
                 
                 try (var ps = conn.prepareStatement(sql)) {
                     
-                    int cakeToppingId = new DBCakeOptions().getToppingIdFromName(c.getCake().getTopping());
-                    int cakeBottomId = new DBCakeOptions().getBottomIdFromName(c.getCake().getBottom());
+                    int cakeToppingId = dbCakeOptions.getToppingIdFromName(c.getCake().getTopping());
+                    int cakeBottomId = dbCakeOptions.getBottomIdFromName(c.getCake().getBottom());
                     
                     System.out.println("Trying to insert cake...");
                     System.out.println("orderID: " + orderId);
@@ -190,7 +164,7 @@ public class DBOrder implements OrderRepository {
      * @query DELETE FROM Orders WHERE ID=orderId
      */
     public void deleteOrder(int orderId) {
-        try (Connection conn = Database.getConnection()) {
+        try (Connection conn = db.getConnection()) {
             
             try(PreparedStatement ps = conn.prepareStatement("DELETE FROM Orders WHERE id=?;")){
             ps.setInt(1, orderId);
@@ -206,7 +180,7 @@ public class DBOrder implements OrderRepository {
      * @param orderId Order ID
      */
     public void markDone(int orderId) {
-        try (Connection conn = Database.getConnection()) {
+        try (Connection conn = db.getConnection()) {
             try(PreparedStatement ps = conn.prepareStatement("UPDATE Orders SET completed=1, paid = 1 WHERE id=?;")){
             
             ps.setInt(1, orderId);
@@ -226,7 +200,7 @@ public class DBOrder implements OrderRepository {
     @SuppressWarnings("DuplicatedCode")
     public List<Order> getAllOrdersSorted() {
         List<Order> tmpList = new LinkedList<>();
-        try (Connection conn = Database.getConnection()) {
+        try (Connection conn = db.getConnection()) {
             try (PreparedStatement s = conn.prepareStatement("SELECT * FROM Orders ORDER BY id DESC;")){
             ResultSet rs = s.executeQuery();
             
@@ -239,7 +213,7 @@ public class DBOrder implements OrderRepository {
                 boolean paid = rs.getBoolean(5);
                 boolean completed = rs.getBoolean(6);
                 
-                User tmpUsr = new DBUser().findUser(userId);
+                User tmpUsr = dbUser.findUser(userId);
                 Order tmpOrder = new Order(id, tmpUsr, comment, timestamp, paid, completed, getCakesOnOrder(id));
                 
                 String sql = "SELECT\n" +
