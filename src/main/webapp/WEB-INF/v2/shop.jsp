@@ -10,6 +10,7 @@
                     <input type="hidden" name="action" value="add">
 
                     <div class="form-group"><label>Vælg bund:</label>
+<%--suppress HtmlFormInputWithoutLabel --%>
                         <select name="bund" id="bund">
                             <c:forEach items="${requestScope.bottoms}" var="bottom">
                                 <option value="${bottom.name}">${bottom.name} - ${bottom.price}kr</option>
@@ -17,6 +18,7 @@
                         </select>
                     </div>
                     <div class="form-group"><label>Vælg topping:</label>
+<%--suppress HtmlFormInputWithoutLabel --%>
                         <select name="topping" id="topping">
                             <c:forEach items="${requestScope.toppings}" var="topping">
                                 <option value="${topping.name}">${topping.name} - ${topping.price}kr</option>
@@ -25,6 +27,7 @@
                     </div>
                     <div class="form-group"><label>Vælg antal:</label>
 
+<%--suppress HtmlFormInputWithoutLabel --%>
                         <select name="antal" id="antal">
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -55,7 +58,7 @@
     </div>
 </section>
 <section class="page-section about-heading">
-    <div class="container"><img class="img-fluid rounded about-heading-img mb-3 mb-lg-0" src="assets/img/bornholm.jpg">
+    <div class="container"><img class="img-fluid rounded about-heading-img mb-3 mb-lg-0" src="assets/img/bornholm.jpg" alt="billede af bornholm">
         <div class="about-heading-content">
             <div class="row">
                 <div class="col-lg-10 col-xl-9 mx-auto">

@@ -22,6 +22,7 @@ public class DBOrder implements OrderRepository {
      * @return List of all orders in Database
      * @see Order
      */
+    @SuppressWarnings("DuplicatedCode")
     public List<Order> getAllOrders() {
         try (Connection conn = Database.getConnection()) {
             try(PreparedStatement s = conn.prepareStatement("SELECT * FROM Orders;")){
@@ -222,6 +223,7 @@ public class DBOrder implements OrderRepository {
      * @return A sorted list by ID decending.
      * @see Order
      */
+    @SuppressWarnings("DuplicatedCode")
     public List<Order> getAllOrdersSorted() {
         List<Order> tmpList = new LinkedList<>();
         try (Connection conn = Database.getConnection()) {

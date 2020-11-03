@@ -2,7 +2,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <section class="page-section clearfix">
     <div class="container">
-        <div class="intro"><img class="img-fluid intro-img mb-3 mb-lg-0 rounded" src="assets/img/5007403719_2e10472c75_b.jpg">
+        <div class="intro"><img class="img-fluid intro-img mb-3 mb-lg-0 rounded" src="assets/img/5007403719_2e10472c75_b.jpg" alt="billede af kager">
             <div class="intro-text left-0 text-centerfaded p-5 rounded bg-faded text-center">
                 <h2 class="section-heading mb-4"><span class="section-heading-upper">Vi OLSKER</span><span class="section-heading-lower">Cupcakes</span></h2>
                 <p class="mb-3">Alle vores cupcakes er bagt med lune hænder og hjemmelavet biodynamisk glasur.</p>

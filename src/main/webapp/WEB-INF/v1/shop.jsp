@@ -17,7 +17,8 @@
     <label for="Bund">Bunde:</label>
 
 
-    <select name="bund" id="bund">
+<%--suppress HtmlFormInputWithoutLabel --%>
+            <select name="bund" id="bund">
         <c:forEach items="${requestScope.bottoms}" var="bottom">
             <option value="${bottom.name}">${bottom.name} - ${bottom.price}kr</option>
         </c:forEach>
@@ -26,7 +27,8 @@
     <br/> <br/>
     <label for="Topping">Topping:</label>
 
-    <select name="topping" id="topping">
+<%--suppress HtmlFormInputWithoutLabel --%>
+            <select name="topping" id="topping">
         <c:forEach items="${requestScope.toppings}" var="topping">
             <option value="${topping.name}">${topping.name} - ${topping.price}kr</option>
         </c:forEach>
@@ -36,7 +38,8 @@
 
     <label for="Antal">Antal:</label>
 
-    <select name="antal" id="antal">
+<%--suppress HtmlFormInputWithoutLabel --%>
+            <select name="antal" id="antal">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>

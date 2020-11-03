@@ -34,6 +34,7 @@ public class DBUser implements UserRepository {
      *
      * @throws InvalidPassword If password is wrong or user does not exist.
      */
+    @SuppressWarnings("DuplicatedCode")
     public User checkLogin(String usrEmail, String usrPassword) throws InvalidPassword {
         User tmpUser;
         
@@ -123,6 +124,7 @@ public class DBUser implements UserRepository {
      *
      * @throws UserNotFound If user is not found in Database
      */
+    @SuppressWarnings("DuplicatedCode")
     @Override
     public User findUser(int id) throws UserNotFound {
         User tmpUser;
@@ -158,6 +160,7 @@ public class DBUser implements UserRepository {
      * @query SELECT * FROM Users
      * @return Iterable of Users
      */
+    @SuppressWarnings("DuplicatedCode")
     @Override
     public Iterable<User> findAllUsers() {
         try (Connection conn = Database.getConnection()) {

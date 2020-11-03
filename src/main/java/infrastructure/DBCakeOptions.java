@@ -8,6 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("SyntaxError")
 public class DBCakeOptions {
     
     public DBCakeOptions() {

@@ -8,6 +8,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.sql.Timestamp;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class User {
     private static final int PASSWORD_ITTERATIONS = 65536;
     private static final int PASSWORD_LENGTH = 256; //32 bytes

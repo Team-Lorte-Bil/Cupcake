@@ -63,6 +63,7 @@
                                     <input type="hidden" name="action" value="changeBalance">
                                     <input type="hidden" name="userId" value="${customer.id}">
                                     <div class="form-group">
+<%--suppress HtmlFormInputWithoutLabel --%>
                                         <input type="number" class="form-control" id="newBalance" name="newBalance" placeholder="Indtast saldo (kr)" value="${customer.accountBalance}">
                                     </div>
 
@@ -94,26 +95,32 @@
                         <div class="modal-body">
                             <input type="hidden" name="action" value="createUser">
                             <div class="form-group">
+<%--suppress HtmlFormInputWithoutLabel --%>
                                 <input type="name" class="form-control" id="inputName" name="inputName" placeholder="Indtast navn...">
                             </div>
 
                             <div class="form-group">
+<%--suppress HtmlFormInputWithoutLabel --%>
                                 <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="Indtast e-mail...">
                             </div>
 
                             <div class="form-group">
+<%--suppress HtmlFormInputWithoutLabel --%>
                                 <input type="tel" class="form-control" id="inputPhone" name="inputPhone" placeholder="Indtast telefon nummer...">
                             </div>
 
                             <div class="form-group">
+<%--suppress HtmlFormInputWithoutLabel --%>
                                 <input type="password" class="form-control" id="inputPsw" name="inputPsw" placeholder="Indtast kodeord...">
                             </div>
 
                             <div class="form-group">
+<%--suppress HtmlFormInputWithoutLabel --%>
                                 <input type="number" class="form-control" id="inputBalance" name="inputBalance" placeholder="Indtast saldo (kr)">
                             </div>
 
                             <div class="form-group">
+<%--suppress HtmlFormInputWithoutLabel --%>
                                 <select class="form-control" id="inputRole" name="inputRole">
                                     <option value="User">Kunde</option>
                                     <option value="Admin">Administrator</option>

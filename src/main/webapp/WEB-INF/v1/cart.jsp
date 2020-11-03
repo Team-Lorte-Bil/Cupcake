@@ -24,6 +24,7 @@
         <c:forEach items="${cakes}" var="cake">
             <tr>
                 <th scope="row">
+<%--suppress HtmlFormInputWithoutLabel --%>
                     <select class="custom-select text-center" disabled>
                         <option selected>${cake.getAmount()}</option>
                         <option value="0">0</option>

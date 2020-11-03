@@ -51,14 +51,17 @@
                     <input type="hidden" name="action" value="createItem">
 
                     <div class="form-group">
-                    <input type="itemname" class="form-control" id="inputItemName" name="inputItemName" placeholder="Indtast navn på din nye bund/top">
+<%--suppress HtmlFormInputWithoutLabel --%>
+                        <input type="itemname" class="form-control" id="inputItemName" name="inputItemName" placeholder="Indtast navn på din nye bund/top">
                     </div>
 
                     <div class="form-group">
+<%--suppress HtmlFormInputWithoutLabel --%>
                         <input type="price" class="form-control" id="inputPrice" name="inputPrice" placeholder="Indtast Pris på varen">
                     </div>
 
                     <div class="form-group">
+<%--suppress HtmlFormInputWithoutLabel --%>
                         <select class="form-control" type="inputRole" name="inputType" >
                             <option value="bottom">Bund</option>
                             <option value="topping">Top</option>
