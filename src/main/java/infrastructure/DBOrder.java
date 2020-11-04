@@ -33,7 +33,7 @@ public class DBOrder implements OrderRepository {
         List<Order.Item> cakeList = new ArrayList<>();
         
         try (Connection conn = db.getConnection()) {
-            String sqlQuery = "SELECT CakesOnOrder.orderId, Cupcake.CakesOnOrder.quantity, \n" +
+            String sqlQuery = "SELECT CakesOnOrder.orderId, CakesOnOrder.quantity, \n" +
                     "CakeBottoms.`name` as \"bottomName\", CakeBottoms.price as \"bottomPrice\",\n" +
                     "CakeToppings.`name` as \"toppingName\", CakeToppings.price as \"toppingPrice\"\n" +
                     "FROM CakesOnOrder\n" +

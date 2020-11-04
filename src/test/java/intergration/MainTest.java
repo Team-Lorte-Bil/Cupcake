@@ -7,6 +7,7 @@ import domain.order.NoOrderExists;
 import domain.order.Order;
 import domain.user.InvalidPassword;
 import domain.user.User;
+import domain.user.UserExists;
 import infrastructure.Database;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,8 +21,6 @@ import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,23 +29,14 @@ public class MainTest {
 
     Cupcake api;
     
-    /*
-     * Before you run this script create a user 'cupcaketest' and grant access to the database:
-     *
-     * <pre>
-     * DROP USER IF EXISTS cupcaketest@localhost;
-     * CREATE USER cupcaketest@localhost;
-     * GRANT ALL PRIVILEGES ON cupcaketest.* TO cupcaketest@localhost;
-     * </pre>
-     */
-    
     static void resetTestDatabase() {
         String URL = "jdbc:mysql://localhost:3306/?serverTimezone=CET";
         String USER = "cupcaketest";
+        String PASS = "test123";
         
         InputStream stream = MainTest.class.getClassLoader().getResourceAsStream("init.sql");
         if (stream == null) throw new RuntimeException("init.sql");
-        try (Connection conn = DriverManager.getConnection(URL, USER, null)) {
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASS)) {
             conn.setAutoCommit(false);
             ScriptRunner runner = new ScriptRunner(conn);
             runner.setStopOnError(true);
@@ -60,28 +50,33 @@ public class MainTest {
     
     @BeforeEach
     void setupAPI() {
-//        resetTestDatabase();
-//
-//        String url = "jdbc:mysql://localhost:3306/cupcaketest?serverTimezone=CET";
-//        String user = "cupcaketest";
-//        String pass = null;
-//
-//        Database db = new Database(url, user, pass);
-//        db.runMigrations();
+        resetTestDatabase();
+
+        String url = "jdbc:mysql://localhost:3306/cupcaketest?serverTimezone=CET";
+        String user = "cupcaketest";
+        String pass = "test123";
+
+        Database db = new Database(url, user, pass);
         
-        api = new Cupcake();
+        api = new Cupcake(db);
     }
     
     /**
      * <b>Som</b> kunde kan jeg bestille og betale cupcakes med en valgfri bund og top
      * <b>sådan at</b> jeg senere kan køre forbi butikken i Olsker og hente min ordre.
      */
-    @Test
     
-    void userStory1() throws ValidationException, NoOrderExists, InvalidPassword {
+    @Test
+    void userStory1() throws ValidationException, NoOrderExists, InvalidPassword, UserExists {
         
-        User currentUser = api.checkLogin("user@user.dk", "admin");
+        //Create new user and login
+        User newUser = api.createNewUser("Test user", "test123", "test@user.ru", 12345678, 500, "User");
+        User currentUser = api.checkLogin("test@user.ru", "test123");
         
+        //Test if user ID is same
+        assertEquals(newUser.getId(), currentUser.getId());
+        
+        //Cakes to put in cart
         Option bottom = api.getCakeOptions().getBottoms().get(2);
         Option topping = api.getCakeOptions().getToppings().get(1);
         Cake cakeOne = new Cake(bottom.getName(), topping.getName(), bottom.getPrice() + topping.getPrice());
@@ -90,18 +85,25 @@ public class MainTest {
         topping = api.getCakeOptions().getToppings().get(1);
         Cake cakeTwo = new Cake(bottom.getName(), topping.getName(), bottom.getPrice() + topping.getPrice());
         
+        //Add cakes to cart
         api.addCake(cakeOne, 5); // 50kr
         api.addCake(cakeTwo, 3); // 30kr
     
+        //Test that cart value is same
         assertEquals(83, api.getCartValue());
         
+        //Create new order and get it back from DB to test
         Order expectedOrder = api.createNewOrder(currentUser, api.getCart().getCakes(), "Integration test order");
         Order actualOrder = api.getOrderById(expectedOrder.getOrderId());
         
+        //Test that created and pulled order has same ID and user ID
         assertEquals(expectedOrder.getUser().getId(), actualOrder.getUser().getId());
         assertEquals(expectedOrder.getOrderId(), actualOrder.getOrderId());
         
+        //Clear the cart
         api.clearCart();
+        
+        //Test that cart value is 0 after clearing
         assertEquals(0, api.getCartValue());
         
     }
