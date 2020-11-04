@@ -10,7 +10,6 @@ import java.util.*;
 
 public class Cupcake {
     private static final int VERSION = 2; //Either 1 or 2 is valid.
-    private final Cart cart;
     private CakeOptions cakeOptions;
     
     private final DBCakeOptions dbOptions;
@@ -23,8 +22,6 @@ public class Cupcake {
         dbOptions = new DBCakeOptions(db);
         dbUser = new DBUser(db);
         dbOrder = new DBOrder(db, dbOptions, dbUser);
-        
-        cart = new Cart();
         cakeOptions = dbOptions.findAllCakeOptions();
         
     }
@@ -33,8 +30,6 @@ public class Cupcake {
         dbOptions = new DBCakeOptions(db);
         dbUser = new DBUser(db);
         dbOrder = new DBOrder(db, dbOptions, dbUser);
-    
-        cart = new Cart();
         cakeOptions = dbOptions.findAllCakeOptions();
     }
     
@@ -66,55 +61,6 @@ public class Cupcake {
     public CakeOptions getCakeOptions() {
         cakeOptions = dbOptions.findAllCakeOptions();
         return cakeOptions;
-    }
-    
-    /**
-     * @return List of cakes in Cart
-     * @see Cart
-     */
-    public List<Order.Item> getCakes() {
-        return cart.getCakes();
-    }
-    
-    
-    /**
-     * @param cake Cake to be added
-     * @param amount Amount of cakes to be added
-     */
-    public void addCake(Cake cake, int amount){
-        cart.addItemToCart(cake, amount);
-    }
-    
-    /**
-     * @return Cart object
-     */
-    public Cart getCart() {
-        return cart;
-    }
-    
-    /**
-     * @param id Item by ID to be removed from the cart
-     * @see Cart
-     */
-    public void removeFromCart(int id){
-    cart.removeItemFromCart(id);
-    }
-    
-    
-    /**
-     * Resets the Cart
-     * @see Cart
-     */
-    public void clearCart(){
-        cart.clearCart();
-    }
-    
-    
-    /**
-     * Calculates total value of cart.
-     */
-    public int getCartValue(){
-        return cart.getCartValue();
     }
     
     
@@ -245,14 +191,13 @@ public class Cupcake {
      * Creates a new order in the database.
      * If user got avaiable balance, it will be marked as paid.
      * @param curUser Current user object
-     * @param cakes List of cakes to add to the order
      * @param comment If any comment
      * @return created Order object.
      * @see DBOrder
      * @see Order
      */
-    public Order createNewOrder(User curUser, List<Order.Item> cakes, String comment) {
-        double newAccountBalance = curUser.getAccountBalance() - getCartValue();
+    public Order createNewOrder(User curUser, Cart cart, String comment) {
+        double newAccountBalance = curUser.getAccountBalance() - cart.getCartValue();
         boolean paid = false;
     
         if(newAccountBalance >= 0){
@@ -261,7 +206,7 @@ public class Cupcake {
             paid = true;
         }
         
-        return dbOrder.create(curUser,cakes,comment,paid);
+        return dbOrder.create(curUser,cart.getCakes(),comment,paid);
     }
     
     /**
@@ -285,5 +230,9 @@ public class Cupcake {
             }
         }
         return sum;
+    }
+    
+    public Cart createCart() {
+        return new Cart(this);
     }
 }

@@ -1,5 +1,6 @@
 package intergration;
 
+import api.Cart;
 import api.Cupcake;
 import domain.items.Cake;
 import domain.items.Option;
@@ -74,7 +75,10 @@ public class MainTest {
         User currentUser = api.checkLogin("test@user.ru", "test123");
         
         //Test if user ID is same
-        assertEquals(newUser.getId(), currentUser.getId());
+        assertEquals(newUser, currentUser);
+        
+        //Create cart
+        Cart cart = api.createCart();
         
         //Cakes to put in cart
         Option bottom = api.getCakeOptions().getBottoms().get(2);
@@ -86,25 +90,20 @@ public class MainTest {
         Cake cakeTwo = new Cake(bottom.getName(), topping.getName(), bottom.getPrice() + topping.getPrice());
         
         //Add cakes to cart
-        api.addCake(cakeOne, 5); // 50kr
-        api.addCake(cakeTwo, 3); // 30kr
+        cart.addItemToCart(cakeOne, 5); // 50kr
+        cart.addItemToCart(cakeTwo, 3); // 33kr
     
         //Test that cart value is same
-        assertEquals(83, api.getCartValue());
+        assertEquals(83, cart.getCartValue());
         
         //Create new order and get it back from DB to test
-        Order expectedOrder = api.createNewOrder(currentUser, api.getCart().getCakes(), "Integration test order");
+        Order expectedOrder = api.createNewOrder(currentUser, cart, "Integration test order");
         Order actualOrder = api.getOrderById(expectedOrder.getOrderId());
         
         //Test that created and pulled order has same ID and user ID
+        assertEquals(cart.getCartValue(), actualOrder.getPrice());
         assertEquals(expectedOrder.getUser().getId(), actualOrder.getUser().getId());
         assertEquals(expectedOrder.getOrderId(), actualOrder.getOrderId());
-        
-        //Clear the cart
-        api.clearCart();
-        
-        //Test that cart value is 0 after clearing
-        assertEquals(0, api.getCartValue());
         
     }
 

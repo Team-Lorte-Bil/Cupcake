@@ -28,12 +28,11 @@ public class NewOrder extends BaseServlet {
         String comment = req.getParameter("comment");
         
         
-        Order tmpOrder = api.createNewOrder(curUser, api.getCakes(), comment);
+        Order tmpOrder = api.createNewOrder(curUser, getCart(req.getSession()), comment);
         
         
         
         req.setAttribute("order",tmpOrder);
-        req.setAttribute("cart", api.getCart());
         req.setAttribute("currentUser", curUser);
         
         log(req,"Got: " + tmpOrder);
@@ -67,7 +66,6 @@ public class NewOrder extends BaseServlet {
      * @see api.Cupcake
      */
     private void clearCart(HttpSession session){
-        api.clearCart();
-        session.setAttribute("cart", api.getCart());
+        session.setAttribute("cart", null);
     }
 }

@@ -45,4 +45,15 @@ class UserTest {
         //Checks the password with same salt is the same
         assertArrayEquals(secretOne, secretTwo);
     }
+    
+    @Test
+    void testUserEquals(){
+        User userOne = new User(1,"mail", "name", 1234, User.Role.User, null, 0);
+    
+        User userTwo = new User(1,"asasd", "asdasd", 12312322, User.Role.Admin, null, 44444440);
+        
+        assertEquals(userOne, userTwo);
+        assertNotEquals(userOne, new User(2,null,null,123,null,null,12));
+    }
+    
 }

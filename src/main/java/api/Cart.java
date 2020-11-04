@@ -10,18 +10,20 @@ public class Cart{
     private Cake lastAddedCake;
     private int cartValue;
     private List<Order.Item> cakes;
+    private final Cupcake api;
     
     /**
      * Initializes a new empty cart.
      */
-    public Cart() {
+    public Cart(Cupcake api) {
+        this.api = api;
         clearCart();
     }
     
     /**
      * Updates the carts total value
      */
-    protected void updateCartValue(){
+    public void updateCartValue(){
         int sum = 0;
         for(Order.Item item: cakes){
             sum += item.getCake().getPrice() * item.getAmount();
@@ -35,7 +37,7 @@ public class Cart{
      * @see Order.Item
      * @see Cake
      */
-    protected void removeItemFromCart(int id){
+    public void removeItemFromCart(int id){
         for(Order.Item c: cakes){
             if(c.getCake().getId() == id){
                 cakes.remove(c);
@@ -55,7 +57,7 @@ public class Cart{
      * @see Order.Item
      * @see Cake
      */
-    protected void addItemToCart(Cake cake, int amount){
+    public void addItemToCart(Cake cake, int amount){
         List<Order.Item> tmpList = new ArrayList<>(List.copyOf(cakes));
         Order.Item newItem = new Order.Item(cake, amount);
         
@@ -80,7 +82,7 @@ public class Cart{
     /**
      * Resets the Cart
      */
-    protected void clearCart(){
+    public void clearCart(){
         cakes = new ArrayList<>();
         cartValue = 0;
         lastAddedCake = null;
