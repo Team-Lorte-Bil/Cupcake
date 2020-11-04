@@ -109,8 +109,9 @@ public class User {
         try {
             return PASSWORD_FACTORY.generateSecret(spec).getEncoded();
         } catch (InvalidKeySpecException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
         }
+        return new byte[]{};
     }
 
 }
