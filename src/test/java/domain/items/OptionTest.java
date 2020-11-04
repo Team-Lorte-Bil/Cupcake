@@ -14,7 +14,6 @@ class OptionTest {
             assertEquals(option, new Option(1,"chocobot", "topping",6));
             assertNotEquals(option, new Option(2,"chocobot", "topping",6));
 
-
         }
     }
 }
