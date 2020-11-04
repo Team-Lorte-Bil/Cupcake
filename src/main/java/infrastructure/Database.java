@@ -3,56 +3,88 @@ package infrastructure;
 import java.sql.*;
 import java.util.TimeZone;
 
+import org.apache.ibatis.jdbc.ScriptRunner;
+
+import java.io.*;
+import java.sql.*;
+
 public class Database {
-    // JDBC driver name and database URL
-    static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://localhost/Cupcake?serverTimezone=" + TimeZone.getDefault().getID();
-    
-    // Database credentials
-    static final String USER = "cupcake";
-    static final String PASS = "lortebil";
+    private final String URL;
+    private final String USER;
+    private final String PASS;
     
     // Database version
     private static final int version = 1;
     
-    public Database() {
+    public Database(String url, String user, String pass) {
+        this.URL = url == null ? "jdbc:mysql://localhost/Cupcake?serverTimezone=" + TimeZone.getDefault().getID() : url;
+        this.USER = user == null ? "cupcake" : user;
+        this.PASS = pass == null ? "lortebil" : pass;
         try {
-            Class.forName(JDBC_DRIVER);
+            Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        
-        if (getCurrentVersion() != getVersion()) {
-           throw new IllegalStateException("Database in wrong state, expected:"
-                   + getVersion() + ", got: " + getCurrentVersion());
-       }
+    }
+    
+    public Database() {
+        this(null, null, null);
+    }
+    
+    public void runMigrations() {
+        try {
+            int currentVersion = getCurrentVersion();
+            while (currentVersion < version) {
+                System.out.printf("Current DB version %d is smaller than expected %d\n", currentVersion, version);
+                runMigration(currentVersion + 1);
+                int new_version = getCurrentVersion();
+                if (new_version > currentVersion) {
+                    currentVersion = new_version;
+                    System.out.println("Updated database to version: " + new_version);
+                } else {
+                    throw new RuntimeException("Something went wrong, version not increased: " + new_version);
+                }
+            }
+        } catch (SQLException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    private void runMigration(int i) throws IOException, SQLException {
+        String migrationFile = String.format("migrate/%d.sql", i);
+        System.out.println("Running migration: " + migrationFile);
+        InputStream stream = Database.class.getClassLoader().getResourceAsStream(migrationFile);
+        if (stream == null) {
+            System.out.println("Migration file, does not exist: " + migrationFile);
+            throw new FileNotFoundException(migrationFile);
+        }
+        try (Connection conn = getConnection()) {
+            conn.setAutoCommit(false);
+            ScriptRunner runner = new ScriptRunner(conn);
+            runner.setStopOnError(true);
+            runner.runScript(new BufferedReader(new InputStreamReader(stream)));
+            conn.commit();
+        }
+        System.out.println("Done running migration");
     }
     
     public int getCurrentVersion() {
         try (Connection conn = getConnection()) {
             Statement s = conn.createStatement();
             ResultSet rs = s.executeQuery("SELECT value FROM properties WHERE name = 'version';");
-            if(rs.next()) {
+            if (rs.next()) {
                 String column = rs.getString("value");
                 return Integer.parseInt(column);
-            } else {
-                System.err.println("No version in properties.");
-                return -1;
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
-            return -1;
         }
+        return -1;
     }
     
     public Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(DB_URL, USER, PASS);
+        return DriverManager.getConnection(URL, USER, PASS);
         
     }
-    
-    public static int getVersion() {
-        return version;
-    }
-    
     
 }

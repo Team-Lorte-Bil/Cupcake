@@ -59,29 +59,22 @@ public class Cart{
         List<Order.Item> tmpList = new ArrayList<>(List.copyOf(cakes));
         Order.Item newItem = new Order.Item(cake, amount);
         
-        System.out.println("newItem: " + newItem);
-        
         for(Order.Item item: cakes){
-            System.out.println("FOR curItem: " + item);
             if(item.getCake().equals(newItem.getCake())){
-                System.out.println("Same object reached");
                 item.setAmount(item.getAmount() + newItem.getAmount());
             } else {
-                System.out.println("New object added");
                 lastAddedCake = newItem.getCake();
                 tmpList.add(newItem);
             }
         }
         
         if(cakes.isEmpty()){
-            System.out.println("List is empty");
             tmpList.add(newItem);
             lastAddedCake = newItem.getCake();
         }
         
         cakes = tmpList;
         updateCartValue();
-        System.out.println("Add complete: " + this);
     }
     
     /**

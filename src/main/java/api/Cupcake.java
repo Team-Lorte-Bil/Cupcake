@@ -29,6 +29,15 @@ public class Cupcake {
         
     }
     
+    public Cupcake(Database db){
+        dbOptions = new DBCakeOptions(db);
+        dbUser = new DBUser(db);
+        dbOrder = new DBOrder(db, dbOptions, dbUser);
+    
+        cart = new Cart();
+        cakeOptions = dbOptions.findAllCakeOptions();
+    }
+    
     /**
      * @return Front-end version to be used.
      */
@@ -115,6 +124,19 @@ public class Cupcake {
      */
     public List<Order> getAllOrdersSorted(){
         return (List<Order>) dbOrder.findAll();
+    }
+    
+    /**
+     * @param id Order ID
+     * @return Order with requested ID
+     */
+    public Order getOrderById(int id){
+        for(Order o: getAllOrdersSorted()){
+            if(o.getOrderId() == id){
+                return o;
+            }
+        }
+        return null;
     }
     
     /**
