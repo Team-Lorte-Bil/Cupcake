@@ -1,5 +1,6 @@
 package ui;
 
+import jdk.jfr.Timespan;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,8 @@ import static org.junit.Assert.assertThat;
 
 class UserUITest {
   
+  private static String OS = System.getProperty("os.name").toLowerCase();
+  
   private WebDriver driver;
   private Map<String, Object> vars;
   JavascriptExecutor js;
@@ -24,6 +27,9 @@ class UserUITest {
   @BeforeEach
   void setUp() {
     String path = "src/test/resources/geckodriver";
+    
+    if(OS.contains("win")) path += ".exe";
+    
     File file = new File(path);
     System.setProperty("webdriver.gecko.driver", file.getAbsolutePath());
     
