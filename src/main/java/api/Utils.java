@@ -1,9 +1,12 @@
 package api;
 
+import org.apache.commons.io.IOUtils;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Properties;
 
@@ -75,12 +78,14 @@ public class Utils {
         Transport.send(msg);
     }
     
-    public static void main(String[] args) {
-        try {
-            sendEmail("emil@evsn.dk", "test mail", "test besked");
-        } catch (UnsupportedEncodingException | MessagingException e){
-            System.out.println(e.getMessage());
+    public static String fileToString(String file){
+        if(file == null || file.isEmpty()) return null;
+        try (InputStream input = Cupcake.class.getClassLoader().getResourceAsStream(file)) {
+            return IOUtils.toString(input);
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
+        return null;
     }
     
 }
