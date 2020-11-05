@@ -88,23 +88,16 @@ public class Order {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (! (o instanceof Order)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         
         Order order = (Order) o;
-        
-        if (orderId != order.orderId) return false;
-        if (user != null ? ! user.equals(order.user) : order.user != null) return false;
-        if (cakes != null ? ! cakes.equals(order.cakes) : order.cakes != null) return false;
-        return comment != null ? comment.equals(order.comment) : order.comment == null;
+    
+        return orderId == order.orderId;
     }
     
     @Override
     public int hashCode() {
-        int result = orderId;
-        result = 31 * result + (user != null ? user.hashCode() : 0);
-        result = 31 * result + (cakes != null ? cakes.hashCode() : 0);
-        result = 31 * result + (comment != null ? comment.hashCode() : 0);
-        return result;
+        return orderId;
     }
     
     public static class Item {

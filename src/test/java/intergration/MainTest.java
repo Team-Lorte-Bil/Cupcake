@@ -26,7 +26,7 @@ import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("Integration-test")
-public class MainTest {
+class MainTest {
 
     Cupcake api;
     
@@ -63,20 +63,26 @@ public class MainTest {
     }
     
     /**
-     * <b>Som</b> kunde kan jeg bestille og betale cupcakes med en valgfri bund og top
-     * <b>sådan at</b> jeg senere kan køre forbi butikken i Olsker og hente min ordre.
+     * Userstory 1 & 2
+     * <b>US-1</b> Som kunde kan jeg bestille og betale cupcakes med en valgfri bund og top,
+     * sådan at jeg senere kan køre forbi butikken i Olsker og hente min ordre.
+     * <b>US-2</b> Som kunde kan jeg oprette en konto/profil for at kunne betale og gemme en en ordre.
      */
     
     @Test
-    void userStory1() throws ValidationException, NoOrderExists, InvalidPassword, UserExists {
+    void userStoryOneAndTwo() throws ValidationException, NoOrderExists, InvalidPassword, UserExists {
         
+        // Start of Userstory 2
         //Create new user and login
         User newUser = api.createNewUser("Test user", "test123", "test@user.ru", 12345678, 500, "User");
         User currentUser = api.checkLogin("test@user.ru", "test123");
         
         //Test if user ID is same
         assertEquals(newUser, currentUser);
+        // End of Userstory 2
         
+        
+        //Start of Userstory 1
         //Create cart
         Cart cart = api.createCart();
         
@@ -104,6 +110,7 @@ public class MainTest {
         assertEquals(cart.getCartValue(), actualOrder.getPrice());
         assertEquals(expectedOrder.getUser().getId(), actualOrder.getUser().getId());
         assertEquals(expectedOrder.getOrderId(), actualOrder.getOrderId());
+        //End of Userstory 1
         
     }
 
