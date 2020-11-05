@@ -31,7 +31,7 @@ public class Login extends BaseServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         try {
-            login(req, req.getSession());
+            login(req);
             if(req.getSession().getAttribute("cart") != null){
                 resp.sendRedirect(req.getContextPath() + "/Cart");
             } else if (req.getSession().getAttribute("isAdmin").equals(true)) {
@@ -39,8 +39,7 @@ public class Login extends BaseServlet {
             } else {
                     resp.sendRedirect(req.getContextPath() + "/");
             }
-    
-            render("Login", "/WEB-INF/v"+api.getVersion()+"/logind.jsp", req, resp);
+            
         } catch (InvalidPassword e){
             req.setAttribute("errorMsg", e.getMessage());
             req.setAttribute("error", true);
@@ -49,12 +48,13 @@ public class Login extends BaseServlet {
         }
     }
     
-    private void login(HttpServletRequest req, HttpSession session) throws InvalidPassword {
+    private void login(HttpServletRequest req) throws InvalidPassword {
+            HttpSession session = req.getSession();
+            
             String usrEmail = req.getParameter("inputEmail");
             String usrPassword = req.getParameter("inputPassword");
     
             log(usrEmail);
-            log(usrPassword);
     
             User curUsr = api.checkLogin(usrEmail, usrPassword);
             log("Logged in: " + curUsr);
