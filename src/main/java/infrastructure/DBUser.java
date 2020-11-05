@@ -1,5 +1,6 @@
 package infrastructure;
 
+import api.CupcakeRuntimeException;
 import api.Utils;
 import domain.user.*;
 
@@ -65,9 +66,8 @@ public class DBUser implements UserRepository {
                 throw new InvalidPassword("Brugeren eksisterer ikke!");
             }
         }} catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new CupcakeRuntimeException(e.getMessage());
         }
-        return null;
     }
     
     /**
@@ -84,7 +84,7 @@ public class DBUser implements UserRepository {
     
             ps.getUpdateCount();
         }} catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new CupcakeRuntimeException(e.getMessage());
         }
     }
     
@@ -104,7 +104,7 @@ public class DBUser implements UserRepository {
             ps.executeUpdate();
             
         }} catch (Exception e) {
-            System.out.println(e.getMessage());
+            throw new CupcakeRuntimeException(e.getMessage());
         }
     }
     
@@ -142,9 +142,8 @@ public class DBUser implements UserRepository {
                 
                 return tmpList;
             }} catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new CupcakeRuntimeException(e.getMessage());
         }
-        return null;
     }
     
     private User loadUser(ResultSet rs) throws SQLException {
@@ -219,8 +218,7 @@ public class DBUser implements UserRepository {
                     throw new UserExists(name);
                 }
             }} catch (UserExists | SQLException e) {
-            System.out.println(e);
+                throw new CupcakeRuntimeException(e.getMessage());
         }
-        return null;
     }
 }

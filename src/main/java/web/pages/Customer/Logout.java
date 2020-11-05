@@ -17,9 +17,13 @@ public class Logout extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        req.getSession().invalidate();
-        log(req, "logged out");
-        resp.sendRedirect(req.getContextPath() + "/");
+        try {
+            req.getSession().invalidate();
+            log(req, "logged out");
+            resp.sendRedirect(req.getContextPath() + "/");
+        } catch (IOException e){
+            log(e.getMessage());
+        }
     }
 
 }

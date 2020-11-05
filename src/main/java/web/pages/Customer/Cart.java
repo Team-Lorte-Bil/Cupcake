@@ -1,5 +1,6 @@
 package web.pages.Customer;
 
+import api.CupcakeRuntimeException;
 import domain.items.Cake;
 import domain.items.CakeOptions;
 import domain.items.Option;
@@ -22,27 +23,25 @@ public class Cart extends BaseServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        HttpSession session = req.getSession();
-        req.setCharacterEncoding("UTF-8");
-        
-        switch (req.getParameter("action")){
-            case "add":
-                addToCart(req,session);
-                break;
-            case "remove":
-                try {
+        try {
+            HttpSession session = req.getSession();
+            req.setCharacterEncoding("UTF-8");
+    
+            switch (req.getParameter("action")) {
+                case "add":
+                    addToCart(req, session);
+                    break;
+                case "remove":
                     removeFromCart(req, resp, session);
-                } catch (IOException e){
-                    resp.sendError(400, e.getMessage());
-                }
-                break;
-            default:
-                log(req,"default reached");
-                resp.sendError(400);
-                return;
+                    break;
+                default:
+                    throw new CupcakeRuntimeException("Error in cart");
+            }
+        } catch (Exception e){
+            log(e.getMessage());
+        } finally {
+            render("Cart", "/WEB-INF/v"+api.getVersion()+"/cart.jsp", req, resp);
         }
-        
-        render("Cart", "/WEB-INF/v"+api.getVersion()+"/cart.jsp", req, resp);
         
     }
     
@@ -102,12 +101,15 @@ public class Cart extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
+        try {
+            req.setCharacterEncoding("UTF-8");
+    
+            req.setAttribute("value", getCart(req.getSession()).getCartValue());
+        } catch (Exception e){
+            log(e.getMessage());
+        } finally {
+            render("Cart", "/WEB-INF/v"+api.getVersion()+"/cart.jsp", req, resp);
+        }
         
-        req.setAttribute("value", getCart(req.getSession()).getCartValue());
-    
-    
-    
-        render("Cart", "/WEB-INF/v"+api.getVersion()+"/cart.jsp", req, resp);
     }
 }

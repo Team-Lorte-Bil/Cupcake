@@ -1,5 +1,6 @@
 package web.pages.Customer;
 
+import api.CupcakeRuntimeException;
 import domain.user.User;
 import domain.user.UserExists;
 import web.pages.BaseServlet;
@@ -21,7 +22,11 @@ public class Register extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        render("Register user", "/WEB-INF/v"+api.getVersion()+"/register.jsp", req, resp);
+        try {
+            render("Register user", "/WEB-INF/v" + api.getVersion() + "/register.jsp", req, resp);
+        } catch (IOException e){
+            log(e.getMessage());
+        }
     }
     
     @Override
@@ -32,7 +37,7 @@ public class Register extends BaseServlet {
             resp.sendRedirect(req.getContextPath() + "/");
         } catch (Exception e){
             resp.sendError(400);
-            throw new RuntimeException(e);
+            log(e.getMessage());
         }
     }
     

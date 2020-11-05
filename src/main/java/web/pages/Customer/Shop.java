@@ -19,9 +19,13 @@ public class Shop extends BaseServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         
-        req.setAttribute("toppings", api.getCakeOptions().getToppings());
-        req.setAttribute("bottoms", api.getCakeOptions().getBottoms());
-    
-        render("Shop", "/WEB-INF/v"+api.getVersion()+"/shop.jsp", req, resp);
+        try {
+            req.setAttribute("toppings", api.getCakeOptions().getToppings());
+            req.setAttribute("bottoms", api.getCakeOptions().getBottoms());
+        } catch (Exception e){
+            log(e.getMessage());
+        } finally {
+            render("Shop", "/WEB-INF/v" + api.getVersion() + "/shop.jsp", req, resp);
+        }
     }
 }

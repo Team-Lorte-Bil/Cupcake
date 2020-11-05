@@ -1,5 +1,6 @@
 package web.pages.admin;
 
+import api.CupcakeRuntimeException;
 import domain.user.User;
 import web.pages.BaseServlet;
 
@@ -20,7 +21,6 @@ public class Customers extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-    
         try {
             if (! api.checkAdminRights(req)) {
                 resp.sendError(401);
@@ -44,7 +44,7 @@ public class Customers extends BaseServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         try {
-            switch (req.getParameter("action")){
+            switch (req.getParameter("action")) {
                 case "deleteUser":
                     deleteUser(req, resp);
                     return;
@@ -52,30 +52,47 @@ public class Customers extends BaseServlet {
                     registerNewUser(req, resp);
                     return;
                 case "changeBalance":
-                    changeBalance(req,resp);
+                    changeBalance(req, resp);
                     return;
                 default:
                     System.out.println("default reached");
             }
         } catch (Exception e){
-            throw new RuntimeException(e);
+            log(e.getMessage());
+        }
+        
+    }
+    
+    private void redirect(HttpServletRequest req, HttpServletResponse resp) {
+        try {
+            resp.sendRedirect(req.getContextPath() + "/AdminCustomers");
+        } catch (IOException e){
+            throw new CupcakeRuntimeException(e.getMessage());
         }
     }
     
-    private void deleteUser(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        int userId = Integer.parseInt(req.getParameter("userId"));
-        api.deleteUser(userId);
-        resp.sendRedirect(req.getContextPath() + "/AdminCustomers");
+    private void deleteUser(HttpServletRequest req, HttpServletResponse resp)  {
+        try {
+            int userId = Integer.parseInt(req.getParameter("userId"));
+            api.deleteUser(userId);
+            redirect(req, resp);
+        } catch (Exception e){
+            throw new CupcakeRuntimeException(e.getMessage());
+        }
     }
     
-    private void changeBalance(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        int userId = Integer.parseInt(req.getParameter("userId"));
-        double newBalance = Double.parseDouble(req.getParameter("newBalance"));
-        api.changeUserBalance(userId, newBalance);
-        resp.sendRedirect(req.getContextPath() + "/AdminCustomers");
+    private void changeBalance(HttpServletRequest req, HttpServletResponse resp)  {
+        try {
+            int userId = Integer.parseInt(req.getParameter("userId"));
+            double newBalance = Double.parseDouble(req.getParameter("newBalance"));
+            api.changeUserBalance(userId, newBalance);
+            redirect(req, resp);
+        } catch (Exception e){
+            throw new CupcakeRuntimeException(e.getMessage());
+        }
     }
     
-    private void registerNewUser (HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void registerNewUser (HttpServletRequest req, HttpServletResponse resp) {
         try {
             String usrName = req.getParameter("inputName");
             String usrMail = req.getParameter("inputEmail");
@@ -88,15 +105,19 @@ public class Customers extends BaseServlet {
             User newUsr = api.createNewUser(usrName, usrPsw, usrMail, usrPhone, balance, role);
             
             if(newUsr != null){
-                resp.sendRedirect(req.getContextPath() + "/AdminCustomers");
+                redirect(req,resp);
             } else {
-                throw new Exception("Error in creating new user");
+                throw new CupcakeRuntimeException("Error creating user");
             }
     
             
         } catch (Exception e){
             log(e.getMessage());
-            resp.sendError(400);
+            try {
+                resp.sendError(400);
+            } catch (IOException es){
+                throw new CupcakeRuntimeException(es.getMessage());
+            }
         }
     }
 }

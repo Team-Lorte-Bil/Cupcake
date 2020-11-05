@@ -20,7 +20,11 @@ public class Login extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        render("Login", "/WEB-INF/v"+api.getVersion()+"/logind.jsp", req, resp);
+        try {
+            render("Login", "/WEB-INF/v" + api.getVersion() + "/logind.jsp", req, resp);
+        } catch (IOException e){
+            log(e.getMessage());
+        }
     }
     
     @Override
@@ -35,10 +39,13 @@ public class Login extends BaseServlet {
             } else {
                     resp.sendRedirect(req.getContextPath() + "/");
             }
+    
+            render("Login", "/WEB-INF/v"+api.getVersion()+"/logind.jsp", req, resp);
         } catch (InvalidPassword e){
             req.setAttribute("errorMsg", e.getMessage());
             req.setAttribute("error", true);
-            render("Login", "/WEB-INF/v"+api.getVersion()+"/logind.jsp", req, resp);
+        } catch (Exception ee){
+            log(ee.getMessage());
         }
     }
     

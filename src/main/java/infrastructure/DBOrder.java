@@ -1,5 +1,6 @@
 package infrastructure;
 
+import api.CupcakeRuntimeException;
 import api.Utils;
 import domain.items.Cake;
 import domain.order.NoOrderExists;
@@ -64,7 +65,7 @@ public class DBOrder implements OrderRepository {
             return cakeList;
             
         }} catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new CupcakeRuntimeException(e.getMessage());
         }
     }
     
@@ -116,7 +117,7 @@ public class DBOrder implements OrderRepository {
             return tmpOrder;
             
         }} catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new CupcakeRuntimeException(e.getMessage());
         }
     }
     
@@ -146,7 +147,7 @@ public class DBOrder implements OrderRepository {
                     
                 }
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                throw new CupcakeRuntimeException(e.getMessage());
             }
         }
     }
@@ -165,7 +166,7 @@ public class DBOrder implements OrderRepository {
             ps.executeUpdate();
             ps.getUpdateCount();
         }} catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new CupcakeRuntimeException(e.getMessage());
         }
     }
     
@@ -182,7 +183,7 @@ public class DBOrder implements OrderRepository {
            
             
         }} catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new CupcakeRuntimeException(e.getMessage());
         }
     }
     
@@ -243,12 +244,11 @@ public class DBOrder implements OrderRepository {
                     price += rss.getDouble(2);
                 }
                 
-                
                 tmpList.add(tmpOrder);
             }}
             return tmpList;
         } catch (SQLException | UserNotFound e) {
-            throw new RuntimeException(e);
+            throw new CupcakeRuntimeException(e.getMessage());
         }
     }
     

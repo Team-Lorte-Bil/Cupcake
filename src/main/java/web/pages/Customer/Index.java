@@ -18,7 +18,10 @@ public class Index extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-    
-        render("Start", "/WEB-INF/v"+api.getVersion()+"/index.jsp", req, resp);
+        try {
+            render("Start", "/WEB-INF/v" + api.getVersion() + "/index.jsp", req, resp);
+        } catch (ServletException | IOException e){
+            log(e.getMessage());
+        }
     }
 }
