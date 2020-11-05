@@ -138,12 +138,6 @@ public class DBOrder implements OrderRepository {
                     int cakeToppingId = dbCakeOptions.getToppingIdFromName(c.getCake().getTopping());
                     int cakeBottomId = dbCakeOptions.getBottomIdFromName(c.getCake().getBottom());
                     
-                    System.out.println("Trying to insert cake...");
-                    System.out.println("orderID: " + orderId);
-                    System.out.println("bottomId: " + cakeBottomId);
-                    System.out.println("toppingId: " + cakeToppingId);
-                    System.out.println("quantity: " + c.getAmount());
-                    
                     ps.setInt(1, orderId);
                     ps.setInt(2, cakeBottomId);
                     ps.setInt(3, cakeToppingId);
@@ -197,7 +191,6 @@ public class DBOrder implements OrderRepository {
      * @return A sorted list by ID decending.
      * @see Order
      */
-    @SuppressWarnings("DuplicatedCode")
     public List<Order> getAllOrdersSorted() {
         List<Order> tmpList = new LinkedList<>();
         try (Connection conn = db.getConnection()) {
@@ -205,13 +198,13 @@ public class DBOrder implements OrderRepository {
             ResultSet rs = s.executeQuery();
             
             while (rs.next()) {
-                int id = rs.getInt(1);
-                int userId = rs.getInt(2);
-                String comment = rs.getString(3);
+                int id = rs.getInt("Orders.id");
+                int userId = rs.getInt("Orders.userId");
+                String comment = rs.getString("Orders.comment");
                 comment = Utils.encodeHtml(comment);
-                Timestamp timestamp = rs.getTimestamp(4);
-                boolean paid = rs.getBoolean(5);
-                boolean completed = rs.getBoolean(6);
+                Timestamp timestamp = rs.getTimestamp("Orders.createdAt");
+                boolean paid = rs.getBoolean("Orders.paid");
+                boolean completed = rs.getBoolean("Orders.completed");
                 
                 User tmpUsr = dbUser.findUser(userId);
                 Order tmpOrder = new Order(id, tmpUsr, comment, timestamp, paid, completed, getCakesOnOrder(id));

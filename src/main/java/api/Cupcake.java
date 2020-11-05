@@ -232,6 +232,9 @@ public class Cupcake {
         return sum;
     }
     
+    /**
+     * @return New cart object.
+     */
     public Cart createCart() {
         return new Cart(this);
     }

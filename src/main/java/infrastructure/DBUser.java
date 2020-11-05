@@ -51,8 +51,8 @@ public class DBUser implements UserRepository {
             ResultSet rs = ps.executeQuery();
             
             if(rs.next()) {
-                byte[] salt = rs.getBytes(5);
-                byte[] secret = rs.getBytes(6);
+                byte[] salt = rs.getBytes("Users.salt");
+                byte[] secret = rs.getBytes("Users.secret");
                 byte[] providedSecret = User.calculateSecret(salt, usrPassword);
                 
                 if(! Arrays.equals(providedSecret, secret)){
@@ -96,7 +96,7 @@ public class DBUser implements UserRepository {
     public void changeBalance(int userId, double newBalance) {
         try (Connection conn = db.getConnection()) {
         
-            try(PreparedStatement ps = conn.prepareStatement("UPDATE Users SET Cupcake.Users.accountBalance=? WHERE id=?")){
+            try(PreparedStatement ps = conn.prepareStatement("UPDATE Users SET Users.accountBalance=? WHERE id=?")){
         
         
             ps.setDouble(1, newBalance);
