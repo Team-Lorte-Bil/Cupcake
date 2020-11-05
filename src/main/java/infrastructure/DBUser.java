@@ -109,6 +109,34 @@ public class DBUser implements UserRepository {
     }
     
     /**
+     * Updates the users password to a new random generated
+     */
+    public String changePassword(String email, String password) throws UserNotFound {
+        try (Connection conn = db.getConnection()) {
+    
+            try (PreparedStatement ps = conn.prepareStatement("UPDATE Users SET Users.salt=?, Users.secret=? WHERE Users.email=?")) {
+    
+                byte[] salt = User.generateSalt();
+    
+                ps.setBytes(1, salt);
+                ps.setBytes(2, User.calculateSecret(salt, password));
+                ps.setString(3, email);
+                ps.executeUpdate();
+    
+                System.out.println("returning: " + password);
+    
+                if (ps.getUpdateCount() == 1) {
+                    return password;
+                } else {
+                    throw new UserNotFound(email);
+                }
+    
+            }}catch (Exception e){
+            throw new UserNotFound(email);
+        }
+    }
+    
+    /**
      * @query SELECT * FROM Users WHERE id=id
      * @param id User ID
      * @return User object

@@ -3,28 +3,25 @@
 <section class="page-section cta" style="background: rgba(109,67,73,0.74);">
     <div class="container">
         <div class="row">
-            <div class="col-xl-9 mx-auto"><span class="text-uppercase d-xl-flex justify-content-xl-center section-heading-lower" style="font-size: 44px;font-weight: 800;color: rgb(255,255,255);">Log ind</span><div class="login-card">
-                <form action="Login" method="POST">
+            <div class="col-xl-9 mx-auto"><span class="text-uppercase d-xl-flex justify-content-xl-center section-heading-lower" style="font-size: 44px;font-weight: 800;color: rgb(255,255,255);">Nulstil kodeord</span><div class="login-card">
+                <form action="Reset" method="POST">
                     <div class="form-group">
                         <label for="inputEmail">E-mail addresse</label>
                         <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="Indtast din e-mail...">
 
                     </div>
-                    <div class="form-group">
-                        <label for="inputPassword">Kodeord</label>
-                        <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Indtast dit kodeord...">
-                    </div>
+                    <c:if test="${requestScope.msg}">
+                        <div class="alert alert-success" role="alert">
+                                Din nye kode er : ${requestScope.msgString}
+                        </div>
+                    </c:if>
                     <c:if test="${requestScope.error}">
                         <div class="alert alert-danger" role="alert">
                                 ${requestScope.errorMsg}
                         </div>
                     </c:if>
 
-                    <input type="submit" value="Log ind" class="btn btn-dark rounded-pill py-2 btn-block" />
-
-                    <a href="${pageContext.request.contextPath}/Reset">
-                        <small id="emailHelp" class="form-text text-muted">Har du glemt dit kodeord? Tryk her</small>
-                    </a>
+                    <input type="submit" value="Nulstil kodeord" class="btn btn-dark rounded-pill py-2 btn-block" />
                 </form>
             </div></div>
         </div>

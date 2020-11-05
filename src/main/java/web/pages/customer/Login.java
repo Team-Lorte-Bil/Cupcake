@@ -43,8 +43,10 @@ public class Login extends BaseServlet {
         } catch (InvalidPassword e){
             req.setAttribute("errorMsg", e.getMessage());
             req.setAttribute("error", true);
+            render("Login", "/WEB-INF/v" + api.getVersion() + "/logind.jsp", req, resp);
         } catch (Exception ee){
             log(ee.getMessage());
+            render("Login", "/WEB-INF/v" + api.getVersion() + "/logind.jsp", req, resp);
         }
     }
     

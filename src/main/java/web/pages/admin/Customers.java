@@ -54,6 +54,9 @@ public class Customers extends BaseServlet {
                 case "changeBalance":
                     changeBalance(req, resp);
                     return;
+                case "changePsw":
+                    changePassword(req, resp);
+                    return;
                 default:
                     System.out.println("default reached");
             }
@@ -61,6 +64,17 @@ public class Customers extends BaseServlet {
             log(e.getMessage());
         }
         
+    }
+    
+    private void changePassword(HttpServletRequest req, HttpServletResponse resp) {
+        try {
+            String userEmail = req.getParameter("userMail");
+            String userPsw = req.getParameter("newPassword");
+            api.resetPassword(userEmail, userPsw);
+            redirect(req, resp);
+        } catch (Exception e){
+            throw new CupcakeRuntimeException(e.getMessage());
+        }
     }
     
     private void redirect(HttpServletRequest req, HttpServletResponse resp) {
