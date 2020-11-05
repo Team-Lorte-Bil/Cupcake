@@ -34,7 +34,7 @@
 </tr>
 </thead>
 <tbody>
-<c:forEach items="${requestScope.cart.cakes}" var="cake">
+<c:forEach items="${sessionScope.cart.cakes}" var="cake">
     <tr>
         <td class="border-1 align-middle"><strong>${cake.cake.bottom}</strong></td>
         <td class="border-1 align-middle"><strong>${cake.cake.topping}</strong></td>

@@ -85,6 +85,21 @@ public class Order {
         cakes.add(new Item(cake, amount));
     }
     
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        
+        Order order = (Order) o;
+    
+        return orderId == order.orderId;
+    }
+    
+    @Override
+    public int hashCode() {
+        return orderId;
+    }
+    
     public static class Item {
         private final Cake cake;
         private int amount;

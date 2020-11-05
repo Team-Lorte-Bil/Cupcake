@@ -1,5 +1,6 @@
 package web.pages;
 
+import api.Cart;
 import api.Cupcake;
 import web.widgets.Navbar;
 
@@ -7,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
@@ -20,6 +22,17 @@ public class BaseServlet extends HttpServlet {
     
     private static Cupcake createApplication() {
         return new Cupcake();
+    }
+    
+    protected Cart getCart(HttpSession session){
+        Cart cart = (Cart) session.getAttribute("cart");
+        
+        if(cart == null){
+            cart = api.createCart();
+            session.setAttribute("cart", cart);
+        }
+        
+        return cart;
     }
     
     

@@ -59,8 +59,7 @@ public class Cart extends BaseServlet {
             resp.sendError(400);
         }
         
-        api.removeFromCart(id);
-        session.setAttribute("cart",api.getCart());
+        getCart(session).removeItemFromCart(id);
     }
     
     /**
@@ -93,9 +92,8 @@ public class Cart extends BaseServlet {
     
         Cake tmpCake = new Cake(bottom,topping,price);
         
-        api.addCake(tmpCake, antal);
+        getCart(session).addItemToCart(tmpCake, antal);
         
-        session.setAttribute("cart",api.getCart());
     }
     
     /**
@@ -106,9 +104,8 @@ public class Cart extends BaseServlet {
             throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         
-        req.setAttribute("value", api.getCartValue());
+        req.setAttribute("value", getCart(req.getSession()).getCartValue());
     
-        System.out.println(api.getCart());
     
     
         render("Cart", "/WEB-INF/v"+api.getVersion()+"/cart.jsp", req, resp);
