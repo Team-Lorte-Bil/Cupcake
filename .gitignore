@@ -149,5 +149,5 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.gitignore.io/api/maven,macos,windows,java-web,intellij# Created by .ignore support plugin (hsz.mobi)
-!/src/main/resources/config.properties
+
+/src/main/resources/config.properties
