@@ -1,16 +1,17 @@
 package web.pages.customer;
 
 import api.CupcakeRuntimeException;
-import domain.user.InvalidPassword;
-import domain.user.User;
+import api.Utils;
 import domain.user.UserNotFound;
 import web.pages.BaseServlet;
 
+import javax.mail.MessagingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 @WebServlet("/Reset")
 public class Reset extends BaseServlet {
@@ -35,8 +36,15 @@ public class Reset extends BaseServlet {
         try {
             String mail = req.getParameter("inputEmail");
             String newPassword = api.resetPassword(mail);
+    
+            try {
+                String message = Utils.fileToString("resetmail.html").replace("$$KODEORD$$",newPassword);
+                Utils.sendEmail(mail, "Dit nye kodeord", message);
+            } catch (UnsupportedEncodingException | MessagingException e){
+                System.out.println(e.getMessage());
+            }
             
-            req.setAttribute("msgString", newPassword);
+            req.setAttribute("msgString", "Vi har sendt dig en mail med din nye kode");
             req.setAttribute("msg", true);
     
             render("Reset password", "/WEB-INF/v" + api.getVersion() + "/resetpassword.jsp", req, resp);

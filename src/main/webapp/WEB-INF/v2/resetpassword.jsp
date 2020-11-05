@@ -12,7 +12,7 @@
                     </div>
                     <c:if test="${requestScope.msg}">
                         <div class="alert alert-success" role="alert">
-                                Din nye kode er : ${requestScope.msgString}
+                                ${requestScope.msgString}
                         </div>
                     </c:if>
                     <c:if test="${requestScope.error}">
