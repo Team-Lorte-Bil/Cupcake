@@ -53,15 +53,15 @@ package web {
             class web.pages.admin.Orders{}
             class web.pages.admin.Start{}
         }
-        package web.pages.Customer{
-            class web.pages.Customer.Cart{}
-            class web.pages.Customer.Index{}
-            class web.pages.Customer.Login{}
-            class web.pages.Customer.Logout{}
-            class web.pages.Customer.NewOrder{}
-            class web.pages.Customer.Register{}
-            class web.pages.Customer.Reset{}
-            class web.pages.Customer.Shop{}
+        package web.pages.customer{
+            class web.pages.customer.Cart{}
+            class web.pages.customer.Index{}
+            class web.pages.customer.Login{}
+            class web.pages.customer.Logout{}
+            class web.pages.customer.NewOrder{}
+            class web.pages.customer.Register{}
+            class web.pages.customer.Reset{}
+            class web.pages.customer.Shop{}
         }
     }
 
@@ -80,14 +80,14 @@ api.Cupcake o-- domain.items.CakeOptions : cakeOptions
   infrastructure.DBCakeOptions o-- infrastructure.Database : db
   infrastructure.DBOrder o-- infrastructure.Database : db
   infrastructure.DBUser o-- infrastructure.Database : db
-  web.pages.Customer.Cart -up-|> web.pages.BaseServlet
-  web.pages.Customer.Index -up-|> web.pages.BaseServlet
-  web.pages.Customer.Login -up-|> web.pages.BaseServlet
-  web.pages.Customer.Logout -up-|> web.pages.BaseServlet
-  web.pages.Customer.NewOrder -up-|> web.pages.BaseServlet
-  web.pages.Customer.Register -up-|> web.pages.BaseServlet
-  web.pages.Customer.Reset -up-|> web.pages.BaseServlet
-  web.pages.Customer.Shop -up-|> web.pages.BaseServlet
+  web.pages.customer.Cart -up-|> web.pages.BaseServlet
+  web.pages.customer.Index -up-|> web.pages.BaseServlet
+  web.pages.customer.Login -up-|> web.pages.BaseServlet
+  web.pages.customer.Logout -up-|> web.pages.BaseServlet
+  web.pages.customer.NewOrder -up-|> web.pages.BaseServlet
+  web.pages.customer.Register -up-|> web.pages.BaseServlet
+  web.pages.customer.Reset -up-|> web.pages.BaseServlet
+  web.pages.customer.Shop -up-|> web.pages.BaseServlet
   web.pages.admin.customers -up-|> web.pages.BaseServlet
   web.pages.admin.Items -up-|> web.pages.BaseServlet
   web.pages.admin.Orders -up-|> web.pages.BaseServlet

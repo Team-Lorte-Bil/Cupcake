@@ -1,4 +1,4 @@
-package web.pages.Customer;
+package web.pages.customer;
 
 import api.CupcakeRuntimeException;
 import domain.items.Cake;

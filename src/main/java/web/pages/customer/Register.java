@@ -1,6 +1,5 @@
-package web.pages.Customer;
+package web.pages.customer;
 
-import api.CupcakeRuntimeException;
 import domain.user.User;
 import domain.user.UserExists;
 import web.pages.BaseServlet;
