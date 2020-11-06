@@ -16,12 +16,12 @@
         </thead>
         <tbody>
         <!-- print all cupcakes in session cart -->
-        <c:forEach items="${requestScope.cakes}" var="cake">
+        <c:forEach items="${sessionScope.cart.cakes}" var="cake">
             <tr>
-                <td>${cake.getAmount()}</td>
-                <td>${cake.getCake().getBottom()}</td>
-                <td>${cake.getCake().getTopping()}</td>
-                <td>${cake.getCake().getPrice() * cake.getAmount()} kr</td>
+                <td>${cake.amount}</td>
+                <td>${cake.cake.bottom}</td>
+                <td>${cake.cake.topping}</td>
+                <td>${cake.cake.price * cake.amount} kr</td>
             </tr>
         </c:forEach>
         <tr> <!-- empty row for spacing -->
@@ -34,10 +34,28 @@
             <td></td>
             <td></td>
             <td>Total</td>
-            <td>${sessionScope.totalprice},- kr</td>
+            <td>${sessionScope.cart.cartvalue},- kr</td>
         </tr>
         </tbody>
     </table>
+    <p>
+<c:choose>
+    <c:when test="${requestScope.order.paid}">
+        <div>
+        <p>
+            Ordren er betalt!
+        </p>
+        </div>
+    </c:when>
+    <c:otherwise>
+        <div>
+            <p>
+                Ordren er ikke betalt!
+            </p>
+        </div>
+    </c:otherwise>
+</c:choose>
+    </p>
     <p>
         Vi glæder os til at se dig i butikken!
         <br/> <br/>

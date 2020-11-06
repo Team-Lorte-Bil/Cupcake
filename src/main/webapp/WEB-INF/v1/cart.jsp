@@ -1,3 +1,4 @@
+<%@ page import="api.Cart" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <div class="container text-center">
@@ -6,7 +7,8 @@
 
 
     <%
-        if (session.getAttribute("cakes") != null) {
+        Cart cart = (Cart) session.getAttribute("cart");
+        if (cart != null && (cart.getCakes().size() > 0)) {
     %>
     <table class="table table-striped" >
         <thead>
@@ -21,12 +23,12 @@
         <tbody>
         <!-- print all cupcakes in session cart -->
         <%--@elvariable id="cakes" type="java.util.List"--%>
-        <c:forEach items="${cakes}" var="cake">
+        <c:forEach items="${sessionScope.cart.cakes}" var="cake">
             <tr>
                 <th scope="row">
 <%--suppress HtmlFormInputWithoutLabel --%>
                     <select class="custom-select text-center" disabled>
-                        <option selected>${cake.getAmount()}</option>
+                        <option selected>${cake.amount}</option>
                         <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -40,13 +42,13 @@
                         <option value="10">10</option>
                     </select>
                 </th>
-                <td>${cake.getCake().getBottom()}</td>
-                <td>${cake.getCake().getTopping()}</td>
-                <td>${cake.getCake().getPrice()},- kr</td>
+                <td>${cake.cake.bottom}</td>
+                <td>${cake.cake.topping}</td>
+                <td>${cake.cake.price},- kr</td>
                 <td>
                     <form action="Cart" method="post">
                         <input type="hidden" name="action" value="remove">
-                        <input type="hidden" name="id" value="${cake.getCake().getId()}">
+                        <input type="hidden" name="id" value="${cake.cake.id}">
                         <input type="submit" class="btn btn-danger" value="Fjern fra kurv"/>
                     </form>
                 </td>
@@ -64,11 +66,7 @@
     <br/> <br/>
 
     <p><strong>Total pris:</strong></p>
-    <p><strong><u>${sessionScope.totalprice},- kr</u></strong></p>
-        <input type="hidden" name="cakes" value="${sessionScope.cakes}">
-        <input type="hidden" name="totalprice" value="${sessionScope.totalprice}">
-
-
+    <p><strong><u>${sessionScope.cart.cartValue},- kr</u></strong></p>
         <c:choose>
             <c:when test="${sessionScope.currentUser == null}">
                 <a class="btn btn-primary" href="${pageContext.request.contextPath}/Login">Log ind og bestil</a>
