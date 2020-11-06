@@ -2,11 +2,9 @@ package api;
 
 import org.apache.commons.io.IOUtils;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Properties;
 
@@ -28,33 +26,28 @@ public class Utils {
     /**
      * @param src String to be encoded
      * @return Encoded String
+     * @author https://www.tutorialspoint.com/how-to-remove-the-html-tags-from-a-given-string-in-java
      */
     public static String encodeHtml(String src) {
-        /*
-         * Tak https://www.tutorialspoint.com/how-to-remove-the-html-tags-from-a-given-string-in-java
-         */
         return src.replaceAll("\"[^\"]*+\"", "");
     }
     
     
     /**
-     * A utility class for sending e-mail messages
+     * A utility methode for sending e-mail messages
      * @author www.codejava.net
      *
      */
     public static void sendEmail(String toAddress, String subject, String message) throws AddressException,
             MessagingException, UnsupportedEncodingException {
-    
-        // sets SMTP server properties
+        
         Properties properties = new Properties();
-    
         try (InputStream input = Cupcake.class.getClassLoader().getResourceAsStream("config.properties")) {
             properties.load(input);
         } catch (IOException ex) {
         ex.printStackTrace();
         }
-    
-        // creates a new session with an authenticator
+        
         Authenticator auth = new Authenticator() {
             public PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(properties.getProperty("USERNAME"), properties.getProperty("PASSWORD"));
@@ -62,8 +55,7 @@ public class Utils {
         };
     
         Session session = Session.getInstance(properties, auth);
-    
-        // creates a new e-mail message
+        
         Message msg = new MimeMessage(session);
     
         msg.setFrom(new InternetAddress(properties.getProperty("SENT_FROM"), properties.getProperty("SENT_FROM_NAME")));
@@ -71,10 +63,8 @@ public class Utils {
         msg.setRecipients(Message.RecipientType.TO, toAddresses);
         msg.setSubject(subject);
         msg.setSentDate(new Date());
-        // set plain text message
         msg.setContent(message, "text/html");
     
-        // sends the e-mail
         Transport.send(msg);
     }
     
