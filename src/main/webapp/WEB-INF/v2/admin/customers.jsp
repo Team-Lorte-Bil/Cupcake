@@ -31,6 +31,9 @@
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalChangeBalance${vs.index}">
                                 Ændre saldo
                             </button>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalChangePsw${vs.index}">
+                                Ændre kode
+                            </button>
                             <c:choose>
                                 <c:when test="${customer.admin}">
                                     <form action="AdminCustomers" method="post">
@@ -71,6 +74,34 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-danger" data-dismiss="modal">Annuller</button>
                                     <button type="submit" class="btn btn-success">Opdater saldo</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="modalChangePsw${vs.index}" tabindex="-1" aria-labelledby="modalChangePswLabel${vs.index}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Ændre kodeord for</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form action="AdminCustomers" method="POST">
+                                <div class="modal-body">
+                                    <input type="hidden" name="action" value="changePsw">
+                                    <input type="hidden" name="userMail" value="${customer.email}">
+                                    <div class="form-group">
+                                            <%--suppress HtmlFormInputWithoutLabel --%>
+                                        <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="Indtast nyt kodeord...">
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Annuller</button>
+                                    <button type="submit" class="btn btn-success">Gem kodeord</button>
                                 </div>
                             </form>
                         </div>

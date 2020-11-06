@@ -1,5 +1,6 @@
 package web.pages.admin;
 
+import api.CupcakeRuntimeException;
 import domain.items.Option;
 import web.pages.BaseServlet;
 
@@ -28,7 +29,7 @@ public class Items extends BaseServlet {
                     System.out.println("default reached");
             }
         } catch (Exception e){
-            throw new RuntimeException(e);
+            throw new CupcakeRuntimeException(e.getMessage());
         }
     }
     

@@ -1,5 +1,6 @@
 package web.pages.admin;
 
+import domain.user.User;
 import web.pages.BaseServlet;
 
 import javax.servlet.ServletException;
@@ -25,12 +26,21 @@ public class Start extends BaseServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         
+        
         try {
-            if (! api.checkAdminRights(req)) {
+            User usr = (User) req.getSession().getAttribute("currentUser");
+            
+            log("Trying to log into admin :" + usr);
+            
+            if (usr == null || !usr.isAdmin()) {
+                log("User is not admin: " + usr );
                 resp.sendError(401);
+            } else {
+                log("User is admin: " + usr);
+                setStats(req);
+                render("Administrator - Start", "/WEB-INF/v"+api.getVersion()+"/admin/start.jsp", req, resp);
             }
-            setStats(req);
-            render("Administrator - Start", "/WEB-INF/v"+api.getVersion()+"/admin/start.jsp", req, resp);
+            
         } catch (Exception e){
             log(e.getMessage());
         }
