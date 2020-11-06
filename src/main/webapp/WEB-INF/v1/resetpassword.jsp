@@ -6,16 +6,24 @@
         <div class="col-sm">
         </div>
         <div class="col-sm">
-            <form action="Reset" method="post">
-                <br/> <br/>
+            <form action="Reset" method="POST">
+                <div class="form-group">
+                    <label for="inputEmail">E-mail addresse</label>
+                    <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="Indtast din e-mail...">
 
-                <label for="exampleInputresetpassword">Indtast din email</label>
-                <input type="name" class="form-control" id="exampleInputresetpassword" placeholder="Indtast din e-mail...">
-
-                <br/> <br/>
-                <div>
-                    <button type="submit" class="btn btn-primary" aria-describedby="emailreset">Send ny kode</button>
                 </div>
+                <c:if test="${requestScope.msg}">
+                    <div class="alert alert-success" role="alert">
+                            ${requestScope.msgString}
+                    </div>
+                </c:if>
+                <c:if test="${requestScope.error}">
+                    <div class="alert alert-danger" role="alert">
+                            ${requestScope.errorMsg}
+                    </div>
+                </c:if>
+
+                <input type="submit" value="Nulstil kodeord" class="btn btn-dark rounded-pill py-2 btn-block" />
             </form>
         </div>
         <div class="col-sm">
