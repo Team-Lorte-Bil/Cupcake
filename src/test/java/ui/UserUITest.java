@@ -1,6 +1,5 @@
 package ui;
 
-import jdk.jfr.Timespan;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,16 +11,14 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 
 import java.io.File;
-import java.util.*;
 
 import static org.junit.Assert.assertThat;
 
 class UserUITest {
   
-  private static String OS = System.getProperty("os.name").toLowerCase();
+  private final static String OS = System.getProperty("os.name").toLowerCase();
   
   private WebDriver driver;
-  private Map<String, Object> vars;
   JavascriptExecutor js;
   
   @BeforeEach
@@ -35,7 +32,6 @@ class UserUITest {
     
     driver = new FirefoxDriver();
     js = (JavascriptExecutor) driver;
-    vars = new HashMap<String, Object>();
   }
   
   @AfterEach
