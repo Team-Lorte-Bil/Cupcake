@@ -238,4 +238,22 @@ public class Cupcake {
     public Cart createCart() {
         return new Cart(this);
     }
+    
+    public String resetPassword(String email) throws UserNotFound {
+        char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+        StringBuilder sb = new StringBuilder(10);
+        Random random = new Random();
+        for (int i = 0; i < 10; i++) {
+            char c = chars[random.nextInt(chars.length)];
+            sb.append(c);
+        }
+        
+        String randPsw = sb.toString();
+        
+        return dbUser.changePassword(email, randPsw);
+    }
+    
+    public String resetPassword(String email, String password) throws UserNotFound {
+        return dbUser.changePassword(email, password);
+    }
 }

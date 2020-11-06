@@ -28,7 +28,7 @@ public class Orders extends BaseServlet {
                     System.out.println("default reached");
             }
         } catch (Exception e){
-            throw new RuntimeException(e);
+            log(e.getMessage());
         }
     }
     

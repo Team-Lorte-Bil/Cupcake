@@ -1,5 +1,6 @@
 package infrastructure;
 
+import api.CupcakeRuntimeException;
 import api.Utils;
 import domain.user.*;
 
@@ -65,9 +66,8 @@ public class DBUser implements UserRepository {
                 throw new InvalidPassword("Brugeren eksisterer ikke!");
             }
         }} catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new CupcakeRuntimeException(e.getMessage());
         }
-        return null;
     }
     
     /**
@@ -84,7 +84,7 @@ public class DBUser implements UserRepository {
     
             ps.getUpdateCount();
         }} catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new CupcakeRuntimeException(e.getMessage());
         }
     }
     
@@ -104,7 +104,35 @@ public class DBUser implements UserRepository {
             ps.executeUpdate();
             
         }} catch (Exception e) {
-            System.out.println(e.getMessage());
+            throw new CupcakeRuntimeException(e.getMessage());
+        }
+    }
+    
+    /**
+     * Updates the users password to a new random generated
+     */
+    public String changePassword(String email, String password) throws UserNotFound {
+        try (Connection conn = db.getConnection()) {
+    
+            try (PreparedStatement ps = conn.prepareStatement("UPDATE Users SET Users.salt=?, Users.secret=? WHERE Users.email=?")) {
+    
+                byte[] salt = User.generateSalt();
+    
+                ps.setBytes(1, salt);
+                ps.setBytes(2, User.calculateSecret(salt, password));
+                ps.setString(3, email);
+                ps.executeUpdate();
+    
+                System.out.println("returning: " + password);
+    
+                if (ps.getUpdateCount() == 1) {
+                    return password;
+                } else {
+                    throw new UserNotFound(email);
+                }
+    
+            }}catch (Exception e){
+            throw new UserNotFound(email);
         }
     }
     
@@ -142,9 +170,8 @@ public class DBUser implements UserRepository {
                 
                 return tmpList;
             }} catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new CupcakeRuntimeException(e.getMessage());
         }
-        return null;
     }
     
     private User loadUser(ResultSet rs) throws SQLException {
@@ -219,8 +246,7 @@ public class DBUser implements UserRepository {
                     throw new UserExists(name);
                 }
             }} catch (UserExists | SQLException e) {
-            System.out.println(e);
+                throw new CupcakeRuntimeException(e.getMessage());
         }
-        return null;
     }
 }

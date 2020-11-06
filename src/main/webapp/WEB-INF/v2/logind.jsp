@@ -21,6 +21,10 @@
                     </c:if>
 
                     <input type="submit" value="Log ind" class="btn btn-dark rounded-pill py-2 btn-block" />
+
+                    <a href="${pageContext.request.contextPath}/Reset">
+                        <small id="emailHelp" class="form-text text-muted">Har du glemt dit kodeord? Tryk her</small>
+                    </a>
                 </form>
             </div></div>
         </div>

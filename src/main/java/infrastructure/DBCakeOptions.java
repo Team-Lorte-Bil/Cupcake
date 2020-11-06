@@ -1,5 +1,6 @@
 package infrastructure;
 
+import api.CupcakeRuntimeException;
 import api.Utils;
 import domain.items.CakeOptions;
 import domain.items.Option;
@@ -37,7 +38,6 @@ public class DBCakeOptions {
      * @see Option
      */
     private List<Option> getAllCakeBottoms(){
-        List<Option> tmpList = new ArrayList<>();
         try (Connection conn = db.getConnection()) {
             try(PreparedStatement s = conn.prepareStatement("SELECT * FROM CakeBottoms;")){
             ResultSet rs = s.executeQuery();
@@ -45,9 +45,8 @@ public class DBCakeOptions {
             return loadOptions(rs, Option.Type.bottom.name());
         }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new CupcakeRuntimeException(e.getMessage());
         }
-        return tmpList;
     }
     
     /**
@@ -55,16 +54,14 @@ public class DBCakeOptions {
      * @see Option
      */
     private List<Option> getAllCakeToppings(){
-        List<Option> tmpList = new ArrayList<>();
         try (Connection conn = db.getConnection()) {
             try(PreparedStatement s = conn.prepareStatement("SELECT * FROM CakeToppings;")){
             ResultSet rs = s.executeQuery();
             
             return loadOptions(rs, Option.Type.topping.name());
         }} catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new CupcakeRuntimeException(e.getMessage());
         }
-        return tmpList;
     }
     
     /**
@@ -112,9 +109,8 @@ public class DBCakeOptions {
             }
                 return new Option(id,option.getName(),option.getType(),option.getPrice());
         }} catch (Exception e) {
-            System.out.println(e.getMessage());
+            throw new CupcakeRuntimeException(e.getMessage());
         }
-        return null;
     }
     
     /**
@@ -146,7 +142,7 @@ public class DBCakeOptions {
             returnVal = ps.getUpdateCount() == 1;
             
         }} catch (Exception e) {
-            System.out.println(e.getMessage());
+            throw new CupcakeRuntimeException(e.getMessage());
         }
         return returnVal;
     }
@@ -168,7 +164,7 @@ public class DBCakeOptions {
             if(rs.next()) return rs.getInt(1);
             
         }} catch (SQLException e){
-            System.out.println(e.getMessage());
+            throw new CupcakeRuntimeException(e.getMessage());
         }
         return 0;
     }
@@ -189,7 +185,7 @@ public class DBCakeOptions {
             if(rs.next()) return rs.getInt(1);
             
         }} catch (SQLException e){
-            System.out.println(e.getMessage());
+            throw new CupcakeRuntimeException(e.getMessage());
         }
         return 0;
     }
@@ -218,7 +214,7 @@ public class DBCakeOptions {
                 }
             }
         } catch (SQLException e){
-            System.out.println(e.getMessage());
+            throw new CupcakeRuntimeException(e.getMessage());
         }
         return cakeOptions;
     }
