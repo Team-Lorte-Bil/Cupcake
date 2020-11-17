@@ -38,7 +38,7 @@ public class Cake {
         
         Cake cake = (Cake) o;
     
-        return id == cake.id;
+        return cake.getBottom().equals(bottom) && cake.getTopping().equals(topping);
     }
     
     @Override
